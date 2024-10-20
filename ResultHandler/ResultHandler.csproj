@@ -6,12 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Base\Results\" />
-    <Folder Include="Implementations\ErrorResults\" />
-    <Folder Include="Base\DataResults\" />
-    <Folder Include="Implementations\SuccessResults\" />
-    <Folder Include="Interfaces\Contracts\" />
-  </ItemGroup>
-
 </Project>
