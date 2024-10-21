@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ResultHandler.Interfaces.Contracts;
 
-internal interface IDataResult
+public interface IDataResult<T> : IResult
 {
+    T ResultData { get; }  // Clearer indication of the data being returned
 }
