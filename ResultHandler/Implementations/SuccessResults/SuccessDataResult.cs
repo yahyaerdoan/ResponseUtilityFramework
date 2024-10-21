@@ -10,8 +10,8 @@ namespace ResultHandler.Implementations.SuccessResults;
 
 public class SuccessDataResult<T> : DataResult<T?>
 {
-    // Constructor with data and custom success message
-    public SuccessDataResult(T resultData, string statusMessage) : base(resultData, true, statusMessage, HttpStatusCode.OK)
+    // Constructor with data, custom success message, and custom status code
+    public SuccessDataResult(T resultData, string statusMessage, HttpStatusCode statusCode) : base(resultData, true, statusMessage, statusCode)
     {
     }
 
@@ -20,8 +20,8 @@ public class SuccessDataResult<T> : DataResult<T?>
     {
     }
 
-    // Constructor with no data, but with custom success message
-    public SuccessDataResult(string statusMessage) : base(default, true, statusMessage, HttpStatusCode.OK)
+    // Constructor with custom success message (no data) and custom status code
+    public SuccessDataResult(string statusMessage, HttpStatusCode statusCode) : base(default, true, statusMessage, statusCode)
     {
     }
 
