@@ -3,7 +3,7 @@
 #### This set of interfaces and classes is designed to standardize the structure of responses across your application, particularly for operations that return data, success/failure status, messages, and HTTP status codes. 
 #### The interfaces provide a common contract for handling results, and the classes implement these interfaces to handle both success and error cases.
 ---
-### 1. IResult Interface
+### 1. `IResult` Interface
 The IResult interface is the base contract for all result types. 
 It defines the common properties that every result (success or error) should have, including whether the operation was successful, a status message, and an HTTP status code.
 ### Properties:
@@ -38,7 +38,7 @@ Console.WriteLine(result.StatusMessage);  // Output: Operation completed success
 Console.WriteLine(result.StatusCode);     // Output: 200 (OK)
 ```
 ---
-### 2. IDataResult<T> Interface
+### 2. `IDataResult<T>` Interface
 IDataResult<T> extends IResult by adding support for returning data along with the status, message, and HTTP status code. 
 This interface is useful when the result of an operation includes some data in addition to success or failure information.
 
@@ -71,7 +71,7 @@ Console.WriteLine(dataResult.StatusMessage);  // Output: Operation succeeded.
 Console.WriteLine(dataResult.StatusCode);  // Output: 200 (OK)
 ```
 ---
-### 3. Result Class
+### 3. `Result` Class
 The Result class implements the IResult interface. It represents the outcome of an operation, whether successful or not, along with a message and HTTP status code.
 
 ### Properties:
@@ -90,7 +90,7 @@ Console.WriteLine(result.StatusMessage);  // Output: An error occurred.
 Console.WriteLine(result.StatusCode);     // Output: 400 (BadRequest)
 ```
  --- 
-### 4. DataResult<T> Class
+### 4. `DataResult<T>` Class
 DataResult<T> extends the Result class and implements IDataResult<T>, adding the ability to return data along with the status, message, and HTTP status code. It is used when an operation returns some data.
 ### Properties:
 T ResultData: The data returned by the operation.
@@ -106,7 +106,7 @@ Console.WriteLine(dataResult.StatusCode);  // Output: 200 (OK)
 
 ```
 ---
-### 5. SuccessResult Class
+### 5. `SuccessResult` Class
 SuccessResult extends the Result class and represents a successful operation. It automatically sets the operation status to successful (IsSuccessful = true).
 
 ### Constructors:
@@ -121,7 +121,7 @@ Console.WriteLine(successResult.StatusCode);     // Output: 200 (OK)
 
 ```
 ---  
-### 6. SuccessDataResult<T> Class
+### 6. `SuccessDataResult<T>` Class
 The SuccessDataResult<T> class extends DataResult<T> and represents a successful operation that also returns data. It automatically sets IsSuccessful to true and allows for custom success messages and HTTP status codes.
 
 ### Constructors:
@@ -162,7 +162,7 @@ The SuccessDataResult<T> class extends DataResult<T> and represents a successful
 
   ```  
 ---
-### 7. ErrorResult Class
+### 7. `ErrorResult` Class
 ErrorResult extends the Result class and represents a failed operation. It automatically sets the operation status to failed (IsSuccessful = false).
 
 ### Constructors:
@@ -177,7 +177,7 @@ Console.WriteLine(errorResult.StatusCode);     // Output: 500 (InternalServerErr
 
 ```
 ---
-### 8. ErrorDataResult<T> Class
+### 8. `ErrorDataResult<T>` Class
 ErrorDataResult<T> extends DataResult<T> and represents a failed operation that may return data.
 
 ### Constructors:
