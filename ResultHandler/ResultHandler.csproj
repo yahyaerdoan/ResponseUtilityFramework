@@ -4,6 +4,33 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>ResponseResultHandler</PackageId>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Response Result Handler</Title>
+    <Version>10.22.2024</Version>
+    <Authors>Yahya Erdogan</Authors>
+    <Company>Cambridge Consulting Group LLC</Company>
+    <Product>ResponseResultHandler</Product>
+    <Description>Response Utility Framework is a framework designed for streamlined handling of response results, supporting success, error, and data outcomes in .NET applications. Within this framework, the ResultHandler project serves as a versatile utility for managing result handling and responses efficiently across different use cases.</Description>
+    <Copyright>YahyaErdogan-2024</Copyright>
+    <PackageIcon>ResultHandlerIcon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/yahyaerdoan/ResponseUtilityFramework</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>Response  response Result result Handler handler CQRS cqrs MediatR  mediatR NetCore netCore Core core .NET .net</PackageTags>
+    <PackageReleaseNotes>Ensuring consistent and dynamic response handling.</PackageReleaseNotes>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\ResultHandlerIcon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
