@@ -1,8 +1,14 @@
 name: publish
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [master]
+    paths:
+      - 'src/**'
+
+env:
+  # Bump when introducing a breaking/minor change; patch is auto-derived below.
+  VERSION_PREFIX: 11.0
 
 jobs:
   publish:
@@ -26,12 +32,11 @@ jobs:
             9.0.x
             10.0.x
 
-      - name: Resolve package version from release tag
+      - name: Resolve package version
         id: version
         shell: pwsh
         run: |
-          $tag = "${{ github.event.release.tag_name }}"
-          $version = $tag.TrimStart('v')
+          $version = "${{ env.VERSION_PREFIX }}.${{ github.run_number }}"
           "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Restore
