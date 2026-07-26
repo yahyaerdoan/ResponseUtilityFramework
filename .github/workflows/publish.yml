@@ -2,7 +2,7 @@ name: publish
 
 on:
   push:
-    branches: [master]
+    branches: [master, beta]
     paths:
       - 'src/**'
 
@@ -37,6 +37,9 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ env.VERSION_PREFIX }}.${{ github.run_number }}"
+          if ("${{ github.ref_name }}" -eq "beta") {
+            $version = "$version-beta.${{ github.run_number }}"
+          }
           "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Restore
