@@ -27,10 +27,10 @@ jobs:
             10.0.x
 
       - name: Restore
-        run: dotnet restore ResponseUtilityFramework.sln
+        run: dotnet restore ResponseUtilityLibrary.sln
 
       - name: Build
-        run: dotnet build ResponseUtilityFramework.sln --no-restore --configuration Release
+        run: dotnet build ResponseUtilityLibrary.sln --no-restore --configuration Release
 
       - name: Test
         run: dotnet test tests/ResultHandler.Tests/ResultHandler.Tests.csproj --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
