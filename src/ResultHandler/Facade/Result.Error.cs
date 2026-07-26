@@ -3,7 +3,7 @@ using ResultHandler.Implementations.Error;
 
 namespace ResultHandler.Facade;
 
-public static partial class Results
+public static partial class Result
 {
     public static ErrorResult BadRequest(string detail)
         => new("Bad Request", ResultStatus.BadRequest, detail);

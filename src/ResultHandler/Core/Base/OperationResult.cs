@@ -1,4 +1,4 @@
-﻿using ResultHandler.Core.Abstractions;
+using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
 using ResultHandler.Serialization;
@@ -10,14 +10,14 @@ namespace ResultHandler.Core.Base;
 /// <summary>
 /// Base implementation of <see cref="IOperationResult"/>. Immutable; prefer the
 /// <see cref="Implementations.Success.SuccessResult"/>/<see cref="Implementations.Error.ErrorResult"/>
-/// subclasses or the <see cref="ResultHandler.Facade.Results"/> facade over constructing this directly.
+/// subclasses or the <see cref="ResultHandler.Facade.Result"/> facade over constructing this directly.
 /// </summary>
 /// <param name="isSuccessful">Whether the operation succeeded.</param>
 /// <param name="status">The outcome status.</param>
 /// <param name="title">A short summary of the result.</param>
 /// <param name="detail">Optional additional context.</param>
 /// <param name="errors">Optional list of individual error messages.</param>
-public class Result(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null) : IOperationResult
+public class OperationResult(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null) : IOperationResult
 {
     [JsonPropertyName("isSuccessful")]
     public virtual bool IsSuccessful { get; } = isSuccessful;
@@ -36,15 +36,15 @@ public class Result(bool isSuccessful, ResultStatus status, string title, string
     public IReadOnlyList<string> Errors { get; } = errors ?? [];
 
     /// <summary>Legacy constructor forwarding into the canonical constructor via <see cref="Mapping.HttpStatusCodeExtensions.ToResultStatus(HttpStatusCode)"/>.</summary>
-    [Obsolete("Use Result(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
-    public Result(bool isSuccessful, string statusMessage, HttpStatusCode statusCode)
+    [Obsolete("Use OperationResult(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
+    public OperationResult(bool isSuccessful, string statusMessage, HttpStatusCode statusCode)
         : this(isSuccessful, statusCode.ToResultStatus(), statusMessage)
     {
     }
 
     /// <summary>Legacy constructor with default title/status for the given success flag.</summary>
-    [Obsolete("Use Result(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
-    public Result(bool isSuccessful)
+    [Obsolete("Use OperationResult(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
+    public OperationResult(bool isSuccessful)
         : this(
             isSuccessful,
             isSuccessful ? ResultStatus.Ok : ResultStatus.Error,
@@ -61,7 +61,7 @@ public class Result(bool isSuccessful, ResultStatus status, string title, string
     public HttpStatusCode StatusCode => Status.ToHttpStatusCode();
 
     public override bool Equals(object? obj)
-        => obj is Result other
+        => obj is OperationResult other
             && IsSuccessful == other.IsSuccessful
             && Status == other.Status
             && Title == other.Title

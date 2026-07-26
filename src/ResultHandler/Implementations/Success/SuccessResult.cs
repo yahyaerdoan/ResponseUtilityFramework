@@ -5,8 +5,8 @@ using System.Net;
 
 namespace ResultHandler.Implementations.Success;
 
-/// <summary>A successful <see cref="Result"/> (<c>IsSuccessful</c> is always <see langword="true"/>).</summary>
-public class SuccessResult : Result
+/// <summary>A successful <see cref="OperationResult"/> (<c>IsSuccessful</c> is always <see langword="true"/>).</summary>
+public class SuccessResult : OperationResult
 {
     /// <summary>Default success: status <see cref="ResultStatus.Ok"/>, title "Operation completed successfully.".</summary>
     public SuccessResult()

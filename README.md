@@ -86,27 +86,27 @@ if (request.Name is { Length: 0 })
 }
 ```
 
-`Result` / `DataResult<T>` (`ResultHandler.Core.Base`) are the base classes both of the above
-inherit from — construct them directly only for a custom result shape that isn't a plain
+`OperationResult` / `OperationDataResult<T>` (`ResultHandler.Core.Base`) are the base classes both of
+the above inherit from — construct them directly only for a custom result shape that isn't a plain
 success/error; `SuccessResult`/`ErrorResult` cover the normal cases.
 
 ---
-## 4. The `Results` facade — the recommended way
+## 4. The `Result` facade — the recommended way
 
-`ResultHandler.Facade.Results` is a static class with one factory pair per `ResultStatus`
+`ResultHandler.Facade.Result` is a static class with one factory pair per `ResultStatus`
 (non-generic and `<T>`), named after the status, with sensible default titles baked in. It's what
 the example above looks like using it instead:
 
 ```csharp
-using ResultHandler.Facade; // Results
+using ResultHandler.Facade; // Result
 
 public IOperationResult<ProductDto> GetById(int id)
 {
     var product = _products.Find(id);
 
     return product is null
-        ? Results.NotFound<ProductDto>($"Product {id} does not exist.")
-        : Results.Success(ToDto(product), "Product found.");
+        ? Result.NotFound<ProductDto>($"Product {id} does not exist.")
+        : Result.Success(ToDto(product), "Product found.");
 }
 
 public ErrorResult ValidateCreate(CreateProductRequest request)
@@ -115,15 +115,15 @@ public ErrorResult ValidateCreate(CreateProductRequest request)
     if (string.IsNullOrEmpty(request.Name)) errors.Add("Name is required.");
     if (request.Price <= 0) errors.Add("Price must be greater than zero.");
 
-    return errors.Count > 0 ? Results.Invalid(errors.ToArray()) : null!;
+    return errors.Count > 0 ? Result.Invalid(errors.ToArray()) : null!;
 }
 
 public SuccessResult MoveResource(int id, string newLocation)
-    => Results.MovedPermanently(newLocation); // 3xx redirects — location gets interpolated into the title
+    => Result.MovedPermanently(newLocation); // 3xx redirects — location gets interpolated into the title
 
 // Escape hatch for anything not covered by a named factory:
 public ErrorResult CustomFailure()
-    => Results.Failure("Payment declined.", "The card was rejected by the issuer.", ResultStatus.PaymentRequired);
+    => Result.Failure("Payment declined.", "The card was rejected by the issuer.", ResultStatus.PaymentRequired);
 ```
 
 ---
@@ -154,7 +154,7 @@ public class ProductsController : ControllerBase
             return validation.ToActionResult(); // 422 Problem Details with the two validation errors
         }
 
-        return Results.Created(_products.Create(request)).ToActionResult();
+        return Result.Created(_products.Create(request)).ToActionResult();
     }
 }
 ```
@@ -189,7 +189,7 @@ delegates accept `IActionResult` return values natively — no separate adapter 
 
 ```csharp
 using ResultHandler.AspNetCore.Extensions;
-using ResultsFacade = ResultHandler.Facade.Results; // see naming-collision note below
+using ResultHandler.Facade; // Result
 
 var app = WebApplication.Create(args);
 app.Services.GetRequiredService<IServiceCollection>(); // ...DI setup omitted
@@ -202,26 +202,26 @@ app.MapPost("/api/products", (CreateProductRequest request, ProductService produ
     var validation = products.ValidateCreate(request);
     return validation is not null
         ? validation.ToActionResult()
-        : ResultsFacade.Created(products.Create(request)).ToActionResult();
+        : Result.Created(products.Create(request)).ToActionResult();
 });
 
 app.Run();
 ```
 
 > **Naming collision to watch for:** ASP.NET Core's own Minimal API helpers live in
-> `Microsoft.AspNetCore.Http` as a static class also named `Results` (`Results.Ok(...)`,
+> `Microsoft.AspNetCore.Http` as a static class named `Results` (plural — `Results.Ok(...)`,
 > `Results.NotFound()`), and its endpoint delegates return an interface named `IResult`. This
-> library's own result interface is `IOperationResult` (`ResultHandler.Core.Abstractions`) —
-> deliberately *not* named `IResult` — so it never collides with ASP.NET Core's. The `Results` class
-> name, though, is still shared: if a file has `using Microsoft.AspNetCore.Http;` alongside
-> `using ResultHandler.Facade;`, `Results` becomes ambiguous — and a plain `using ResultHandler.Facade;`
-> can even lose to a same-named nested namespace in your own project (e.g. `YourApp.Results`), so
-> don't rely on the bare `using` in files where either risk applies. A using-alias sidesteps both
-> problems cleanly and reads better than qualifying every call:
+> library's own facade is `Result` (singular) and its result interface is `IOperationResult`
+> (`ResultHandler.Core.Abstractions`) — deliberately *not* named `Results`/`IResult` — so neither
+> collides with ASP.NET Core's, even with `using Microsoft.AspNetCore.Http;` and
+> `using ResultHandler.Facade;` in the same file. The one thing to still watch for: a plain
+> `using ResultHandler.Facade;` can lose to a same-named nested namespace in your own project (e.g.
+> `YourApp.Result`) — if that ever applies, a using-alias sidesteps it and reads better than
+> qualifying every call:
 > ```csharp
-> using ResultsFacade = ResultHandler.Facade.Results;
+> using ResultFacade = ResultHandler.Facade.Result;
 > // ...
-> return ResultsFacade.NotFound<ProductDto>("Missing.").ToActionResult();
+> return ResultFacade.NotFound<ProductDto>("Missing.").ToActionResult();
 > ```
 > `ToActionResult()` already returns the MVC `IActionResult` that both minimal endpoints and
 > controllers understand, so you rarely need ASP.NET Core's own `Results`/`IResult` at all once
@@ -260,7 +260,7 @@ and the failure (title/status/detail/errors) is carried over into the new result
 naming policy, and `ResultStatus` always serializes as its numeric HTTP code:
 
 ```csharp
-JsonSerializer.Serialize(Results.NotFound<ProductDto>("Product 42 does not exist."));
+JsonSerializer.Serialize(Result.NotFound<ProductDto>("Product 42 does not exist."));
 ```
 
 ```json
@@ -279,12 +279,12 @@ JsonSerializer.Serialize(Results.NotFound<ProductDto>("Product 42 does not exist
 ---
 ## 9. Equality & debugging
 
-`Result`/`DataResult<T>` override `Equals`/`GetHashCode` (structural, by value) and `ToString()`:
+`OperationResult`/`OperationDataResult<T>` override `Equals`/`GetHashCode` (structural, by value) and `ToString()`:
 
 ```csharp
-Results.NotFound("x") == Results.NotFound("x"); // false (reference types) — use .Equals()
-Results.NotFound("x").Equals(Results.NotFound("x")); // true
-Results.NotFound("x").ToString(); // "NotFound (404): Not found."
+Result.NotFound("x") == Result.NotFound("x"); // false (reference types) — use .Equals()
+Result.NotFound("x").Equals(Result.NotFound("x")); // true
+Result.NotFound("x").ToString(); // "NotFound (404): Not found."
 ```
 
 ---

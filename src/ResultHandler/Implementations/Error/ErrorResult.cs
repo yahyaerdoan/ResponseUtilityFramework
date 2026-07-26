@@ -5,8 +5,8 @@ using System.Net;
 
 namespace ResultHandler.Implementations.Error;
 
-/// <summary>A failed <see cref="Result"/> (<c>IsSuccessful</c> is always <see langword="false"/>).</summary>
-public class ErrorResult : Result
+/// <summary>A failed <see cref="OperationResult"/> (<c>IsSuccessful</c> is always <see langword="false"/>).</summary>
+public class ErrorResult : OperationResult
 {
     /// <summary>Default error: status <see cref="ResultStatus.Error"/>, title "An error occurred.".</summary>
     public ErrorResult()

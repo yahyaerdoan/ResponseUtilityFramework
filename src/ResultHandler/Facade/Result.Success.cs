@@ -3,7 +3,7 @@ using ResultHandler.Implementations.Success;
 
 namespace ResultHandler.Facade;
 
-public static partial class Results
+public static partial class Result
 {
     public static SuccessResult Continue(string title = "Continue.")
         => new(title, ResultStatus.Continue);
