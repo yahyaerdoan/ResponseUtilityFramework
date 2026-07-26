@@ -33,11 +33,11 @@ jobs:
         run: dotnet build ResponseUtilityLibrary.sln --no-restore --configuration Release
 
       - name: Test
-        run: dotnet test tests/ResultHandler.Tests/ResultHandler.Tests.csproj --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
+        run: dotnet test test/ResultHandler.Tests/ResultHandler.Tests.csproj --no-build --configuration Release --logger "trx;LogFileName=test-results.trx"
 
       - name: Publish test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: tests/ResultHandler.Tests/TestResults/*.trx
+          path: test/ResultHandler.Tests/TestResults/*.trx

@@ -51,7 +51,7 @@ jobs:
         run: dotnet build ResponseUtilityLibrary.sln --no-restore --configuration Release -p:Version=${{ steps.version.outputs.version }}
 
       - name: Test
-        run: dotnet test tests/ResultHandler.Tests/ResultHandler.Tests.csproj --no-build --configuration Release
+        run: dotnet test test/ResultHandler.Tests/ResultHandler.Tests.csproj --no-build --configuration Release
 
       - name: Pack
         run: dotnet pack ResponseUtilityLibrary.sln --no-build --configuration Release -p:Version=${{ steps.version.outputs.version }} --output ./nupkgs
