@@ -66,7 +66,7 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
             && Status == other.Status
             && Title == other.Title
             && Detail == other.Detail
-            && Errors.SequenceEqual(other.Errors);
+            && (ReferenceEquals(Errors, other.Errors) || Errors.SequenceEqual(other.Errors));
 
     public override int GetHashCode()
     {

@@ -35,6 +35,21 @@ public static partial class Result
     public static SuccessResult ResetContent()
         => new("Reset content.", ResultStatus.ResetContent);
 
+    public static SuccessResult NonAuthoritativeInformation()
+        => new("Non-authoritative information.", ResultStatus.NonAuthoritativeInformation);
+
+    public static SuccessResult PartialContent()
+        => new("Partial content.", ResultStatus.PartialContent);
+
+    public static SuccessResult MultiStatus()
+        => new("Multi-status.", ResultStatus.MultiStatus);
+
+    public static SuccessResult AlreadyReported()
+        => new("Already reported.", ResultStatus.AlreadyReported);
+
+    public static SuccessResult ImUsed()
+        => new("IM used.", ResultStatus.ImUsed);
+
     public static SuccessDataResult<T> Success<T>(T data)
         => new(data);
 
@@ -85,4 +100,28 @@ public static partial class Result
 
     public static SuccessResult PermanentRedirect(string location)
         => new($"Permanently redirected to: {location}", ResultStatus.PermanentRedirect);
+
+    public static SuccessDataResult<T> MultipleChoices<T>(T data, string detail)
+        => new(data, detail, ResultStatus.MultipleChoices);
+
+    public static SuccessDataResult<T> MovedPermanently<T>(T data, string location)
+        => new(data, $"Resource moved permanently to: {location}", ResultStatus.MovedPermanently);
+
+    public static SuccessDataResult<T> Found<T>(T data, string location)
+        => new(data, $"Resource found at: {location}", ResultStatus.Found);
+
+    public static SuccessDataResult<T> SeeOther<T>(T data, string location)
+        => new(data, $"See other resource at: {location}", ResultStatus.SeeOther);
+
+    public static SuccessDataResult<T> UseProxy<T>(T data, string proxy)
+        => new(data, $"Requested resource must be accessed through the proxy: {proxy}", ResultStatus.UseProxy);
+
+    public static SuccessDataResult<T> NotModified<T>(T data)
+        => new(data, "Not modified.", ResultStatus.NotModified);
+
+    public static SuccessDataResult<T> TemporaryRedirect<T>(T data, string location)
+        => new(data, $"Temporarily redirected to: {location}", ResultStatus.TemporaryRedirect);
+
+    public static SuccessDataResult<T> PermanentRedirect<T>(T data, string location)
+        => new(data, $"Permanently redirected to: {location}", ResultStatus.PermanentRedirect);
 }

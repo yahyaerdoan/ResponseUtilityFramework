@@ -11,7 +11,7 @@
     <PackageIcon>ResultHandlerIcon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>Response  response Result result Handler handler CQRS cqrs MediatR  mediatR NetCore netCore Core core .NET .net ProblemDetails RFC9457</PackageTags>
-    <PackageReleaseNotes>v11: Decoupled from HttpStatusCode via new ResultStatus enum, added Results.cs factory facade, RFC 9457 Problem Details support via ResultHandler.AspNetCore, custom JSON serialization. Old members (StatusMessage/StatusCode/ResultData) preserved as obsolete for backward compatibility.</PackageReleaseNotes>
+    <PackageReleaseNotes>v11: Decoupled from HttpStatusCode via new ResultStatus enum, added Result.cs factory facade, RFC 9457 Problem Details support via ResultHandler.AspNetCore, custom JSON serialization. Old members (StatusMessage/StatusCode/ResultData) preserved as obsolete for backward compatibility.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
