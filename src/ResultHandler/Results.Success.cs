@@ -74,6 +74,9 @@ public static partial class Results
     public static SuccessResult SeeOther(string location)
         => new($"See other resource at: {location}", ResultStatus.SeeOther);
 
+    public static SuccessResult UseProxy(string proxy)
+        => new($"Requested resource must be accessed through the proxy: {proxy}", ResultStatus.UseProxy);
+
     public static SuccessResult NotModified()
         => new("Not modified.", ResultStatus.NotModified);
 

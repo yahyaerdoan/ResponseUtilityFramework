@@ -1,4 +1,4 @@
-using ResultHandler.Core.Enums;
+﻿using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Error;
 
 namespace ResultHandler;
@@ -25,6 +25,9 @@ public static partial class Results
 
     public static ErrorResult NotAcceptable(string detail = "The requested media type is not supported by this server.")
         => new("Not Acceptable", ResultStatus.NotAcceptable, detail);
+
+    public static ErrorResult ProxyAuthenticationRequired(string detail = "Proxy authentication is required to access this resource.")
+        => new("Proxy Authentication Required", ResultStatus.ProxyAuthenticationRequired, detail);
 
     public static ErrorResult RequestTimeout(string detail = "The request timed out. Please try again.")
         => new("Request Timeout", ResultStatus.RequestTimeout, detail);
@@ -149,6 +152,9 @@ public static partial class Results
     public static ErrorDataResult<T> NotAcceptable<T>(string detail = "The requested media type is not supported by this server.")
         => new("Not Acceptable", ResultStatus.NotAcceptable, detail);
 
+    public static ErrorDataResult<T> ProxyAuthenticationRequired<T>(string detail = "Proxy authentication is required to access this resource.")
+        => new("Proxy Authentication Required", ResultStatus.ProxyAuthenticationRequired, detail);
+
     public static ErrorDataResult<T> RequestTimeout<T>(string detail = "The request timed out. Please try again.")
         => new("Request Timeout", ResultStatus.RequestTimeout, detail);
 
@@ -189,7 +195,10 @@ public static partial class Results
         => new("Unprocessable Entity", ResultStatus.Invalid, detail);
 
     public static ErrorDataResult<T> Invalid<T>(params string[] errors)
-        => new("Validation Failed", ResultStatus.Invalid, (IReadOnlyList<string>)errors);
+        => new("Validation Failed", ResultStatus.Invalid, errors);
+
+    public static ErrorDataResult<T> Invalid<T>(IReadOnlyList<string> errors)
+        => new("Validation Failed", ResultStatus.Invalid, errors);
 
     public static ErrorDataResult<T> Locked<T>(string detail = "The resource is currently locked and cannot be modified.")
         => new("Locked", ResultStatus.Locked, detail);

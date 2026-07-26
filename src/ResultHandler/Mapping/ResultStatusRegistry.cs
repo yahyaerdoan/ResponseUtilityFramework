@@ -81,6 +81,25 @@ internal static class ResultStatusRegistry
     };
 
     // Never hand-written: always derived from ToHttpCode so the two directions can never drift apart.
-    public static readonly IReadOnlyDictionary<int, ResultStatus> FromHttpCode =
-        ToHttpCode.ToDictionary(kv => (int)kv.Value, kv => kv.Key);
+    public static readonly IReadOnlyDictionary<int, ResultStatus> FromHttpCode = BuildFromHttpCode();
+
+    private static Dictionary<int, ResultStatus> BuildFromHttpCode()
+    {
+        var map = new Dictionary<int, ResultStatus>();
+        foreach (var (status, httpStatusCode) in ToHttpCode)
+        {
+            var code = (int)httpStatusCode;
+            if (map.TryGetValue(code, out var existing))
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(ResultStatusRegistry)}.{nameof(ToHttpCode)} maps both " +
+                    $"{nameof(ResultStatus)}.{existing} and {nameof(ResultStatus)}.{status} to HTTP status code {code}. " +
+                    "Each ResultStatus must map to a distinct HTTP status code.");
+            }
+
+            map[code] = status;
+        }
+
+        return map;
+    }
 }
