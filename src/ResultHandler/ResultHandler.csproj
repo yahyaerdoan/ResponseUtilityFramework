@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0;net8.0;net9.0;net10.0;netstandard2.0</TargetFrameworks>
+    <PackageId>ResponseResultHandler</PackageId>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Response Result Handler</Title>
+    <Version>11.0.0</Version>
+    <Product>ResponseResultHandler</Product>
+    <Description>Response Utility Framework is a framework designed for streamlined handling of response results, supporting success, error, and data outcomes in .NET applications. Within this framework, the ResultHandler project serves as a versatile utility for managing result handling and responses efficiently across different use cases.</Description>
+    <PackageIcon>ResultHandlerIcon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>Response  response Result result Handler handler CQRS cqrs MediatR  mediatR NetCore netCore Core core .NET .net ProblemDetails RFC9457</PackageTags>
+    <PackageReleaseNotes>v11: Decoupled from HttpStatusCode via new ResultStatus enum, added Results.cs factory facade, RFC 9457 Problem Details support via ResultHandler.AspNetCore, custom JSON serialization. Old members (StatusMessage/StatusCode/ResultData) preserved as obsolete for backward compatibility.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="ResultHandlerIcon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="System.Text.Json" Version="6.0.10" />
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="ResultHandler.Tests" />
+  </ItemGroup>
+
+</Project>
