@@ -166,7 +166,7 @@ public static class AspNetCoreResultExtensions
             [ResultStatus.ExpectationFailed] = "https://tools.ietf.org/html/rfc9110#section-15.5.18",
             [ResultStatus.ImATeapot] = "https://tools.ietf.org/html/rfc9110#section-15.5.19",
             [ResultStatus.MisdirectedRequest] = "https://tools.ietf.org/html/rfc9110#section-15.5.20",
-            [ResultStatus.Invalid] = "https://tools.ietf.org/html/rfc9110#section-15.5.21",
+            [ResultStatus.UnprocessableContent] = "https://tools.ietf.org/html/rfc9110#section-15.5.21",
             [ResultStatus.Locked] = "https://tools.ietf.org/html/rfc4918#section-11.3",
             [ResultStatus.FailedDependency] = "https://tools.ietf.org/html/rfc4918#section-11.4",
             [ResultStatus.TooEarly] = "https://tools.ietf.org/html/rfc8470#section-5.2",
@@ -177,10 +177,10 @@ public static class AspNetCoreResultExtensions
             [ResultStatus.UnavailableForLegalReasons] = "https://tools.ietf.org/html/rfc7725#section-3",
 
             // 5xx - RFC 9110 §15.6.x / RFC 4918 / RFC 2295 / RFC 5842 / RFC 2774 / RFC 6585
-            [ResultStatus.Error] = "https://tools.ietf.org/html/rfc9110#section-15.6.1",
+            [ResultStatus.InternalServerError] = "https://tools.ietf.org/html/rfc9110#section-15.6.1",
             [ResultStatus.NotImplemented] = "https://tools.ietf.org/html/rfc9110#section-15.6.2",
             [ResultStatus.BadGateway] = "https://tools.ietf.org/html/rfc9110#section-15.6.3",
-            [ResultStatus.Unavailable] = "https://tools.ietf.org/html/rfc9110#section-15.6.4",
+            [ResultStatus.ServiceUnavailable] = "https://tools.ietf.org/html/rfc9110#section-15.6.4",
             [ResultStatus.GatewayTimeout] = "https://tools.ietf.org/html/rfc9110#section-15.6.5",
             [ResultStatus.HttpVersionNotSupported] = "https://tools.ietf.org/html/rfc9110#section-15.6.6",
             [ResultStatus.VariantAlsoNegotiates] = "https://tools.ietf.org/html/rfc2295#section-8.1",

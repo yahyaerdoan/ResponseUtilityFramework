@@ -44,7 +44,7 @@ public class OperationDataResult<T>([AllowNull] T data, bool isSuccessful, Resul
         : this(
             resultData,
             isSuccessful,
-            isSuccessful ? ResultStatus.Ok : ResultStatus.Error,
+            isSuccessful ? ResultStatus.Ok : ResultStatus.InternalServerError,
             isSuccessful ? "Operation completed successfully." : "An error occurred.")
     {
     }

@@ -47,7 +47,7 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
     public OperationResult(bool isSuccessful)
         : this(
             isSuccessful,
-            isSuccessful ? ResultStatus.Ok : ResultStatus.Error,
+            isSuccessful ? ResultStatus.Ok : ResultStatus.InternalServerError,
             isSuccessful ? "Operation completed successfully." : "An error occurred.")
     {
     }

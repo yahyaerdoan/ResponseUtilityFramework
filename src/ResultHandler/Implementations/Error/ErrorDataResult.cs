@@ -8,14 +8,14 @@ namespace ResultHandler.Implementations.Error;
 /// <summary>A failed <see cref="OperationDataResult{T}"/> (<c>IsSuccessful</c> is always <see langword="false"/>).</summary>
 public class ErrorDataResult<T> : OperationDataResult<T>
 {
-    /// <summary>Default error, no data: status <see cref="ResultStatus.Error"/>, title "An error occurred.".</summary>
+    /// <summary>Default error, no data: status <see cref="ResultStatus.InternalServerError"/>, title "An error occurred.".</summary>
     public ErrorDataResult()
-        : base(default, false, ResultStatus.Error, "An error occurred.")
+        : base(default, false, ResultStatus.InternalServerError, "An error occurred.")
     {
     }
 
     public ErrorDataResult(T data)
-        : base(data, false, ResultStatus.Error, "An error occurred.")
+        : base(data, false, ResultStatus.InternalServerError, "An error occurred.")
     {
     }
 

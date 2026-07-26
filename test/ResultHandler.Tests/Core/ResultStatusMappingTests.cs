@@ -45,15 +45,15 @@ public class ResultStatusMappingTests
     [Theory]
     [InlineData(200, ResultStatus.Ok)]
     [InlineData(404, ResultStatus.NotFound)]
-    [InlineData(500, ResultStatus.Error)]
+    [InlineData(500, ResultStatus.InternalServerError)]
     public void IntToResultStatus_UsesRegistryLookup(int httpCode, ResultStatus expected)
         => Assert.Equal(expected, httpCode.ToResultStatus());
 
     [Theory]
     [InlineData(299, ResultStatus.Ok)]
     [InlineData(499, ResultStatus.BadRequest)]
-    [InlineData(599, ResultStatus.Error)]
-    [InlineData(999, ResultStatus.Error)]
+    [InlineData(599, ResultStatus.InternalServerError)]
+    [InlineData(999, ResultStatus.InternalServerError)]
     public void IntToResultStatus_FallsBackToRangeBasedSwitch_WhenNotInRegistry(int httpCode, ResultStatus expected)
         => Assert.Equal(expected, httpCode.ToResultStatus());
 }

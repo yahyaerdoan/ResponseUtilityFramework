@@ -21,7 +21,7 @@ public static class HttpStatusCodeExtensions
             >= 200 and < 300 => ResultStatus.Ok,
             >= 300 and < 400 => ResultStatus.Found,
             >= 400 and < 500 => ResultStatus.BadRequest,
-            _ => ResultStatus.Error,
+            _ => ResultStatus.InternalServerError,
         };
     }
 }

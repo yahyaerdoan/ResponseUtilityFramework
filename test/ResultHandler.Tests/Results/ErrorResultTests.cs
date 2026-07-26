@@ -13,7 +13,7 @@ public class ErrorResultTests
         var result = new ErrorResult();
 
         Assert.False(result.IsSuccessful);
-        Assert.Equal(ResultStatus.Error, result.Status);
+        Assert.Equal(ResultStatus.InternalServerError, result.Status);
         Assert.Equal("An error occurred.", result.Title);
         Assert.Null(result.Detail);
         Assert.Empty(result.Errors);
@@ -34,7 +34,7 @@ public class ErrorResultTests
     public void TitleStatusErrorsConstructor_PopulatesErrors()
     {
         var errors = new[] { "Field A is required.", "Field B is invalid." };
-        var result = new ErrorResult("Validation failed.", ResultStatus.Invalid, errors);
+        var result = new ErrorResult("Validation failed.", ResultStatus.UnprocessableContent, errors);
 
         Assert.Equal(errors, result.Errors);
         Assert.Null(result.Detail);
@@ -60,7 +60,7 @@ public class ErrorResultTests
         var result = new ErrorDataResult<string>("payload");
 
         Assert.False(result.IsSuccessful);
-        Assert.Equal(ResultStatus.Error, result.Status);
+        Assert.Equal(ResultStatus.InternalServerError, result.Status);
         Assert.Equal("An error occurred.", result.Title);
         Assert.Equal("payload", result.Data);
     }

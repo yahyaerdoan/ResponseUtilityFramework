@@ -65,14 +65,14 @@ public static partial class Result
     public static ErrorResult MisdirectedRequest(string detail = "The request was directed to a server unable to produce a response.")
         => new("Misdirected Request", ResultStatus.MisdirectedRequest, detail);
 
-    public static ErrorResult UnprocessableEntity(string detail)
-        => new("Unprocessable Entity", ResultStatus.Invalid, detail);
+    public static ErrorResult UnprocessableContent(string detail)
+        => new("Unprocessable Content", ResultStatus.UnprocessableContent, detail);
 
     public static ErrorResult Invalid(params string[] errors)
-        => new("Validation Failed", ResultStatus.Invalid, (IReadOnlyList<string>)errors);
+        => new("Validation Failed", ResultStatus.UnprocessableContent, (IReadOnlyList<string>)errors);
 
     public static ErrorResult Invalid(IReadOnlyList<string> errors)
-        => new("Validation Failed", ResultStatus.Invalid, errors);
+        => new("Validation Failed", ResultStatus.UnprocessableContent, errors);
 
     public static ErrorResult Locked(string detail = "The resource is currently locked and cannot be modified.")
         => new("Locked", ResultStatus.Locked, detail);
@@ -99,7 +99,7 @@ public static partial class Result
         => new("Unavailable For Legal Reasons", ResultStatus.UnavailableForLegalReasons, detail);
 
     public static ErrorResult InternalServerError(string detail = "An unexpected error occurred. Please try again later.")
-        => new("Internal Server Error", ResultStatus.Error, detail);
+        => new("Internal Server Error", ResultStatus.InternalServerError, detail);
 
     public static ErrorResult NotImplemented(string detail = "This feature is not yet implemented.")
         => new("Not Implemented", ResultStatus.NotImplemented, detail);
@@ -108,7 +108,7 @@ public static partial class Result
         => new("Bad Gateway", ResultStatus.BadGateway, detail);
 
     public static ErrorResult ServiceUnavailable(string detail = "The service is temporarily unavailable. Please try again later.")
-        => new("Service Unavailable", ResultStatus.Unavailable, detail);
+        => new("Service Unavailable", ResultStatus.ServiceUnavailable, detail);
 
     public static ErrorResult GatewayTimeout(string detail = "An upstream server did not respond in time.")
         => new("Gateway Timeout", ResultStatus.GatewayTimeout, detail);
@@ -191,14 +191,14 @@ public static partial class Result
     public static ErrorDataResult<T> MisdirectedRequest<T>(string detail = "The request was directed to a server unable to produce a response.")
         => new("Misdirected Request", ResultStatus.MisdirectedRequest, detail);
 
-    public static ErrorDataResult<T> UnprocessableEntity<T>(string detail)
-        => new("Unprocessable Entity", ResultStatus.Invalid, detail);
+    public static ErrorDataResult<T> UnprocessableContent<T>(string detail)
+        => new("Unprocessable Content", ResultStatus.UnprocessableContent, detail);
 
     public static ErrorDataResult<T> Invalid<T>(params string[] errors)
-        => new("Validation Failed", ResultStatus.Invalid, errors);
+        => new("Validation Failed", ResultStatus.UnprocessableContent, errors);
 
     public static ErrorDataResult<T> Invalid<T>(IReadOnlyList<string> errors)
-        => new("Validation Failed", ResultStatus.Invalid, errors);
+        => new("Validation Failed", ResultStatus.UnprocessableContent, errors);
 
     public static ErrorDataResult<T> Locked<T>(string detail = "The resource is currently locked and cannot be modified.")
         => new("Locked", ResultStatus.Locked, detail);
@@ -225,7 +225,7 @@ public static partial class Result
         => new("Unavailable For Legal Reasons", ResultStatus.UnavailableForLegalReasons, detail);
 
     public static ErrorDataResult<T> InternalServerError<T>(string detail = "An unexpected error occurred. Please try again later.")
-        => new("Internal Server Error", ResultStatus.Error, detail);
+        => new("Internal Server Error", ResultStatus.InternalServerError, detail);
 
     public static ErrorDataResult<T> NotImplemented<T>(string detail = "This feature is not yet implemented.")
         => new("Not Implemented", ResultStatus.NotImplemented, detail);
@@ -234,7 +234,7 @@ public static partial class Result
         => new("Bad Gateway", ResultStatus.BadGateway, detail);
 
     public static ErrorDataResult<T> ServiceUnavailable<T>(string detail = "The service is temporarily unavailable. Please try again later.")
-        => new("Service Unavailable", ResultStatus.Unavailable, detail);
+        => new("Service Unavailable", ResultStatus.ServiceUnavailable, detail);
 
     public static ErrorDataResult<T> GatewayTimeout<T>(string detail = "An upstream server did not respond in time.")
         => new("Gateway Timeout", ResultStatus.GatewayTimeout, detail);

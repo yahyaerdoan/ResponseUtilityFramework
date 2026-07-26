@@ -51,7 +51,7 @@ public enum ResultStatus
     ExpectationFailed,              // 417
     ImATeapot,                      // 418
     MisdirectedRequest,             // 421
-    Invalid,                        // 422 (Unprocessable Entity)
+    UnprocessableContent,           // 422
     Locked,                         // 423
     FailedDependency,               // 424
     TooEarly,                       // 425
@@ -62,10 +62,10 @@ public enum ResultStatus
     UnavailableForLegalReasons,     // 451
 
     // 5xx - Server errors
-    Error,                            // 500 (Internal Server Error)
+    InternalServerError,              // 500
     NotImplemented,                   // 501
     BadGateway,                       // 502
-    Unavailable,                      // 503
+    ServiceUnavailable,               // 503
     GatewayTimeout,                   // 504
     HttpVersionNotSupported,          // 505
     VariantAlsoNegotiates,            // 506

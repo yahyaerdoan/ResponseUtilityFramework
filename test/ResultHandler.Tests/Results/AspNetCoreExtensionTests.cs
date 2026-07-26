@@ -68,7 +68,7 @@ public class AspNetCoreExtensionTests
     public void ToProblemDetails_WithErrors_AddsErrorsExtension()
     {
         var errors = new[] { "Field A is required." };
-        var result = new ErrorResult("Validation failed.", ResultStatus.Invalid, errors);
+        var result = new ErrorResult("Validation failed.", ResultStatus.UnprocessableContent, errors);
 
         var problemDetails = result.ToProblemDetails();
 

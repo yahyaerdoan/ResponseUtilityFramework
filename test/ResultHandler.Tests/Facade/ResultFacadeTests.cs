@@ -67,7 +67,7 @@ public class ResultFacadeTests
     {
         var result = Result.Invalid("Name is required.", "Email is invalid.");
 
-        Assert.Equal(ResultStatus.Invalid, result.Status);
+        Assert.Equal(ResultStatus.UnprocessableContent, result.Status);
         Assert.Equal(2, result.Errors.Count);
     }
 

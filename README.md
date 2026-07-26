@@ -81,7 +81,7 @@ Validation errors use the `IReadOnlyList<string> errors` overload instead of `de
 ```csharp
 if (request.Name is { Length: 0 })
 {
-    return new ErrorResult("Validation failed.", ResultStatus.Invalid,
+    return new ErrorResult("Validation failed.", ResultStatus.UnprocessableContent,
         new[] { "Name is required.", "Price must be greater than zero." });
 }
 ```

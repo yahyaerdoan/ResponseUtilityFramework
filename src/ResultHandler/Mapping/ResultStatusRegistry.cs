@@ -56,7 +56,7 @@ internal static class ResultStatusRegistry
         [ResultStatus.ExpectationFailed] = HttpStatusCode.ExpectationFailed,
         [ResultStatus.ImATeapot] = (HttpStatusCode)418,
         [ResultStatus.MisdirectedRequest] = (HttpStatusCode)421,
-        [ResultStatus.Invalid] = (HttpStatusCode)422,
+        [ResultStatus.UnprocessableContent] = (HttpStatusCode)422,
         [ResultStatus.Locked] = (HttpStatusCode)423,
         [ResultStatus.FailedDependency] = (HttpStatusCode)424,
         [ResultStatus.TooEarly] = (HttpStatusCode)425,
@@ -67,10 +67,10 @@ internal static class ResultStatusRegistry
         [ResultStatus.UnavailableForLegalReasons] = (HttpStatusCode)451,
 
         // 5xx
-        [ResultStatus.Error] = HttpStatusCode.InternalServerError,
+        [ResultStatus.InternalServerError] = HttpStatusCode.InternalServerError,
         [ResultStatus.NotImplemented] = HttpStatusCode.NotImplemented,
         [ResultStatus.BadGateway] = HttpStatusCode.BadGateway,
-        [ResultStatus.Unavailable] = HttpStatusCode.ServiceUnavailable,
+        [ResultStatus.ServiceUnavailable] = HttpStatusCode.ServiceUnavailable,
         [ResultStatus.GatewayTimeout] = HttpStatusCode.GatewayTimeout,
         [ResultStatus.HttpVersionNotSupported] = HttpStatusCode.HttpVersionNotSupported,
         [ResultStatus.VariantAlsoNegotiates] = (HttpStatusCode)506,
