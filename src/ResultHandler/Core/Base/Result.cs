@@ -10,7 +10,7 @@ namespace ResultHandler.Core.Base;
 /// <summary>
 /// Base implementation of <see cref="IResult"/>. Immutable; prefer the
 /// <see cref="Implementations.Success.SuccessResult"/>/<see cref="Implementations.Error.ErrorResult"/>
-/// subclasses or the <see cref="Results"/> facade over constructing this directly.
+/// subclasses or the <see cref="ResultHandler.Facade.Results"/> facade over constructing this directly.
 /// </summary>
 /// <param name="isSuccessful">Whether the operation succeeded.</param>
 /// <param name="status">The outcome status.</param>

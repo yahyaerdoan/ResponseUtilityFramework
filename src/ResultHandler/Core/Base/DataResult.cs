@@ -10,7 +10,7 @@ namespace ResultHandler.Core.Base;
 /// <summary>
 /// Base implementation of <see cref="IDataResult{T}"/>. Immutable; prefer the
 /// <see cref="Implementations.Success.SuccessDataResult{T}"/>/<see cref="Implementations.Error.ErrorDataResult{T}"/>
-/// subclasses or the <see cref="Results"/> facade over constructing this directly.
+/// subclasses or the <see cref="ResultHandler.Facade.Results"/> facade over constructing this directly.
 /// </summary>
 /// <param name="data">The data payload; may be <see langword="null"/> when <paramref name="isSuccessful"/> is <see langword="false"/>.</param>
 /// <param name="isSuccessful">Whether the operation succeeded.</param>

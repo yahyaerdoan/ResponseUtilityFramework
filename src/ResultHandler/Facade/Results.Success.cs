@@ -1,7 +1,7 @@
-using ResultHandler.Core.Enums;
+﻿using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Success;
 
-namespace ResultHandler;
+namespace ResultHandler.Facade;
 
 public static partial class Results
 {
