@@ -182,6 +182,7 @@ delegates accept `IActionResult` return values natively — no separate adapter 
 
 ```csharp
 using ResultHandler.AspNetCore.Extensions;
+using ResultsFacade = ResultHandler.Results; // see naming-collision note below
 
 var app = WebApplication.Create(args);
 app.Services.GetRequiredService<IServiceCollection>(); // ...DI setup omitted
@@ -194,7 +195,7 @@ app.MapPost("/api/products", (CreateProductRequest request, ProductService produ
     var validation = products.ValidateCreate(request);
     return validation is not null
         ? validation.ToActionResult()
-        : ResultHandler.Results.Created(products.Create(request)).ToActionResult();
+        : ResultsFacade.Created(products.Create(request)).ToActionResult();
 });
 
 app.Run();
@@ -204,11 +205,18 @@ app.Run();
 > `Microsoft.AspNetCore.Http` as a static class also named `Results` (`Results.Ok(...)`,
 > `Results.NotFound()`), and its endpoint delegates return an interface also named `IResult`. If a
 > file has `using Microsoft.AspNetCore.Http;` alongside `using ResultHandler;`, both `Results` and
-> `IResult` become ambiguous. Fully qualify this library's facade as `ResultHandler.Results.X(...)`
-> in files that also use ASP.NET Core's built-in helpers (as above), or keep the two usages in
-> separate files — don't try to alias one away, since `ToActionResult()` already returns the MVC
-> `IActionResult` that both minimal endpoints and controllers understand, so you rarely need
-> ASP.NET Core's own `Results`/`IResult` at all once you're using this library.
+> `IResult` become ambiguous — and a plain `using ResultHandler;` can even lose to a same-named
+> nested namespace in your own project (e.g. `YourApp.Results`), so don't rely on the bare `using`
+> in files where either risk applies. A using-alias sidesteps both problems cleanly and reads better
+> than qualifying every call:
+> ```csharp
+> using ResultsFacade = ResultHandler.Results;
+> // ...
+> return ResultsFacade.NotFound<ProductDto>("Missing.").ToActionResult();
+> ```
+> `ToActionResult()` already returns the MVC `IActionResult` that both minimal endpoints and
+> controllers understand, so you rarely need ASP.NET Core's own `Results`/`IResult` at all once
+> you're using this library.
 
 ---
 ## 7. Functional composition
@@ -248,7 +256,7 @@ JsonSerializer.Serialize(Results.NotFound<ProductDto>("Product 42 does not exist
 
 ```json
 {
-  "IsSuccessful": false,
+  "isSuccessful": false,
   "statusCode": 404,
   "statusMessage": "Not found.",
   "detail": "Product 42 does not exist.",

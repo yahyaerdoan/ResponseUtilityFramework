@@ -19,6 +19,7 @@ namespace ResultHandler.Core.Base;
 /// <param name="errors">Optional list of individual error messages.</param>
 public class Result(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null) : IResult
 {
+    [JsonPropertyName("isSuccessful")]
     public virtual bool IsSuccessful { get; } = isSuccessful;
 
     [JsonConverter(typeof(ResultStatusJsonConverter))]
@@ -28,6 +29,7 @@ public class Result(bool isSuccessful, ResultStatus status, string title, string
     [JsonPropertyName("statusMessage")]
     public string Title { get; } = title;
 
+    [JsonPropertyName("detail")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Detail { get; } = detail;
 

@@ -27,6 +27,7 @@ public class DataResult<T>([AllowNull] T data, bool isSuccessful, ResultStatus s
     public T Data { get; } = data!;
 
     /// <inheritdoc cref="IResult.IsSuccessful"/>
+    [JsonPropertyName("isSuccessful")]
     [MemberNotNullWhen(true, nameof(Data))]
     public override bool IsSuccessful => base.IsSuccessful;
 

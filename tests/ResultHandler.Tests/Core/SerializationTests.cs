@@ -20,7 +20,7 @@ public class SerializationTests
         Assert.Equal((int)ResultStatus.Ok.ToHttpStatusCode(), root.GetProperty("statusCode").GetInt32());
         Assert.Equal("Fetched.", root.GetProperty("statusMessage").GetString());
         Assert.Equal("payload", root.GetProperty("resultData").GetString());
-        Assert.True(root.GetProperty("IsSuccessful").GetBoolean());
+        Assert.True(root.GetProperty("isSuccessful").GetBoolean());
     }
 
     [Fact]
@@ -30,7 +30,7 @@ public class SerializationTests
 
         using var document = JsonDocument.Parse(JsonSerializer.Serialize(result));
 
-        Assert.False(document.RootElement.TryGetProperty("Detail", out _));
+        Assert.False(document.RootElement.TryGetProperty("detail", out _));
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class SerializationTests
 
         using var document = JsonDocument.Parse(JsonSerializer.Serialize(result));
 
-        Assert.Equal("Field X is missing.", document.RootElement.GetProperty("Detail").GetString());
+        Assert.Equal("Field X is missing.", document.RootElement.GetProperty("detail").GetString());
     }
 
     [Fact]
