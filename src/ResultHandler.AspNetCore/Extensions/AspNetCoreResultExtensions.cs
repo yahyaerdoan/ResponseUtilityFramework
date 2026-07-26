@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
@@ -63,7 +63,7 @@ public static class AspNetCoreResultExtensions
     {
         if (result.IsSuccessful)
         {
-            return ToBodylessSuccessActionResult(result.Status)
+            return (IActionResult?)ToBodylessSuccessActionResult(result.Status)
                 ?? new OkObjectResult(result);
         }
 
@@ -79,7 +79,7 @@ public static class AspNetCoreResultExtensions
     {
         var problem = new ProblemDetails
         {
-            Type = ProblemTypes.TryGetValue(result.Status, out var type) ? type : "about:blank",
+            Type = _problemTypes.TryGetValue(result.Status, out var type) ? type : "about:blank",
             Title = result.Title,
             Detail = result.Detail,
             Status = (int)result.Status.ToHttpStatusCode(),
@@ -96,11 +96,11 @@ public static class AspNetCoreResultExtensions
 
     private static IActionResult ToSuccessActionResult<T>(ResultStatus status, T data)
     {
-        return ToBodylessSuccessActionResult(status)
+        return (IActionResult?)ToBodylessSuccessActionResult(status)
             ?? new OkObjectResult(data);
     }
 
-    private static IActionResult? ToBodylessSuccessActionResult(ResultStatus status)
+    private static StatusCodeResult? ToBodylessSuccessActionResult(ResultStatus status)
     {
         var httpCode = (int)status.ToHttpStatusCode();
         return status switch
@@ -119,8 +119,8 @@ public static class AspNetCoreResultExtensions
         };
 
     // RFC 9110 / RFC 6585 / RFC 4918 / RFC 7725 / RFC 8470 - canonical type URIs per RFC 9457 §4.2
-    private static readonly IReadOnlyDictionary<ResultStatus, string> ProblemTypes =
-        new Dictionary<ResultStatus, string>
+    private static readonly Dictionary<ResultStatus, string> _problemTypes =
+        new()
         {
             // 1xx, 2xx, 3xx - about:blank per RFC 9457 §4.2.1
             [ResultStatus.Continue] = "about:blank",
