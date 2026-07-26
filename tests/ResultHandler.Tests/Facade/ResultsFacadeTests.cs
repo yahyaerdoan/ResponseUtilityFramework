@@ -8,7 +8,7 @@ public class ResultsFacadeTests
     [Fact]
     public void Success_NoArgs_UsesDefaults()
     {
-        var result = global::ResultHandler.Results.Success();
+        var result = ResultHandler.Results.Success();
 
         Assert.True(result.IsSuccessful);
         Assert.Equal(ResultStatus.Ok, result.Status);
@@ -17,7 +17,7 @@ public class ResultsFacadeTests
     [Fact]
     public void Success_WithData_CarriesData()
     {
-        var result = global::ResultHandler.Results.Success(42);
+        var result = ResultHandler.Results.Success(42);
 
         Assert.True(result.IsSuccessful);
         Assert.Equal(42, result.Data);
@@ -26,7 +26,7 @@ public class ResultsFacadeTests
     [Fact]
     public void MovedPermanently_InterpolatesLocationIntoTitle()
     {
-        var result = global::ResultHandler.Results.MovedPermanently("https://example.com/new");
+        var result = ResultHandler.Results.MovedPermanently("https://example.com/new");
 
         Assert.True(result.IsSuccessful);
         Assert.Equal(ResultStatus.MovedPermanently, result.Status);
@@ -36,7 +36,7 @@ public class ResultsFacadeTests
     [Fact]
     public void NotFound_UsesGivenDetail()
     {
-        var result = global::ResultHandler.Results.NotFound("The user does not exist.");
+        var result = ResultHandler.Results.NotFound("The user does not exist.");
 
         Assert.False(result.IsSuccessful);
         Assert.Equal(ResultStatus.NotFound, result.Status);
@@ -46,7 +46,7 @@ public class ResultsFacadeTests
     [Fact]
     public void Unauthorized_HasDefaultDetail()
     {
-        var result = global::ResultHandler.Results.Unauthorized();
+        var result = ResultHandler.Results.Unauthorized();
 
         Assert.Equal("Authentication is required to access this resource.", result.Detail);
     }
@@ -54,7 +54,7 @@ public class ResultsFacadeTests
     [Fact]
     public void NotFoundOfT_ReturnsGenericErrorDataResult()
     {
-        var result = global::ResultHandler.Results.NotFound<string>("Missing.");
+        var result = ResultHandler.Results.NotFound<string>("Missing.");
 
         Assert.False(result.IsSuccessful);
         Assert.Equal(ResultStatus.NotFound, result.Status);
@@ -64,7 +64,7 @@ public class ResultsFacadeTests
     [Fact]
     public void Invalid_ParamsOverload_SetsErrors()
     {
-        var result = global::ResultHandler.Results.Invalid("Name is required.", "Email is invalid.");
+        var result = ResultHandler.Results.Invalid("Name is required.", "Email is invalid.");
 
         Assert.Equal(ResultStatus.Invalid, result.Status);
         Assert.Equal(2, result.Errors.Count);
@@ -75,7 +75,7 @@ public class ResultsFacadeTests
     {
         IReadOnlyList<string> errors = new[] { "Name is required." };
 
-        var result = global::ResultHandler.Results.Invalid(errors);
+        var result = ResultHandler.Results.Invalid(errors);
 
         Assert.Equal(errors, result.Errors);
     }
@@ -83,7 +83,7 @@ public class ResultsFacadeTests
     [Fact]
     public void Failure_EscapeHatch_BuildsCustomErrorResult()
     {
-        var result = global::ResultHandler.Results.Failure("Custom title", "Custom detail", ResultStatus.Conflict);
+        var result = ResultHandler.Results.Failure("Custom title", "Custom detail", ResultStatus.Conflict);
 
         Assert.Equal("Custom title", result.Title);
         Assert.Equal("Custom detail", result.Detail);
@@ -93,7 +93,7 @@ public class ResultsFacadeTests
     [Fact]
     public void FailureOfT_WithData_BuildsCustomErrorDataResult()
     {
-        var result = global::ResultHandler.Results.Failure(-1, "Custom title", "Custom detail", ResultStatus.Conflict);
+        var result = ResultHandler.Results.Failure(-1, "Custom title", "Custom detail", ResultStatus.Conflict);
 
         Assert.Equal(-1, result.Data);
         Assert.Equal(ResultStatus.Conflict, result.Status);

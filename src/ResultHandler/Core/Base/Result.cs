@@ -1,9 +1,9 @@
-using System.Net;
-using System.Text.Json.Serialization;
-using ResultHandler.Core.Abstractions;
+﻿using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
 using ResultHandler.Serialization;
+using System.Net;
+using System.Text.Json.Serialization;
 
 namespace ResultHandler.Core.Base;
 

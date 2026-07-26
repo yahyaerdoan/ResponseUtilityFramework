@@ -1,7 +1,7 @@
-using System.Net;
-using ResultHandler.Core.Base;
+﻿using ResultHandler.Core.Base;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
+using System.Net;
 
 namespace ResultHandler.Implementations.Error;
 
