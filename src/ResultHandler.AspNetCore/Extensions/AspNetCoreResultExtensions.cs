@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
-using HttpContext = Microsoft.AspNetCore.Http.HttpContext;
 
 namespace ResultHandler.AspNetCore.Extensions;
 
@@ -17,7 +17,7 @@ public static class AspNetCoreResultExtensions
     /// Optional; when provided, a failed result's <see cref="ProblemDetails.Instance"/> is set to
     /// the current request path per RFC 9457.
     /// </param>
-    public static IActionResult ToActionResult(this IResult result, HttpContext? httpContext = null)
+    public static IActionResult ToActionResult(this IOperationResult result, HttpContext? httpContext = null)
     {
         if (result.IsSuccessful)
         {
@@ -40,7 +40,7 @@ public static class AspNetCoreResultExtensions
     /// Optional; when provided, a failed result's <see cref="ProblemDetails.Instance"/> is set to
     /// the current request path per RFC 9457.
     /// </param>
-    public static IActionResult ToActionResult<T>(this IDataResult<T> result, HttpContext? httpContext = null)
+    public static IActionResult ToActionResult<T>(this IOperationResult<T> result, HttpContext? httpContext = null)
     {
         if (result.IsSuccessful)
         {
@@ -59,7 +59,7 @@ public static class AspNetCoreResultExtensions
     /// Optional; when provided, a failed result's <see cref="ProblemDetails.Instance"/> is set to
     /// the current request path per RFC 9457.
     /// </param>
-    public static IActionResult ToEnvelopedActionResult(this IResult result, HttpContext? httpContext = null)
+    public static IActionResult ToEnvelopedActionResult(this IOperationResult result, HttpContext? httpContext = null)
     {
         if (result.IsSuccessful)
         {
@@ -75,7 +75,7 @@ public static class AspNetCoreResultExtensions
     /// Optional; when provided, <see cref="ProblemDetails.Instance"/> is set to the current request
     /// path, per RFC 9457's guidance that it identify "this specific occurrence" of the problem.
     /// </param>
-    public static ProblemDetails ToProblemDetails(this IResult result, HttpContext? httpContext = null)
+    public static ProblemDetails ToProblemDetails(this IOperationResult result, HttpContext? httpContext = null)
     {
         var problem = new ProblemDetails
         {
@@ -112,7 +112,7 @@ public static class AspNetCoreResultExtensions
         };
     }
 
-    private static ObjectResult ToProblemActionResult(IResult result, HttpContext? httpContext)
+    private static ObjectResult ToProblemActionResult(IOperationResult result, HttpContext? httpContext)
         => new(result.ToProblemDetails(httpContext))
         {
             StatusCode = (int)result.Status.ToHttpStatusCode(),

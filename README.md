@@ -1,4 +1,4 @@
-# ResponseResultHandler
+﻿# ResponseResultHandler
 
 A Result-Pattern library for .NET (net6.0–net10.0). Wraps the outcome of an
 operation — success or failure, an HTTP-mappable status, a title/detail, and optional data — in an
@@ -22,7 +22,7 @@ product by id, and a `ProductsController` that exposes it over HTTP.
 ---
 ## 1. The core contract
 
-Every result implements `IResult` (`ResultHandler.Core.Abstractions`):
+Every result implements `IOperationResult` (`ResultHandler.Core.Abstractions`):
 
 | Member | Meaning |
 |---|---|
@@ -32,7 +32,7 @@ Every result implements `IResult` (`ResultHandler.Core.Abstractions`):
 | `string? Detail` | optional extra context, e.g. `"Product 42 does not exist."` |
 | `IReadOnlyList<string> Errors` | optional list of individual error messages (validation, etc.) |
 
-`IDataResult<T> : IResult` adds `T Data` — guaranteed non-null when `IsSuccessful` is `true`
+`IOperationResult<T> : IOperationResult` adds `T Data` — guaranteed non-null when `IsSuccessful` is `true`
 (the compiler enforces this via `[MemberNotNullWhen]`, so `result.Data` is safe to use right after
 an `if (result.IsSuccessful)` check without a null-forgiving operator).
 
@@ -62,7 +62,7 @@ using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Error;
 using ResultHandler.Implementations.Success;
 
-public IDataResult<ProductDto> GetById(int id)
+public IOperationResult<ProductDto> GetById(int id)
 {
     var product = _products.Find(id);
 
@@ -93,14 +93,14 @@ success/error; `SuccessResult`/`ErrorResult` cover the normal cases.
 ---
 ## 4. The `Results` facade — the recommended way
 
-`ResultHandler.Results` is a static class with one factory pair per `ResultStatus` (non-generic and
-`<T>`), named after the status, with sensible default titles baked in. It's what the example above
-looks like using it instead:
+`ResultHandler.Facade.Results` is a static class with one factory pair per `ResultStatus`
+(non-generic and `<T>`), named after the status, with sensible default titles baked in. It's what
+the example above looks like using it instead:
 
 ```csharp
-using ResultHandler; // Results
+using ResultHandler.Facade; // Results
 
-public IDataResult<ProductDto> GetById(int id)
+public IOperationResult<ProductDto> GetById(int id)
 {
     var product = _products.Find(id);
 
@@ -189,7 +189,7 @@ delegates accept `IActionResult` return values natively — no separate adapter 
 
 ```csharp
 using ResultHandler.AspNetCore.Extensions;
-using ResultsFacade = ResultHandler.Results; // see naming-collision note below
+using ResultsFacade = ResultHandler.Facade.Results; // see naming-collision note below
 
 var app = WebApplication.Create(args);
 app.Services.GetRequiredService<IServiceCollection>(); // ...DI setup omitted
@@ -210,14 +210,16 @@ app.Run();
 
 > **Naming collision to watch for:** ASP.NET Core's own Minimal API helpers live in
 > `Microsoft.AspNetCore.Http` as a static class also named `Results` (`Results.Ok(...)`,
-> `Results.NotFound()`), and its endpoint delegates return an interface also named `IResult`. If a
-> file has `using Microsoft.AspNetCore.Http;` alongside `using ResultHandler;`, both `Results` and
-> `IResult` become ambiguous — and a plain `using ResultHandler;` can even lose to a same-named
-> nested namespace in your own project (e.g. `YourApp.Results`), so don't rely on the bare `using`
-> in files where either risk applies. A using-alias sidesteps both problems cleanly and reads better
-> than qualifying every call:
+> `Results.NotFound()`), and its endpoint delegates return an interface named `IResult`. This
+> library's own result interface is `IOperationResult` (`ResultHandler.Core.Abstractions`) —
+> deliberately *not* named `IResult` — so it never collides with ASP.NET Core's. The `Results` class
+> name, though, is still shared: if a file has `using Microsoft.AspNetCore.Http;` alongside
+> `using ResultHandler.Facade;`, `Results` becomes ambiguous — and a plain `using ResultHandler.Facade;`
+> can even lose to a same-named nested namespace in your own project (e.g. `YourApp.Results`), so
+> don't rely on the bare `using` in files where either risk applies. A using-alias sidesteps both
+> problems cleanly and reads better than qualifying every call:
 > ```csharp
-> using ResultsFacade = ResultHandler.Results;
+> using ResultsFacade = ResultHandler.Facade.Results;
 > // ...
 > return ResultsFacade.NotFound<ProductDto>("Missing.").ToActionResult();
 > ```
@@ -244,8 +246,8 @@ _products.GetById(id)
     .OnSuccess(product => _logger.LogInformation("Fetched {Name}", product.Name)) // typed: product is ProductDto
     .OnFailure(failure => _logger.LogWarning("Lookup failed: {Title}", failure.Title));
 
-IDataResult<OrderDto> order = _products.GetById(id)
-    .Bind(product => _orders.CreateDraftOrder(product)); // chains into another IDataResult<T>-returning call
+IOperationResult<OrderDto> order = _products.GetById(id)
+    .Bind(product => _orders.CreateDraftOrder(product)); // chains into another IOperationResult<T>-returning call
 ```
 
 `Map`/`Bind` short-circuit automatically: if the source result failed, the mapper/binder never runs

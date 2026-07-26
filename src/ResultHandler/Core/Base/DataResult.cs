@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 namespace ResultHandler.Core.Base;
 
 /// <summary>
-/// Base implementation of <see cref="IDataResult{T}"/>. Immutable; prefer the
+/// Base implementation of <see cref="IOperationResult{T}"/>. Immutable; prefer the
 /// <see cref="Implementations.Success.SuccessDataResult{T}"/>/<see cref="Implementations.Error.ErrorDataResult{T}"/>
 /// subclasses or the <see cref="ResultHandler.Facade.Results"/> facade over constructing this directly.
 /// </summary>
@@ -19,14 +19,14 @@ namespace ResultHandler.Core.Base;
 /// <param name="detail">Optional additional context.</param>
 /// <param name="errors">Optional list of individual error messages.</param>
 public class DataResult<T>([AllowNull] T data, bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null)
-    : Result(isSuccessful, status, title, detail, errors), IDataResult<T>
+    : Result(isSuccessful, status, title, detail, errors), IOperationResult<T>
 {
-    /// <inheritdoc cref="IDataResult{T}.Data"/>
+    /// <inheritdoc cref="IOperationResult{T}.Data"/>
     [MaybeNull]
     [JsonPropertyName("resultData")]
     public T Data { get; } = data!;
 
-    /// <inheritdoc cref="IResult.IsSuccessful"/>
+    /// <inheritdoc cref="IOperationResult.IsSuccessful"/>
     [JsonPropertyName("isSuccessful")]
     [MemberNotNullWhen(true, nameof(Data))]
     public override bool IsSuccessful => base.IsSuccessful;

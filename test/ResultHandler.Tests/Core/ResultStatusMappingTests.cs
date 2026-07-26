@@ -6,8 +6,19 @@ namespace ResultHandler.Tests.Core;
 
 public class ResultStatusMappingTests
 {
-    public static IEnumerable<object[]> AllStatuses =>
-        Enum.GetValues<ResultStatus>().Select(status => new object[] { status });
+    public static TheoryData<ResultStatus> AllStatuses
+    {
+        get
+        {
+            var data = new TheoryData<ResultStatus>();
+            foreach (var status in Enum.GetValues<ResultStatus>())
+            {
+                data.Add(status);
+            }
+
+            return data;
+        }
+    }
 
     [Theory]
     [MemberData(nameof(AllStatuses))]
@@ -36,9 +47,7 @@ public class ResultStatusMappingTests
     [InlineData(404, ResultStatus.NotFound)]
     [InlineData(500, ResultStatus.Error)]
     public void IntToResultStatus_UsesRegistryLookup(int httpCode, ResultStatus expected)
-    {
-        Assert.Equal(expected, httpCode.ToResultStatus());
-    }
+        => Assert.Equal(expected, httpCode.ToResultStatus());
 
     [Theory]
     [InlineData(299, ResultStatus.Ok)]
@@ -46,7 +55,5 @@ public class ResultStatusMappingTests
     [InlineData(599, ResultStatus.Error)]
     [InlineData(999, ResultStatus.Error)]
     public void IntToResultStatus_FallsBackToRangeBasedSwitch_WhenNotInRegistry(int httpCode, ResultStatus expected)
-    {
-        Assert.Equal(expected, httpCode.ToResultStatus());
-    }
+        => Assert.Equal(expected, httpCode.ToResultStatus());
 }

@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 namespace ResultHandler.Core.Base;
 
 /// <summary>
-/// Base implementation of <see cref="IResult"/>. Immutable; prefer the
+/// Base implementation of <see cref="IOperationResult"/>. Immutable; prefer the
 /// <see cref="Implementations.Success.SuccessResult"/>/<see cref="Implementations.Error.ErrorResult"/>
 /// subclasses or the <see cref="ResultHandler.Facade.Results"/> facade over constructing this directly.
 /// </summary>
@@ -17,7 +17,7 @@ namespace ResultHandler.Core.Base;
 /// <param name="title">A short summary of the result.</param>
 /// <param name="detail">Optional additional context.</param>
 /// <param name="errors">Optional list of individual error messages.</param>
-public class Result(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null) : IResult
+public class Result(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null) : IOperationResult
 {
     [JsonPropertyName("isSuccessful")]
     public virtual bool IsSuccessful { get; } = isSuccessful;
