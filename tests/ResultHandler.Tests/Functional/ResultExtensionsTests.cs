@@ -44,6 +44,21 @@ public class ResultExtensionsTests
     }
 
     [Fact]
+    public void OnSuccessOfT_ExposesTypedDataAndRunsOnlyWhenSuccessful()
+    {
+        var received = 0;
+        var success = new SuccessDataResult<int>(42, "Ok.", ResultStatus.Ok);
+        var failure = new ErrorDataResult<int>("Not found.", ResultStatus.NotFound);
+
+        success.OnSuccess(data => received = data);
+        Assert.Equal(42, received);
+
+        received = 0;
+        failure.OnSuccess(data => received = data);
+        Assert.Equal(0, received);
+    }
+
+    [Fact]
     public void OnFailure_RunsAction_OnlyWhenFailed()
     {
         var ran = false;

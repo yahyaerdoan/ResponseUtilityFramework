@@ -29,6 +29,17 @@ public static class ResultExtensions
         return result;
     }
 
+    /// <summary>Runs a side effect with the typed <see cref="IDataResult{T}.Data"/> when <paramref name="result"/> is successful and returns it unchanged, for fluent chaining.</summary>
+    public static IDataResult<T> OnSuccess<T>(this IDataResult<T> result, Action<T> action)
+    {
+        if (result.IsSuccessful)
+        {
+            action(result.Data);
+        }
+
+        return result;
+    }
+
     /// <summary>Runs a side effect when <paramref name="result"/> failed and returns it unchanged, for fluent chaining.</summary>
     public static IResult OnFailure(this IResult result, Action<IResult> action)
     {
