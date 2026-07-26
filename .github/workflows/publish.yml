@@ -8,7 +8,9 @@ on:
 
 env:
   # Bump when introducing a breaking/minor change; patch is auto-derived below.
-  VERSION_PREFIX: 11.0
+  # Quoted so YAML/expressions keep it as the literal string "11.0" (unquoted, it
+  # gets parsed as the number 11 and loses the trailing .0).
+  VERSION_PREFIX: "11.0"
 
 jobs:
   publish:
@@ -61,4 +63,12 @@ jobs:
           user: ${{ secrets.NUGET_USER }}
 
       - name: Push to NuGet.org
-        run: dotnet nuget push "./nupkgs/*.nupkg" --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        shell: pwsh
+        run: |
+          $packages = Get-ChildItem -Path ./nupkgs -Filter *.nupkg
+          if (-not $packages) {
+            throw "No .nupkg files found in ./nupkgs"
+          }
+          foreach ($package in $packages) {
+            dotnet nuget push $package.FullName --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }
