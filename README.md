@@ -159,15 +159,21 @@ public class ProductsController : ControllerBase
 }
 ```
 
-* **`ToActionResult()`** — success returns the raw payload (`200 { ... }`), or a bodyless status for
-  `NoContent`/1xx/3xx; failure returns an RFC 9457 `ProblemDetails` body.
+* **`ToActionResult()`** — success returns the raw payload with the result's actual status code
+  (`201 { ... }` for `Created`, `202 { ... }` for `Accepted`, etc. — not hardcoded to `200`), or a
+  bodyless status for `NoContent`/1xx/3xx; failure returns an RFC 9457 `ProblemDetails` body.
 * **`ToEnvelopedActionResult()`** — success returns the *whole* result object (status/title/data) as
-  the body instead of just the payload — useful when clients want metadata alongside the data.
+  the body instead of just the payload, with the same status-code-preserving behavior — useful when
+  clients want metadata alongside the data.
 * **`ToProblemDetails(HttpContext? httpContext = null)`** — builds the `ProblemDetails` yourself;
   pass `HttpContext` and `Instance` gets set to the current request path (RFC 9457 §3.1.4).
 * Every 4xx/5xx `ResultStatus` maps `ProblemDetails.Type` to the actual RFC section that defines it
   (RFC 9110, RFC 6585, RFC 4918, RFC 7725, RFC 8470); 1xx/2xx/3xx use `about:blank` per RFC 9457
   §4.2.1, since those aren't "problems".
+* These `IActionResult`-returning methods are for **MVC controllers**. In a Minimal API endpoint
+  delegate, use the `IResult`-returning siblings from §6 instead — returning `IActionResult` from a
+  delegate triggers analyzer warning `ASP0004` and hides the response shape from OpenAPI/Swagger
+  generation at compile time.
 
 A failed `GetById(999)` call above produces:
 
@@ -184,8 +190,27 @@ A failed `GetById(999)` call above produces:
 ---
 ## 6. Minimal APIs
 
-`ToActionResult()` returns `Microsoft.AspNetCore.Mvc.IActionResult`, and Minimal API endpoint
-delegates accept `IActionResult` return values natively — no separate adapter needed:
+Minimal API endpoint delegates *can* return `IActionResult` — ASP.NET Core has run it through an MVC
+compatibility shim since .NET 7 — but don't. That path triggers analyzer warning `ASP0004` and, more
+importantly, `IActionResult` is opaque to the endpoint metadata pipeline: the compile-time
+`IEndpointMetadataProvider` machinery that Swashbuckle/`Microsoft.AspNetCore.OpenApi` rely on to infer
+response types and status codes can't see through it, so your OpenAPI/Swagger document ends up
+missing or wrong for those endpoints.
+
+Use the `IResult`-returning siblings instead — same shapes, same status-code-preserving behavior, but
+native to Minimal APIs and fully visible to OpenAPI generation:
+
+* **`ToResult(HttpContext? httpContext = null)`** — `IOperationResult` → `IResult`. Success returns a
+  bodyless status (`204` for `NoContent`, `304` for `NotModified`, plain status code for 1xx/3xx/`Ok`);
+  failure returns an RFC 9457 `ProblemDetails` JSON body via `ToProblemResult`.
+* **`ToResult<T>(HttpContext? httpContext = null)`** — `IOperationResult<T>` → `IResult`. Success
+  returns the raw payload as JSON with the result's actual status code (`201` for `Created`, `202` for
+  `Accepted`, etc.); failure is the same `ProblemDetails` JSON body.
+* **`ToEnvelopedResult(HttpContext? httpContext = null)`** — success returns the *whole* result object
+  (status/title/data) as the JSON body instead of just the payload.
+* **`ToProblemResult(HttpContext? httpContext = null)`** — maps a failed result straight to an
+  `IResult` carrying RFC 9457 `ProblemDetails` JSON; the same building block `ToResult`/`ToResult<T>`/
+  `ToEnvelopedResult` use internally for their failure branch.
 
 ```csharp
 using ResultHandler.AspNetCore.Extensions;
@@ -195,37 +220,18 @@ var app = WebApplication.Create(args);
 app.Services.GetRequiredService<IServiceCollection>(); // ...DI setup omitted
 
 app.MapGet("/api/products/{id:int}", (int id, ProductService products, HttpContext httpContext)
-    => products.GetById(id).ToActionResult(httpContext));
+    => products.GetById(id).ToResult(httpContext));
 
 app.MapPost("/api/products", (CreateProductRequest request, ProductService products) =>
 {
     var validation = products.ValidateCreate(request);
     return validation is not null
-        ? validation.ToActionResult()
-        : Result.Created(products.Create(request)).ToActionResult();
+        ? validation.ToProblemResult() // 422 Problem Details with the two validation errors
+        : Result.Created(products.Create(request)).ToResult();
 });
 
 app.Run();
 ```
-
-> **Naming collision to watch for:** ASP.NET Core's own Minimal API helpers live in
-> `Microsoft.AspNetCore.Http` as a static class named `Results` (plural — `Results.Ok(...)`,
-> `Results.NotFound()`), and its endpoint delegates return an interface named `IResult`. This
-> library's own facade is `Result` (singular) and its result interface is `IOperationResult`
-> (`ResultHandler.Core.Abstractions`) — deliberately *not* named `Results`/`IResult` — so neither
-> collides with ASP.NET Core's, even with `using Microsoft.AspNetCore.Http;` and
-> `using ResultHandler.Facade;` in the same file. The one thing to still watch for: a plain
-> `using ResultHandler.Facade;` can lose to a same-named nested namespace in your own project (e.g.
-> `YourApp.Result`) — if that ever applies, a using-alias sidesteps it and reads better than
-> qualifying every call:
-> ```csharp
-> using ResultFacade = ResultHandler.Facade.Result;
-> // ...
-> return ResultFacade.NotFound<ProductDto>("Missing.").ToActionResult();
-> ```
-> `ToActionResult()` already returns the MVC `IActionResult` that both minimal endpoints and
-> controllers understand, so you rarely need ASP.NET Core's own `Results`/`IResult` at all once
-> you're using this library.
 
 ---
 ## 7. Functional composition
@@ -299,3 +305,9 @@ var legacy = new ErrorResult("Not found.", HttpStatusCode.NotFound); // forwards
 Console.WriteLine(legacy.StatusMessage); // "Not found." — same as legacy.Title
 #pragma warning restore CS0618
 ```
+
+**`ResultHandler.AspNetCore` behavior fix:** `ToActionResult<T>()` and `ToEnvelopedActionResult()`
+used to hardcode a `200` status code for any successful result that carried a body, silently
+discarding the result's actual `Status` (so `Result.Created(...)` came back as `200`, not `201`).
+Both now honor `Status` correctly. If you were relying on the old (incorrect) `200`-always behavior,
+check call sites that use non-`Ok` success statuses with `ToActionResult<T>`/`ToEnvelopedActionResult`.

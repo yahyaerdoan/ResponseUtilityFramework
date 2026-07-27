@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
@@ -6,70 +6,16 @@ using ResultHandler.Mapping;
 
 namespace ResultHandler.AspNetCore.Extensions;
 
-public static class AspNetCoreResultExtensions
+/// <summary>
+/// Converts <see cref="IOperationResult"/>/<see cref="IOperationResult{T}"/> into ASP.NET Core
+/// response types. Split across three files: the MVC <see cref="IActionResult"/> surface lives in
+/// <c>AspNetCoreResultExtensions.Mvc.cs</c>, the Minimal API <see cref="IResult"/> surface lives in
+/// <c>AspNetCoreResultExtensions.MinimalApi.cs</c>, and this file holds what both share — RFC 9457
+/// <see cref="ProblemDetails"/> construction and the bodyless-status classification they both need to
+/// agree on.
+/// </summary>
+public static partial class AspNetCoreResultExtensions
 {
-    /// <summary>
-    /// Maps to an HTTP response without a body on success.
-    /// Use for endpoints that do not return data (e.g. fire-and-forget commands).
-    /// </summary>
-    /// <param name="result">The result to convert.</param>
-    /// <param name="httpContext">
-    /// Optional; when provided, a failed result's <see cref="ProblemDetails.Instance"/> is set to
-    /// the current request path per RFC 9457.
-    /// </param>
-    public static IActionResult ToActionResult(this IOperationResult result, HttpContext? httpContext = null)
-    {
-        if (result.IsSuccessful)
-        {
-            return result.Status switch
-            {
-                ResultStatus.NoContent => new NoContentResult(),
-                _ => new StatusCodeResult((int)result.Status.ToHttpStatusCode()),
-            };
-        }
-
-        return ToProblemActionResult(result, httpContext);
-    }
-
-    /// <summary>
-    /// Maps to an HTTP response whose success body is the raw <typeparamref name="T"/> data.
-    /// 1xx / 3xx / NoContent / NotModified carry no body.
-    /// </summary>
-    /// <param name="result">The result to convert.</param>
-    /// <param name="httpContext">
-    /// Optional; when provided, a failed result's <see cref="ProblemDetails.Instance"/> is set to
-    /// the current request path per RFC 9457.
-    /// </param>
-    public static IActionResult ToActionResult<T>(this IOperationResult<T> result, HttpContext? httpContext = null)
-    {
-        if (result.IsSuccessful)
-        {
-            return ToSuccessActionResult(result.Status, result.Data);
-        }
-
-        return ToProblemActionResult(result, httpContext);
-    }
-
-    /// <summary>
-    /// Maps to an HTTP response whose success body is the full result envelope (data + metadata).
-    /// 1xx / 3xx / NoContent / NotModified carry no body.
-    /// </summary>
-    /// <param name="result">The result to convert.</param>
-    /// <param name="httpContext">
-    /// Optional; when provided, a failed result's <see cref="ProblemDetails.Instance"/> is set to
-    /// the current request path per RFC 9457.
-    /// </param>
-    public static IActionResult ToEnvelopedActionResult(this IOperationResult result, HttpContext? httpContext = null)
-    {
-        if (result.IsSuccessful)
-        {
-            return (IActionResult?)ToBodylessSuccessActionResult(result.Status)
-                ?? new OkObjectResult(result);
-        }
-
-        return ToProblemActionResult(result, httpContext);
-    }
-
     /// <param name="result">The result to convert.</param>
     /// <param name="httpContext">
     /// Optional; when provided, <see cref="ProblemDetails.Instance"/> is set to the current request
@@ -94,29 +40,24 @@ public static class AspNetCoreResultExtensions
         return problem;
     }
 
-    private static IActionResult ToSuccessActionResult<T>(ResultStatus status, T data)
-    {
-        return (IActionResult?)ToBodylessSuccessActionResult(status)
-            ?? new OkObjectResult(data);
-    }
-
-    private static StatusCodeResult? ToBodylessSuccessActionResult(ResultStatus status)
+    /// <summary>
+    /// Single source of truth for which statuses map to a bodyless response and what HTTP code to
+    /// use — shared by both the <see cref="IActionResult"/> and Minimal API <see cref="IResult"/>
+    /// surfaces so the two never drift apart.
+    /// </summary>
+    private static (BodylessKind Kind, int HttpCode) ClassifyBodyless(ResultStatus status)
     {
         var httpCode = (int)status.ToHttpStatusCode();
         return status switch
         {
-            ResultStatus.NoContent => new NoContentResult(),
-            ResultStatus.NotModified => new StatusCodeResult(304),
-            _ when httpCode is >= 100 and < 200 or >= 300 and < 400 => new StatusCodeResult(httpCode),
-            _ => null,
+            ResultStatus.NoContent => (BodylessKind.NoContent, httpCode),
+            ResultStatus.NotModified => (BodylessKind.NotModified, 304),
+            _ when httpCode is >= 100 and < 200 or >= 300 and < 400 => (BodylessKind.Generic, httpCode),
+            _ => (BodylessKind.None, httpCode),
         };
     }
 
-    private static ObjectResult ToProblemActionResult(IOperationResult result, HttpContext? httpContext)
-        => new(result.ToProblemDetails(httpContext))
-        {
-            StatusCode = (int)result.Status.ToHttpStatusCode(),
-        };
+    private enum BodylessKind { None, NoContent, NotModified, Generic }
 
     // RFC 9110 / RFC 6585 / RFC 4918 / RFC 7725 / RFC 8470 - canonical type URIs per RFC 9457 §4.2
     private static readonly Dictionary<ResultStatus, string> _problemTypes =

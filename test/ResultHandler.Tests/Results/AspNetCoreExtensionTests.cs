@@ -1,5 +1,9 @@
+#if NET7_0_OR_GREATER
+using Microsoft.AspNetCore.Http.HttpResults;
+#endif
 using Microsoft.AspNetCore.Mvc;
 using ResultHandler.AspNetCore.Extensions;
+using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Error;
 using ResultHandler.Implementations.Success;
@@ -9,6 +13,74 @@ namespace ResultHandler.Tests.Results;
 
 public class AspNetCoreExtensionTests
 {
+    [Fact]
+    public void ToActionResultOfT_SuccessWithNonOkStatus_PreservesStatusCode()
+    {
+        var result = new SuccessDataResult<string>("new-id", "Created.", ResultStatus.Created);
+
+        var actionResult = Assert.IsType<ObjectResult>(result.ToActionResult());
+
+        Assert.Equal("new-id", actionResult.Value);
+        Assert.Equal(201, actionResult.StatusCode);
+    }
+
+    [Fact]
+    public void ToEnvelopedActionResult_SuccessWithNonOkStatus_PreservesStatusCode()
+    {
+        var result = new SuccessDataResult<int>(42, "Accepted.", ResultStatus.Accepted);
+
+        var actionResult = Assert.IsType<ObjectResult>(result.ToEnvelopedActionResult());
+
+        Assert.Same(result, actionResult.Value);
+        Assert.Equal(202, actionResult.StatusCode);
+    }
+
+#if NET7_0_OR_GREATER
+    [Fact]
+    public void ToResult_Success_NoContent_ReturnsNoContentResult()
+    {
+        var result = new SuccessResult("Deleted.", ResultStatus.NoContent);
+
+        Assert.IsType<NoContent>(result.ToResult());
+    }
+
+    [Fact]
+    public void ToResultOfT_SuccessWithNonOkStatus_PreservesStatusCode()
+    {
+        var result = new SuccessDataResult<string>("new-id", "Created.", ResultStatus.Created);
+
+        var httpResult = Assert.IsType<JsonHttpResult<string>>(result.ToResult());
+
+        Assert.Equal("new-id", httpResult.Value);
+        Assert.Equal(201, httpResult.StatusCode);
+    }
+
+    [Fact]
+    public void ToEnvelopedResult_SuccessWithNonOkStatus_PreservesStatusCode()
+    {
+        var result = new SuccessDataResult<int>(42, "Accepted.", ResultStatus.Accepted);
+
+        var httpResult = Assert.IsType<JsonHttpResult<IOperationResult>>(result.ToEnvelopedResult());
+
+        Assert.Same(result, httpResult.Value);
+        Assert.Equal(202, httpResult.StatusCode);
+    }
+
+    [Fact]
+    public void ToProblemResult_Failure_ReturnsJsonHttpResultWithProblemDetails()
+    {
+        var result = new ErrorResult("Not found.", ResultStatus.NotFound, "The user does not exist.");
+
+        var httpResult = Assert.IsType<JsonHttpResult<ProblemDetails>>(result.ToProblemResult());
+        var problemDetails = Assert.IsType<ProblemDetails>(httpResult.Value);
+
+        Assert.Equal(404, httpResult.StatusCode);
+        Assert.Equal(404, problemDetails.Status);
+        Assert.Equal("Not found.", problemDetails.Title);
+        Assert.Equal("The user does not exist.", problemDetails.Detail);
+    }
+#endif
+
     [Fact]
     public void ToActionResult_Success_NoContent_ReturnsNoContentResult()
     {
@@ -44,7 +116,7 @@ public class AspNetCoreExtensionTests
     {
         var result = new SuccessDataResult<string>("hello", "Ok.", ResultStatus.Ok);
 
-        var actionResult = Assert.IsType<OkObjectResult>(result.ToActionResult());
+        var actionResult = Assert.IsType<ObjectResult>(result.ToActionResult());
 
         Assert.Equal("hello", actionResult.Value);
         Assert.Equal(200, actionResult.StatusCode);
@@ -91,7 +163,7 @@ public class AspNetCoreExtensionTests
     {
         var result = new SuccessDataResult<int>(42, "Fetched.", ResultStatus.Ok);
 
-        var actionResult = Assert.IsType<OkObjectResult>(result.ToEnvelopedActionResult());
+        var actionResult = Assert.IsType<ObjectResult>(result.ToEnvelopedActionResult());
 
         Assert.Same(result, actionResult.Value);
         Assert.Equal(200, actionResult.StatusCode);

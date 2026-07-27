@@ -9,8 +9,11 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
 
     <Authors>Yahya Erdogan</Authors>
-    <Company>Cambridge Consulting Group LLC</Company>
-    <Copyright>YahyaErdogan-2024</Copyright>
+    <CopyrightStartYear>2024</CopyrightStartYear>
+    <CopyrightCurrentYear>$([System.DateTime]::Now.Year)</CopyrightCurrentYear>
+    <CopyrightYears Condition="'$(CopyrightCurrentYear)' == '$(CopyrightStartYear)'">$(CopyrightStartYear)</CopyrightYears>
+    <CopyrightYears Condition="'$(CopyrightCurrentYear)' != '$(CopyrightStartYear)'">$(CopyrightStartYear)-$(CopyrightCurrentYear)</CopyrightYears>
+    <Copyright>Copyright © $(Authors) $(CopyrightYears)</Copyright>
     <RepositoryUrl>https://github.com/yahyaerdoan/Response-Utility-Library</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en</NeutralLanguage>
