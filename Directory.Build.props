@@ -24,13 +24,23 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <EnablePackageValidation>true</EnablePackageValidation>
-    <PackageValidationBaselineVersion>11.0.12-beta.12</PackageValidationBaselineVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!--
+    Package validation compares the built package's API against the last published NuGet
+    baseline to catch accidental breaking changes. It needs a real -p:Version (set by
+    publish.yml from the release tag) to compare meaningfully, so it only runs in CI —
+    local builds always use the csproj's placeholder Version and would otherwise fail
+    PackageValidation's "assembly version must be >= baseline" check on every build.
+  -->
+  <PropertyGroup Condition="'$(IsPackable)' != 'false' AND '$(GITHUB_ACTIONS)' == 'true'">
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>11.0.12-beta.12</PackageValidationBaselineVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(IsPackable)' != 'false'">
