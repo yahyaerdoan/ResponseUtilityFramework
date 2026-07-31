@@ -19,7 +19,7 @@ namespace ResultHandler.Core.Base;
 /// <param name="detail">Optional additional context.</param>
 /// <param name="errors">Optional list of individual error messages.</param>
 public class OperationResult(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null)
-    : IOperationResult, IFailureFactory<OperationResult>
+    : IOperationResult, IResultFailureFactory<OperationResult>
 {
     [JsonPropertyName("isSuccessful")]
     public virtual bool IsSuccessful { get; } = isSuccessful;

@@ -1,4 +1,4 @@
-﻿using ResultHandler.Core.Enums;
+using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Error;
 
 namespace ResultHandler.Facade;
@@ -8,28 +8,28 @@ public static partial class Result
     public static ErrorResult BadRequest(string detail)
         => new("Bad Request", ResultStatus.BadRequest, detail);
 
-    public static ErrorResult Unauthorized(string detail = "Authentication is required to access this resource.")
+    public static ErrorResult Unauthorized(string detail = FailureMessages.Unauthorized)
         => new("Unauthorized", ResultStatus.Unauthorized, detail);
 
     public static ErrorResult PaymentRequired(string detail)
         => new("Payment Required", ResultStatus.PaymentRequired, detail);
 
-    public static ErrorResult Forbidden(string detail = "You do not have permission to access this resource.")
+    public static ErrorResult Forbidden(string detail = FailureMessages.Forbidden)
         => new("Forbidden", ResultStatus.Forbidden, detail);
 
     public static ErrorResult NotFound(string detail)
         => new("Not Found", ResultStatus.NotFound, detail);
 
-    public static ErrorResult MethodNotAllowed(string detail = "The HTTP method used is not allowed for this endpoint.")
+    public static ErrorResult MethodNotAllowed(string detail = FailureMessages.MethodNotAllowed)
         => new("Method Not Allowed", ResultStatus.MethodNotAllowed, detail);
 
-    public static ErrorResult NotAcceptable(string detail = "The requested media type is not supported by this server.")
+    public static ErrorResult NotAcceptable(string detail = FailureMessages.NotAcceptable)
         => new("Not Acceptable", ResultStatus.NotAcceptable, detail);
 
-    public static ErrorResult ProxyAuthenticationRequired(string detail = "Proxy authentication is required to access this resource.")
+    public static ErrorResult ProxyAuthenticationRequired(string detail = FailureMessages.ProxyAuthenticationRequired)
         => new("Proxy Authentication Required", ResultStatus.ProxyAuthenticationRequired, detail);
 
-    public static ErrorResult RequestTimeout(string detail = "The request timed out. Please try again.")
+    public static ErrorResult RequestTimeout(string detail = FailureMessages.RequestTimeout)
         => new("Request Timeout", ResultStatus.RequestTimeout, detail);
 
     public static ErrorResult Conflict(string detail)
@@ -38,7 +38,7 @@ public static partial class Result
     public static ErrorResult Gone(string detail)
         => new("Gone", ResultStatus.Gone, detail);
 
-    public static ErrorResult LengthRequired(string detail = "A Content-Length header is required for this request.")
+    public static ErrorResult LengthRequired(string detail = FailureMessages.LengthRequired)
         => new("Length Required", ResultStatus.LengthRequired, detail);
 
     public static ErrorResult PreconditionFailed(string detail)
@@ -47,22 +47,22 @@ public static partial class Result
     public static ErrorResult ContentTooLarge(string detail)
         => new("Content Too Large", ResultStatus.ContentTooLarge, detail);
 
-    public static ErrorResult UriTooLong(string detail = "The request URI exceeds the maximum allowed length.")
+    public static ErrorResult UriTooLong(string detail = FailureMessages.UriTooLong)
         => new("URI Too Long", ResultStatus.UriTooLong, detail);
 
-    public static ErrorResult UnsupportedMediaType(string detail = "The submitted media type is not supported. Please use a supported type.")
+    public static ErrorResult UnsupportedMediaType(string detail = FailureMessages.UnsupportedMediaType)
         => new("Unsupported Media Type", ResultStatus.UnsupportedMediaType, detail);
 
     public static ErrorResult RangeNotSatisfiable(string detail)
         => new("Range Not Satisfiable", ResultStatus.RangeNotSatisfiable, detail);
 
-    public static ErrorResult ExpectationFailed(string detail = "The expectation given in the Expect header could not be met.")
+    public static ErrorResult ExpectationFailed(string detail = FailureMessages.ExpectationFailed)
         => new("Expectation Failed", ResultStatus.ExpectationFailed, detail);
 
-    public static ErrorResult ImATeapot(string detail = "I'm a teapot.")
+    public static ErrorResult ImATeapot(string detail = FailureMessages.ImATeapot)
         => new("I'm a Teapot", ResultStatus.ImATeapot, detail);
 
-    public static ErrorResult MisdirectedRequest(string detail = "The request was directed to a server unable to produce a response.")
+    public static ErrorResult MisdirectedRequest(string detail = FailureMessages.MisdirectedRequest)
         => new("Misdirected Request", ResultStatus.MisdirectedRequest, detail);
 
     public static ErrorResult UnprocessableContent(string detail)
@@ -74,13 +74,13 @@ public static partial class Result
     public static ErrorResult Invalid(IReadOnlyList<string> errors)
         => new("Validation Failed", ResultStatus.UnprocessableContent, errors);
 
-    public static ErrorResult Locked(string detail = "The resource is currently locked and cannot be modified.")
+    public static ErrorResult Locked(string detail = FailureMessages.Locked)
         => new("Locked", ResultStatus.Locked, detail);
 
     public static ErrorResult FailedDependency(string detail)
         => new("Failed Dependency", ResultStatus.FailedDependency, detail);
 
-    public static ErrorResult TooEarly(string detail = "The request was rejected because it may be replayed.")
+    public static ErrorResult TooEarly(string detail = FailureMessages.TooEarly)
         => new("Too Early", ResultStatus.TooEarly, detail);
 
     public static ErrorResult UpgradeRequired(string detail)
@@ -89,73 +89,73 @@ public static partial class Result
     public static ErrorResult PreconditionRequired(string detail)
         => new("Precondition Required", ResultStatus.PreconditionRequired, detail);
 
-    public static ErrorResult TooManyRequests(string detail = "Too many requests. Please slow down and try again later.")
+    public static ErrorResult TooManyRequests(string detail = FailureMessages.TooManyRequests)
         => new("Too Many Requests", ResultStatus.TooManyRequests, detail);
 
-    public static ErrorResult RequestHeaderFieldsTooLarge(string detail = "One or more request header fields exceed the maximum allowed size.")
+    public static ErrorResult RequestHeaderFieldsTooLarge(string detail = FailureMessages.RequestHeaderFieldsTooLarge)
         => new("Request Header Fields Too Large", ResultStatus.RequestHeaderFieldsTooLarge, detail);
 
     public static ErrorResult UnavailableForLegalReasons(string detail)
         => new("Unavailable For Legal Reasons", ResultStatus.UnavailableForLegalReasons, detail);
 
-    public static ErrorResult InternalServerError(string detail = "An unexpected error occurred. Please try again later.")
+    public static ErrorResult InternalServerError(string detail = FailureMessages.InternalServerError)
         => new("Internal Server Error", ResultStatus.InternalServerError, detail);
 
-    public static ErrorResult NotImplemented(string detail = "This feature is not yet implemented.")
+    public static ErrorResult NotImplemented(string detail = FailureMessages.NotImplemented)
         => new("Not Implemented", ResultStatus.NotImplemented, detail);
 
-    public static ErrorResult BadGateway(string detail = "An upstream server returned an invalid response.")
+    public static ErrorResult BadGateway(string detail = FailureMessages.BadGateway)
         => new("Bad Gateway", ResultStatus.BadGateway, detail);
 
-    public static ErrorResult ServiceUnavailable(string detail = "The service is temporarily unavailable. Please try again later.")
+    public static ErrorResult ServiceUnavailable(string detail = FailureMessages.ServiceUnavailable)
         => new("Service Unavailable", ResultStatus.ServiceUnavailable, detail);
 
-    public static ErrorResult GatewayTimeout(string detail = "An upstream server did not respond in time.")
+    public static ErrorResult GatewayTimeout(string detail = FailureMessages.GatewayTimeout)
         => new("Gateway Timeout", ResultStatus.GatewayTimeout, detail);
 
-    public static ErrorResult HttpVersionNotSupported(string detail = "The HTTP version used in the request is not supported.")
+    public static ErrorResult HttpVersionNotSupported(string detail = FailureMessages.HttpVersionNotSupported)
         => new("HTTP Version Not Supported", ResultStatus.HttpVersionNotSupported, detail);
 
-    public static ErrorResult VariantAlsoNegotiates(string detail = "The server has an internal configuration error.")
+    public static ErrorResult VariantAlsoNegotiates(string detail = FailureMessages.VariantAlsoNegotiates)
         => new("Variant Also Negotiates", ResultStatus.VariantAlsoNegotiates, detail);
 
-    public static ErrorResult InsufficientStorage(string detail = "Insufficient storage to complete the request.")
+    public static ErrorResult InsufficientStorage(string detail = FailureMessages.InsufficientStorage)
         => new("Insufficient Storage", ResultStatus.InsufficientStorage, detail);
 
-    public static ErrorResult LoopDetected(string detail = "The server detected an infinite loop while processing the request.")
+    public static ErrorResult LoopDetected(string detail = FailureMessages.LoopDetected)
         => new("Loop Detected", ResultStatus.LoopDetected, detail);
 
-    public static ErrorResult NotExtended(string detail = "Further extensions to the request are required.")
+    public static ErrorResult NotExtended(string detail = FailureMessages.NotExtended)
         => new("Not Extended", ResultStatus.NotExtended, detail);
 
-    public static ErrorResult NetworkAuthenticationRequired(string detail = "Network authentication is required to access this resource.")
+    public static ErrorResult NetworkAuthenticationRequired(string detail = FailureMessages.NetworkAuthenticationRequired)
         => new("Network Authentication Required", ResultStatus.NetworkAuthenticationRequired, detail);
 
     public static ErrorDataResult<T> BadRequest<T>(string detail)
         => new("Bad Request", ResultStatus.BadRequest, detail);
 
-    public static ErrorDataResult<T> Unauthorized<T>(string detail = "Authentication is required to access this resource.")
+    public static ErrorDataResult<T> Unauthorized<T>(string detail = FailureMessages.Unauthorized)
         => new("Unauthorized", ResultStatus.Unauthorized, detail);
 
     public static ErrorDataResult<T> PaymentRequired<T>(string detail)
         => new("Payment Required", ResultStatus.PaymentRequired, detail);
 
-    public static ErrorDataResult<T> Forbidden<T>(string detail = "You do not have permission to access this resource.")
+    public static ErrorDataResult<T> Forbidden<T>(string detail = FailureMessages.Forbidden)
         => new("Forbidden", ResultStatus.Forbidden, detail);
 
     public static ErrorDataResult<T> NotFound<T>(string detail)
         => new("Not Found", ResultStatus.NotFound, detail);
 
-    public static ErrorDataResult<T> MethodNotAllowed<T>(string detail = "The HTTP method used is not allowed for this endpoint.")
+    public static ErrorDataResult<T> MethodNotAllowed<T>(string detail = FailureMessages.MethodNotAllowed)
         => new("Method Not Allowed", ResultStatus.MethodNotAllowed, detail);
 
-    public static ErrorDataResult<T> NotAcceptable<T>(string detail = "The requested media type is not supported by this server.")
+    public static ErrorDataResult<T> NotAcceptable<T>(string detail = FailureMessages.NotAcceptable)
         => new("Not Acceptable", ResultStatus.NotAcceptable, detail);
 
-    public static ErrorDataResult<T> ProxyAuthenticationRequired<T>(string detail = "Proxy authentication is required to access this resource.")
+    public static ErrorDataResult<T> ProxyAuthenticationRequired<T>(string detail = FailureMessages.ProxyAuthenticationRequired)
         => new("Proxy Authentication Required", ResultStatus.ProxyAuthenticationRequired, detail);
 
-    public static ErrorDataResult<T> RequestTimeout<T>(string detail = "The request timed out. Please try again.")
+    public static ErrorDataResult<T> RequestTimeout<T>(string detail = FailureMessages.RequestTimeout)
         => new("Request Timeout", ResultStatus.RequestTimeout, detail);
 
     public static ErrorDataResult<T> Conflict<T>(string detail)
@@ -164,7 +164,7 @@ public static partial class Result
     public static ErrorDataResult<T> Gone<T>(string detail)
         => new("Gone", ResultStatus.Gone, detail);
 
-    public static ErrorDataResult<T> LengthRequired<T>(string detail = "A Content-Length header is required for this request.")
+    public static ErrorDataResult<T> LengthRequired<T>(string detail = FailureMessages.LengthRequired)
         => new("Length Required", ResultStatus.LengthRequired, detail);
 
     public static ErrorDataResult<T> PreconditionFailed<T>(string detail)
@@ -173,22 +173,22 @@ public static partial class Result
     public static ErrorDataResult<T> ContentTooLarge<T>(string detail)
         => new("Content Too Large", ResultStatus.ContentTooLarge, detail);
 
-    public static ErrorDataResult<T> UriTooLong<T>(string detail = "The request URI exceeds the maximum allowed length.")
+    public static ErrorDataResult<T> UriTooLong<T>(string detail = FailureMessages.UriTooLong)
         => new("URI Too Long", ResultStatus.UriTooLong, detail);
 
-    public static ErrorDataResult<T> UnsupportedMediaType<T>(string detail = "The submitted media type is not supported. Please use a supported type.")
+    public static ErrorDataResult<T> UnsupportedMediaType<T>(string detail = FailureMessages.UnsupportedMediaType)
         => new("Unsupported Media Type", ResultStatus.UnsupportedMediaType, detail);
 
     public static ErrorDataResult<T> RangeNotSatisfiable<T>(string detail)
         => new("Range Not Satisfiable", ResultStatus.RangeNotSatisfiable, detail);
 
-    public static ErrorDataResult<T> ExpectationFailed<T>(string detail = "The expectation given in the Expect header could not be met.")
+    public static ErrorDataResult<T> ExpectationFailed<T>(string detail = FailureMessages.ExpectationFailed)
         => new("Expectation Failed", ResultStatus.ExpectationFailed, detail);
 
-    public static ErrorDataResult<T> ImATeapot<T>(string detail = "I'm a teapot.")
+    public static ErrorDataResult<T> ImATeapot<T>(string detail = FailureMessages.ImATeapot)
         => new("I'm a Teapot", ResultStatus.ImATeapot, detail);
 
-    public static ErrorDataResult<T> MisdirectedRequest<T>(string detail = "The request was directed to a server unable to produce a response.")
+    public static ErrorDataResult<T> MisdirectedRequest<T>(string detail = FailureMessages.MisdirectedRequest)
         => new("Misdirected Request", ResultStatus.MisdirectedRequest, detail);
 
     public static ErrorDataResult<T> UnprocessableContent<T>(string detail)
@@ -200,13 +200,13 @@ public static partial class Result
     public static ErrorDataResult<T> Invalid<T>(IReadOnlyList<string> errors)
         => new("Validation Failed", ResultStatus.UnprocessableContent, errors);
 
-    public static ErrorDataResult<T> Locked<T>(string detail = "The resource is currently locked and cannot be modified.")
+    public static ErrorDataResult<T> Locked<T>(string detail = FailureMessages.Locked)
         => new("Locked", ResultStatus.Locked, detail);
 
     public static ErrorDataResult<T> FailedDependency<T>(string detail)
         => new("Failed Dependency", ResultStatus.FailedDependency, detail);
 
-    public static ErrorDataResult<T> TooEarly<T>(string detail = "The request was rejected because it may be replayed.")
+    public static ErrorDataResult<T> TooEarly<T>(string detail = FailureMessages.TooEarly)
         => new("Too Early", ResultStatus.TooEarly, detail);
 
     public static ErrorDataResult<T> UpgradeRequired<T>(string detail)
@@ -215,46 +215,46 @@ public static partial class Result
     public static ErrorDataResult<T> PreconditionRequired<T>(string detail)
         => new("Precondition Required", ResultStatus.PreconditionRequired, detail);
 
-    public static ErrorDataResult<T> TooManyRequests<T>(string detail = "Too many requests. Please slow down and try again later.")
+    public static ErrorDataResult<T> TooManyRequests<T>(string detail = FailureMessages.TooManyRequests)
         => new("Too Many Requests", ResultStatus.TooManyRequests, detail);
 
-    public static ErrorDataResult<T> RequestHeaderFieldsTooLarge<T>(string detail = "One or more request header fields exceed the maximum allowed size.")
+    public static ErrorDataResult<T> RequestHeaderFieldsTooLarge<T>(string detail = FailureMessages.RequestHeaderFieldsTooLarge)
         => new("Request Header Fields Too Large", ResultStatus.RequestHeaderFieldsTooLarge, detail);
 
     public static ErrorDataResult<T> UnavailableForLegalReasons<T>(string detail)
         => new("Unavailable For Legal Reasons", ResultStatus.UnavailableForLegalReasons, detail);
 
-    public static ErrorDataResult<T> InternalServerError<T>(string detail = "An unexpected error occurred. Please try again later.")
+    public static ErrorDataResult<T> InternalServerError<T>(string detail = FailureMessages.InternalServerError)
         => new("Internal Server Error", ResultStatus.InternalServerError, detail);
 
-    public static ErrorDataResult<T> NotImplemented<T>(string detail = "This feature is not yet implemented.")
+    public static ErrorDataResult<T> NotImplemented<T>(string detail = FailureMessages.NotImplemented)
         => new("Not Implemented", ResultStatus.NotImplemented, detail);
 
-    public static ErrorDataResult<T> BadGateway<T>(string detail = "An upstream server returned an invalid response.")
+    public static ErrorDataResult<T> BadGateway<T>(string detail = FailureMessages.BadGateway)
         => new("Bad Gateway", ResultStatus.BadGateway, detail);
 
-    public static ErrorDataResult<T> ServiceUnavailable<T>(string detail = "The service is temporarily unavailable. Please try again later.")
+    public static ErrorDataResult<T> ServiceUnavailable<T>(string detail = FailureMessages.ServiceUnavailable)
         => new("Service Unavailable", ResultStatus.ServiceUnavailable, detail);
 
-    public static ErrorDataResult<T> GatewayTimeout<T>(string detail = "An upstream server did not respond in time.")
+    public static ErrorDataResult<T> GatewayTimeout<T>(string detail = FailureMessages.GatewayTimeout)
         => new("Gateway Timeout", ResultStatus.GatewayTimeout, detail);
 
-    public static ErrorDataResult<T> HttpVersionNotSupported<T>(string detail = "The HTTP version used in the request is not supported.")
+    public static ErrorDataResult<T> HttpVersionNotSupported<T>(string detail = FailureMessages.HttpVersionNotSupported)
         => new("HTTP Version Not Supported", ResultStatus.HttpVersionNotSupported, detail);
 
-    public static ErrorDataResult<T> VariantAlsoNegotiates<T>(string detail = "The server has an internal configuration error.")
+    public static ErrorDataResult<T> VariantAlsoNegotiates<T>(string detail = FailureMessages.VariantAlsoNegotiates)
         => new("Variant Also Negotiates", ResultStatus.VariantAlsoNegotiates, detail);
 
-    public static ErrorDataResult<T> InsufficientStorage<T>(string detail = "Insufficient storage to complete the request.")
+    public static ErrorDataResult<T> InsufficientStorage<T>(string detail = FailureMessages.InsufficientStorage)
         => new("Insufficient Storage", ResultStatus.InsufficientStorage, detail);
 
-    public static ErrorDataResult<T> LoopDetected<T>(string detail = "The server detected an infinite loop while processing the request.")
+    public static ErrorDataResult<T> LoopDetected<T>(string detail = FailureMessages.LoopDetected)
         => new("Loop Detected", ResultStatus.LoopDetected, detail);
 
-    public static ErrorDataResult<T> NotExtended<T>(string detail = "Further extensions to the request are required.")
+    public static ErrorDataResult<T> NotExtended<T>(string detail = FailureMessages.NotExtended)
         => new("Not Extended", ResultStatus.NotExtended, detail);
 
-    public static ErrorDataResult<T> NetworkAuthenticationRequired<T>(string detail = "Network authentication is required to access this resource.")
+    public static ErrorDataResult<T> NetworkAuthenticationRequired<T>(string detail = FailureMessages.NetworkAuthenticationRequired)
         => new("Network Authentication Required", ResultStatus.NetworkAuthenticationRequired, detail);
 
     public static ErrorResult Failure(string title, string detail, ResultStatus status)

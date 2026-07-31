@@ -60,7 +60,8 @@ public static partial class AspNetCoreResultExtensions
     private enum BodylessKind { None, NoContent, NotModified, Generic }
 
     // RFC 9110 / RFC 6585 / RFC 4918 / RFC 7725 / RFC 8470 - canonical type URIs per RFC 9457 §4.2
-    private static readonly Dictionary<ResultStatus, string> _problemTypes =
+    // internal (not private) so ResultHandler.Tests can assert every ResultStatus is covered.
+    internal static readonly Dictionary<ResultStatus, string> _problemTypes =
         new()
         {
             // 1xx, 2xx, 3xx - about:blank per RFC 9457 §4.2.1
@@ -83,6 +84,7 @@ public static partial class AspNetCoreResultExtensions
             [ResultStatus.Found] = "about:blank",
             [ResultStatus.SeeOther] = "about:blank",
             [ResultStatus.NotModified] = "about:blank",
+            [ResultStatus.UseProxy] = "about:blank",
             [ResultStatus.TemporaryRedirect] = "about:blank",
             [ResultStatus.PermanentRedirect] = "about:blank",
 

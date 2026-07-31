@@ -13,11 +13,11 @@ namespace ResultHandler.Core.Abstractions;
 /// <see cref="Failure(IReadOnlyList{string})"/> for a validation message list, and
 /// <see cref="Failure(string, string, ResultStatus)"/> for a title/detail/status triple. Named,
 /// per-status shortcuts (<c>BadRequest</c>, <c>NotFound</c>, ...) are generic helpers over the
-/// latter in <see cref="ResultHandler.Functional.ResultFailure"/> — written once there for every
+/// latter in <see cref="ResultHandler.Functional.ResultFailureFactory"/> — written once there for every
 /// implementer, instead of being redeclared as interface members on each one.
 /// </remarks>
 /// <typeparam name="TSelf">The implementing result type itself (CRTP).</typeparam>
-public interface IFailureFactory<TSelf> where TSelf : IOperationResult
+public interface IResultFailureFactory<TSelf> where TSelf : IOperationResult
 {
     /// <summary>Builds a failed <typeparamref name="TSelf"/> for one or more validation error messages.</summary>
     /// <param name="errors">The individual error messages (e.g. one per invalid field).</param>
@@ -26,7 +26,7 @@ public interface IFailureFactory<TSelf> where TSelf : IOperationResult
     /// Short-circuiting a MediatR pipeline behavior once validation fails, without knowing the
     /// concrete response type:
     /// <code>
-    /// where TResponse : IOperationResult, IFailureFactory&lt;TResponse&gt;
+    /// where TResponse : IOperationResult, IResultFailureFactory&lt;TResponse&gt;
     /// ...
     /// if (validationErrors.Length > 0)
     /// {
@@ -43,12 +43,12 @@ public interface IFailureFactory<TSelf> where TSelf : IOperationResult
     /// <returns>A failed result carrying <paramref name="title"/>, <paramref name="detail"/> and <paramref name="status"/>.</returns>
     /// <example>
     /// <code>
-    /// where TResponse : IOperationResult, IFailureFactory&lt;TResponse&gt;
+    /// where TResponse : IOperationResult, IResultFailureFactory&lt;TResponse&gt;
     /// ...
     /// return TResponse.Failure("Not Found", $"Brand {id} does not exist.", ResultStatus.NotFound);
     /// </code>
-    /// Prefer <see cref="ResultHandler.Functional.ResultFailure"/>'s named shortcuts
-    /// (<c>ResultFailure.NotFound&lt;TResponse&gt;(detail)</c>) over calling this overload directly.
+    /// Prefer <see cref="ResultHandler.Functional.ResultFailureFactory"/>'s named shortcuts
+    /// (<c>ResultFailureFactory.NotFound&lt;TResponse&gt;(detail)</c>) over calling this overload directly.
     /// </example>
     static abstract TSelf Failure(string title, string detail, ResultStatus status);
 }

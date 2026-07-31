@@ -260,7 +260,7 @@ IOperationResult<OrderDto> order = _products.GetById(id)
 and the failure (title/status/detail/errors) is carried over into the new result type.
 
 ---
-## 8. Generic short-circuiting — `IFailureFactory<TSelf>` / `ResultFailure`
+## 8. Generic short-circuiting — `IResultFailureFactory<TSelf>` / `ResultFailureFactory`
 
 Everything above assumes the calling code knows the concrete result type (`IOperationResult<ProductDto>`,
 `ErrorResult`, ...). Generic infrastructure often doesn't — a MediatR `IPipelineBehavior<TRequest, TResponse>`,
@@ -268,19 +268,19 @@ a gRPC interceptor, any short-circuiting middleware only has `TResponse` as a ty
 usually gets solved by throwing an exception to unwind the pipeline, because you can't `new TResponse(...)`
 without knowing what `TResponse` actually is.
 
-`IFailureFactory<TSelf>` (`ResultHandler.Core.Abstractions`) solves this with a C# 11 static-abstract-interface
+`IResultFailureFactory<TSelf>` (`ResultHandler.Core.Abstractions`) solves this with a C# 11 static-abstract-interface
 CRTP: it lets `TSelf` build its own failure instance. `OperationResult` and `OperationDataResult<T>` already
 implement it, so **any** result type built on top of this library (concrete or still generic) gets it for free:
 
 ```csharp
-public interface IFailureFactory<TSelf> where TSelf : IOperationResult
+public interface IResultFailureFactory<TSelf> where TSelf : IOperationResult
 {
     static abstract TSelf Failure(IReadOnlyList<string> errors);               // validation message list
     static abstract TSelf Failure(string title, string detail, ResultStatus status); // everything else
 }
 ```
 
-`ResultFailure` (`ResultHandler.Functional`) layers the same named, per-status vocabulary as `Result` on top
+`ResultFailureFactory` (`ResultHandler.Functional`) layers the same named, per-status vocabulary as `Result` on top
 of these two primitives — `BadRequest`, `NotFound`, `Unauthorized`, `Forbidden`, and every other 4xx/5xx —
 generically, for any `TSelf`. It delegates to the matching `Result.XXX(detail)` method internally, so titles
 and default messages have exactly one source of truth (`Result`); nothing is duplicated.
@@ -294,7 +294,7 @@ using ResultHandler.Functional;
 public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
-    where TResponse : IOperationResult, IFailureFactory<TResponse>
+    where TResponse : IOperationResult, IResultFailureFactory<TResponse>
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {
@@ -316,18 +316,18 @@ public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
 public class AuthorizationBehavior<TRequest, TResponse>(ICurrentUser user)
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>, IRequireRole
-    where TResponse : IOperationResult, IFailureFactory<TResponse>
+    where TResponse : IOperationResult, IResultFailureFactory<TResponse>
 {
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {
         if (!user.IsAuthenticated)
         {
-            return ResultFailure.Unauthorized<TResponse>();
+            return ResultFailureFactory.Unauthorized<TResponse>();
         }
 
         if (!user.IsInRole(request.RequiredRole))
         {
-            return ResultFailure.Forbidden<TResponse>();
+            return ResultFailureFactory.Forbidden<TResponse>();
         }
 
         return await next(ct);
@@ -336,7 +336,7 @@ public class AuthorizationBehavior<TRequest, TResponse>(ICurrentUser user)
 ```
 
 For this to type-check, the command/query itself declares its response as an `OperationDataResult<T>` (or
-any other `IFailureFactory` implementer) instead of a bare DTO:
+any other `IResultFailureFactory` implementer) instead of a bare DTO:
 
 ```csharp
 public record CreateProductCommand(string Name, decimal Price) : IRequest<OperationDataResult<ProductDto>>;
@@ -349,7 +349,7 @@ public class CreateProductHandler(IProductRepository repository)
         if (await repository.ExistsByName(request.Name))
         {
             // built by a business-rule check that only knows IOperationResult, not the final DTO shape:
-            var duplicate = ResultFailure.Conflict<OperationResult>($"A product named '{request.Name}' already exists.");
+            var duplicate = ResultFailureFactory.Conflict<OperationResult>($"A product named '{request.Name}' already exists.");
             return duplicate.ToErrorDataResult<ProductDto>(); // re-projects into the handler's actual return type
         }
 

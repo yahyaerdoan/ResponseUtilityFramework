@@ -168,4 +168,16 @@ public class AspNetCoreExtensionTests
         Assert.Same(result, actionResult.Value);
         Assert.Equal(200, actionResult.StatusCode);
     }
+
+    [Fact]
+    public void ProblemTypes_CoversEveryResultStatus()
+    {
+        var missing = Enum.GetValues<ResultStatus>()
+            .Where(status => !AspNetCoreResultExtensions._problemTypes.ContainsKey(status))
+            .ToArray();
+
+        Assert.True(missing.Length == 0,
+            $"Missing problem-type mapping for: {string.Join(", ", missing)}. " +
+            $"A missing entry silently falls back to \"about:blank\" instead of failing loudly.");
+    }
 }
