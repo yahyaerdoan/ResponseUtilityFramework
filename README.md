@@ -260,7 +260,49 @@ IOperationResult<OrderDto> order = _products.GetById(id)
 and the failure (title/status/detail/errors) is carried over into the new result type.
 
 ---
-## 8. Generic short-circuiting — `IResultFailureFactory<TSelf>` / `ResultFailureFactory`
+## 8. Async composition
+
+Real handlers usually chain calls that are themselves `async` — a repository hit, an email send, a
+downstream API call. `ResultHandler.Functional` mirrors every method from §7 with an `...Async`
+counterpart so those chains read the same way, without an `await` breaking up the fluent chain at
+every step:
+
+```csharp
+using ResultHandler.Functional;
+
+public Task<IOperationResult<ProductDto>> ActivateAsync(int id)
+    => _products.GetByIdAsync(id)                       // Task<IOperationResult<Product>>
+        .BindAsync(product => ValidateCanActivateAsync(product)) // async business rule
+        .MapAsync(product => ToDto(product))                     // sync mapper
+        .OnSuccessAsync(dto => _email.SendActivationEmailAsync(dto.OwnerEmail)); // async side effect
+```
+
+If `GetByIdAsync` returns `NotFound`, or `ValidateCanActivateAsync` fails, the chain short-circuits
+immediately — `MapAsync` and `OnSuccessAsync` never run, and the original failure (title/status/detail)
+is what the caller gets back, exactly like the sync `Map`/`Bind` in §7.
+
+Each method comes in three shapes so you can start the chain from either a `Task<IOperationResult<T>>`
+or a plain `IOperationResult<T>`, and pass either a sync or an `async` delegate — mix and match freely
+in the same chain:
+
+| Shape | Example |
+|---|---|
+| `Task<IOperationResult<T>>` source, sync delegate | `.MapAsync(p => p.Name)` |
+| `Task<IOperationResult<T>>` source, async delegate | `.BindAsync(p => _orders.CreateDraftOrderAsync(p))` |
+| `IOperationResult<T>` source, async delegate | `existingResult.OnSuccessAsync(p => _email.SendAsync(p))` |
+
+`MatchAsync`, `OnSuccessAsync`, `OnFailureAsync`, `MapAsync`, and `BindAsync` all follow this pattern,
+for both `IOperationResult` and `IOperationResult<T>`. The controller/endpoint at the edge (§5/§6)
+doesn't change — just `await` the final result and call `.ToActionResult()` / `.ToResult()` as usual:
+
+```csharp
+[HttpPost("{id}/activate")]
+public async Task<IActionResult> Activate(int id)
+    => (await _products.ActivateAsync(id)).ToActionResult();
+```
+
+---
+## 9. Generic short-circuiting — `IResultFailureFactory<TSelf>` / `ResultFailureFactory`
 
 Everything above assumes the calling code knows the concrete result type (`IOperationResult<ProductDto>`,
 `ErrorResult`, ...). Generic infrastructure often doesn't — a MediatR `IPipelineBehavior<TRequest, TResponse>`,
@@ -374,7 +416,7 @@ public async Task<IActionResult> Create(CreateProductCommand command)
 ```
 
 ---
-## 9. Serialization
+## 10. Serialization
 
 `System.Text.Json` output uses fixed property names regardless of your `JsonSerializerOptions`
 naming policy, and `ResultStatus` always serializes as its numeric HTTP code:
@@ -397,7 +439,7 @@ JsonSerializer.Serialize(Result.NotFound<ProductDto>("Product 42 does not exist.
 `ResultData`) never appear in JSON — only the current API does.
 
 ---
-## 10. Equality & debugging
+## 11. Equality & debugging
 
 `OperationResult`/`OperationDataResult<T>` override `Equals`/`GetHashCode` (structural, by value) and `ToString()`:
 
@@ -408,7 +450,7 @@ Result.NotFound("x").ToString(); // "NotFound (404): Not found."
 ```
 
 ---
-## 11. Migrating from the pre-v11 API
+## 12. Migrating from the pre-v11 API
 
 `StatusMessage`, `StatusCode: HttpStatusCode`, and `ResultData` still work — marked `[Obsolete]` so
 existing code keeps compiling while you migrate to `Title`, `Status: ResultStatus`, and `Data`:

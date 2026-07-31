@@ -8,7 +8,7 @@ namespace ResultHandler.Functional;
 /// Functional-style composition helpers over <see cref="IOperationResult"/> and <see cref="IOperationResult{T}"/>.
 /// Purely additive extension methods — they do not change the interfaces or existing constructors.
 /// </summary>
-public static class ResultExtensions
+public static partial class ResultExtensions
 {
     /// <summary>Reduces a result into a single value depending on whether it succeeded.</summary>
     public static TOut Match<TOut>(this IOperationResult result, Func<IOperationResult, TOut> onSuccess, Func<IOperationResult, TOut> onFailure)
