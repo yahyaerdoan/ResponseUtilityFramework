@@ -17,7 +17,8 @@ namespace ResultHandler.Core.Abstractions;
 /// implementer, instead of being redeclared as interface members on each one.
 /// </remarks>
 /// <typeparam name="TSelf">The implementing result type itself (CRTP).</typeparam>
-public interface IResultFailureFactory<TSelf> where TSelf : IOperationResult
+public interface IResultFailureFactory<TSelf>
+    where TSelf : IOperationResult
 {
     /// <summary>Builds a failed <typeparamref name="TSelf"/> for one or more validation error messages.</summary>
     /// <param name="errors">The individual error messages (e.g. one per invalid field).</param>

@@ -63,18 +63,6 @@ public static class ResultExtensions
             ? binder(result.Data)
             : Propagate<TOut>(result);
 
-    private static ErrorDataResult<TOut> Propagate<TOut>(IOperationResult failed)
-    {
-        if (failed.Errors.Count > 0)
-        {
-            return new ErrorDataResult<TOut>(failed.Title, failed.Status, failed.Errors);
-        }
-
-        return failed.Detail is null
-            ? new ErrorDataResult<TOut>(failed.Title, failed.Status)
-            : new ErrorDataResult<TOut>(failed.Title, failed.Status, failed.Detail);
-    }
-
     /// <summary>
     /// Re-projects a failed, non-generic <see cref="IOperationResult"/> into the typed
     /// <see cref="ErrorDataResult{T}"/> envelope a caller must return.
@@ -105,4 +93,16 @@ public static class ResultExtensions
     /// </example>
     public static ErrorDataResult<T> ToErrorDataResult<T>(this IOperationResult failed)
         => Propagate<T>(failed);
+
+    private static ErrorDataResult<TOut> Propagate<TOut>(IOperationResult failed)
+    {
+        if (failed.Errors.Count > 0)
+        {
+            return new ErrorDataResult<TOut>(failed.Title, failed.Status, failed.Errors);
+        }
+
+        return failed.Detail is null
+            ? new ErrorDataResult<TOut>(failed.Title, failed.Status)
+            : new ErrorDataResult<TOut>(failed.Title, failed.Status, failed.Detail);
+    }
 }

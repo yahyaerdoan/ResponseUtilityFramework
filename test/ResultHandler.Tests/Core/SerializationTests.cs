@@ -1,8 +1,8 @@
-﻿using ResultHandler.Core.Enums;
+﻿using System.Text.Json;
+using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Error;
 using ResultHandler.Implementations.Success;
 using ResultHandler.Mapping;
-using System.Text.Json;
 using Xunit;
 
 namespace ResultHandler.Tests.Core;

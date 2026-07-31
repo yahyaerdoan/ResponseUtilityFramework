@@ -1,7 +1,7 @@
-﻿using ResultHandler.Core.Base;
+﻿using System.Net;
+using ResultHandler.Core.Base;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
-using System.Net;
 
 namespace ResultHandler.Implementations.Error;
 
@@ -10,7 +10,7 @@ public class ErrorResult : OperationResult
 {
     /// <summary>Default error: status <see cref="ResultStatus.InternalServerError"/>, title "An error occurred.".</summary>
     public ErrorResult()
-        : base(false, ResultStatus.InternalServerError, "An error occurred.")
+        : base(false, ResultStatus.InternalServerError, OperationResultDefaults.ErrorTitle)
     {
     }
 
