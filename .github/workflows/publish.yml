@@ -2,9 +2,15 @@ name: publish
 
 on:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
-      - 'v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+'
+    branches: [master, beta]
+    paths:
+      - 'src/**'
+
+env:
+  # Bump when introducing a breaking/minor change; patch is auto-derived below.
+  # Quoted so YAML/expressions keep it as the literal string "11.0" (unquoted, it
+  # gets parsed as the number 11 and loses the trailing .0).
+  VERSION_PREFIX: "11.0"
 
 jobs:
   publish:
@@ -27,11 +33,14 @@ jobs:
             9.0.x
             10.0.x
 
-      - name: Resolve package version from tag
+      - name: Resolve package version
         id: version
         shell: pwsh
         run: |
-          $version = "${{ github.ref_name }}".TrimStart('v')
+          $version = "${{ env.VERSION_PREFIX }}.${{ github.run_number }}"
+          if ("${{ github.ref_name }}" -eq "beta") {
+            $version = "$version-beta.${{ github.run_number }}"
+          }
           "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Restore
