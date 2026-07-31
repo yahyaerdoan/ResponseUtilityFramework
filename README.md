@@ -260,7 +260,121 @@ IOperationResult<OrderDto> order = _products.GetById(id)
 and the failure (title/status/detail/errors) is carried over into the new result type.
 
 ---
-## 8. Serialization
+## 8. Generic short-circuiting — `IFailureFactory<TSelf>` / `ResultFailure`
+
+Everything above assumes the calling code knows the concrete result type (`IOperationResult<ProductDto>`,
+`ErrorResult`, ...). Generic infrastructure often doesn't — a MediatR `IPipelineBehavior<TRequest, TResponse>`,
+a gRPC interceptor, any short-circuiting middleware only has `TResponse` as a type parameter. Today that
+usually gets solved by throwing an exception to unwind the pipeline, because you can't `new TResponse(...)`
+without knowing what `TResponse` actually is.
+
+`IFailureFactory<TSelf>` (`ResultHandler.Core.Abstractions`) solves this with a C# 11 static-abstract-interface
+CRTP: it lets `TSelf` build its own failure instance. `OperationResult` and `OperationDataResult<T>` already
+implement it, so **any** result type built on top of this library (concrete or still generic) gets it for free:
+
+```csharp
+public interface IFailureFactory<TSelf> where TSelf : IOperationResult
+{
+    static abstract TSelf Failure(IReadOnlyList<string> errors);               // validation message list
+    static abstract TSelf Failure(string title, string detail, ResultStatus status); // everything else
+}
+```
+
+`ResultFailure` (`ResultHandler.Functional`) layers the same named, per-status vocabulary as `Result` on top
+of these two primitives — `BadRequest`, `NotFound`, `Unauthorized`, `Forbidden`, and every other 4xx/5xx —
+generically, for any `TSelf`. It delegates to the matching `Result.XXX(detail)` method internally, so titles
+and default messages have exactly one source of truth (`Result`); nothing is duplicated.
+
+A MediatR pipeline behavior that stops throwing and starts returning:
+
+```csharp
+using ResultHandler.Core.Abstractions;
+using ResultHandler.Functional;
+
+public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
+    : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
+    where TResponse : IOperationResult, IFailureFactory<TResponse>
+{
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
+    {
+        var errors = validators
+            .Select(v => v.Validate(request))
+            .SelectMany(r => r.Errors)
+            .Select(f => f.ErrorMessage)
+            .ToArray();
+
+        if (errors.Length > 0)
+        {
+            return TResponse.Failure(errors); // short-circuits the pipeline — no throw, no exception cost
+        }
+
+        return await next(ct);
+    }
+}
+
+public class AuthorizationBehavior<TRequest, TResponse>(ICurrentUser user)
+    : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>, IRequireRole
+    where TResponse : IOperationResult, IFailureFactory<TResponse>
+{
+    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
+    {
+        if (!user.IsAuthenticated)
+        {
+            return ResultFailure.Unauthorized<TResponse>();
+        }
+
+        if (!user.IsInRole(request.RequiredRole))
+        {
+            return ResultFailure.Forbidden<TResponse>();
+        }
+
+        return await next(ct);
+    }
+}
+```
+
+For this to type-check, the command/query itself declares its response as an `OperationDataResult<T>` (or
+any other `IFailureFactory` implementer) instead of a bare DTO:
+
+```csharp
+public record CreateProductCommand(string Name, decimal Price) : IRequest<OperationDataResult<ProductDto>>;
+
+public class CreateProductHandler(IProductRepository repository)
+    : IRequestHandler<CreateProductCommand, OperationDataResult<ProductDto>>
+{
+    public async Task<OperationDataResult<ProductDto>> Handle(CreateProductCommand request, CancellationToken ct)
+    {
+        if (await repository.ExistsByName(request.Name))
+        {
+            // built by a business-rule check that only knows IOperationResult, not the final DTO shape:
+            var duplicate = ResultFailure.Conflict<OperationResult>($"A product named '{request.Name}' already exists.");
+            return duplicate.ToErrorDataResult<ProductDto>(); // re-projects into the handler's actual return type
+        }
+
+        var product = await repository.Add(request.Name, request.Price);
+        return Result.Success(ToDto(product));
+    }
+}
+```
+
+`ToErrorDataResult<T>()` (`ResultHandler.Functional`) is the companion piece: it re-projects an *existing*
+failed `IOperationResult` (title/status/detail/errors already decided elsewhere, e.g. in a business-rule
+method) into the `ErrorDataResult<T>` shape a handler must return — a conversion, not a new factory call,
+which is why it reads as `failure.ToErrorDataResult<T>()` rather than `Result.ToErrorDataResult<T>(failure)`.
+
+The controller/endpoint at the edge doesn't change at all — `result.ToActionResult()` still works, because
+`OperationDataResult<T>` still implements `IOperationResult<T>`:
+
+```csharp
+[HttpPost]
+public async Task<IActionResult> Create(CreateProductCommand command)
+    => (await mediator.Send(command)).ToActionResult();
+```
+
+---
+## 9. Serialization
 
 `System.Text.Json` output uses fixed property names regardless of your `JsonSerializerOptions`
 naming policy, and `ResultStatus` always serializes as its numeric HTTP code:
@@ -283,7 +397,7 @@ JsonSerializer.Serialize(Result.NotFound<ProductDto>("Product 42 does not exist.
 `ResultData`) never appear in JSON — only the current API does.
 
 ---
-## 9. Equality & debugging
+## 10. Equality & debugging
 
 `OperationResult`/`OperationDataResult<T>` override `Equals`/`GetHashCode` (structural, by value) and `ToString()`:
 
@@ -294,7 +408,7 @@ Result.NotFound("x").ToString(); // "NotFound (404): Not found."
 ```
 
 ---
-## 10. Migrating from the pre-v11 API
+## 11. Migrating from the pre-v11 API
 
 `StatusMessage`, `StatusCode: HttpStatusCode`, and `ResultData` still work — marked `[Obsolete]` so
 existing code keeps compiling while you migrate to `Title`, `Status: ResultStatus`, and `Data`:

@@ -1,5 +1,6 @@
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
+using ResultHandler.Implementations.Error;
 using ResultHandler.Mapping;
 using ResultHandler.Serialization;
 using System.Net;
@@ -17,7 +18,8 @@ namespace ResultHandler.Core.Base;
 /// <param name="title">A short summary of the result.</param>
 /// <param name="detail">Optional additional context.</param>
 /// <param name="errors">Optional list of individual error messages.</param>
-public class OperationResult(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null) : IOperationResult
+public class OperationResult(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null)
+    : IOperationResult, IFailureFactory<OperationResult>
 {
     [JsonPropertyName("isSuccessful")]
     public virtual bool IsSuccessful { get; } = isSuccessful;
@@ -85,4 +87,12 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
 
     public override string ToString()
         => $"{Status} ({(int)Status.ToHttpStatusCode()}): {Title}";
+
+    /// <inheritdoc />
+    public static OperationResult Failure(IReadOnlyList<string> errors)
+        => new ErrorResult("Validation Failed", ResultStatus.UnprocessableContent, errors);
+
+    /// <inheritdoc />
+    public static OperationResult Failure(string title, string detail, ResultStatus status)
+        => new ErrorResult(title, status, detail);
 }

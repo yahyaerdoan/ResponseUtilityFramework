@@ -74,4 +74,35 @@ public static class ResultExtensions
             ? new ErrorDataResult<TOut>(failed.Title, failed.Status)
             : new ErrorDataResult<TOut>(failed.Title, failed.Status, failed.Detail);
     }
+
+    /// <summary>
+    /// Re-projects a failed, non-generic <see cref="IOperationResult"/> into the typed
+    /// <see cref="ErrorDataResult{T}"/> envelope a caller must return.
+    /// </summary>
+    /// <param name="failed">
+    /// A failed result, typically from a business-rule check that only knows <see cref="IOperationResult"/>,
+    /// not the caller's final data type. Only call this when
+    /// <paramref name="failed"/>.<see cref="IOperationResult.IsSuccessful"/> is <see langword="false"/>.
+    /// </param>
+    /// <typeparam name="T">The data type the caller's own result envelope needs to carry.</typeparam>
+    /// <returns>
+    /// An <see cref="ErrorDataResult{T}"/> carrying <paramref name="failed"/>'s title, status, detail
+    /// and errors unchanged — only the shape changes, not the content.
+    /// </returns>
+    /// <example>
+    /// <code>
+    /// public async Task&lt;OperationDataResult&lt;CreatedBrandResponse&gt;&gt; Handle(CreateBrandCommand request, CancellationToken ct)
+    /// {
+    ///     var duplicateCheck = await _brandBusinessRules.BrandNameCannotBeDuplicatedWhenInserted(request.Name);
+    ///     if (!duplicateCheck.IsSuccessful)
+    ///     {
+    ///         return duplicateCheck.ToErrorDataResult&lt;CreatedBrandResponse&gt;();
+    ///     }
+    ///
+    ///     // ...
+    /// }
+    /// </code>
+    /// </example>
+    public static ErrorDataResult<T> ToErrorDataResult<T>(this IOperationResult failed)
+        => Propagate<T>(failed);
 }

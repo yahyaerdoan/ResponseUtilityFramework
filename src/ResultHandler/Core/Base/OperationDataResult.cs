@@ -1,5 +1,6 @@
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
+using ResultHandler.Implementations.Error;
 using ResultHandler.Mapping;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
@@ -19,7 +20,7 @@ namespace ResultHandler.Core.Base;
 /// <param name="detail">Optional additional context.</param>
 /// <param name="errors">Optional list of individual error messages.</param>
 public class OperationDataResult<T>([AllowNull] T data, bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null)
-    : OperationResult(isSuccessful, status, title, detail, errors), IOperationResult<T>
+    : OperationResult(isSuccessful, status, title, detail, errors), IOperationResult<T>, IFailureFactory<OperationDataResult<T>>
 {
     /// <inheritdoc cref="IOperationResult{T}.Data"/>
     [MaybeNull]
@@ -61,4 +62,12 @@ public class OperationDataResult<T>([AllowNull] T data, bool isSuccessful, Resul
 
     public override int GetHashCode()
         => HashCode.Combine(base.GetHashCode(), Data);
+
+    /// <inheritdoc />
+    public static new OperationDataResult<T> Failure(IReadOnlyList<string> errors)
+        => new ErrorDataResult<T>("Validation Failed", ResultStatus.UnprocessableContent, errors);
+
+    /// <inheritdoc />
+    public static new OperationDataResult<T> Failure(string title, string detail, ResultStatus status)
+        => new ErrorDataResult<T>(title, status, detail);
 }
