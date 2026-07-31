@@ -1,0 +1,322 @@
+#nullable enable
+ResultHandler.Core.Abstractions.IOperationResult
+ResultHandler.Core.Abstractions.IOperationResult.Detail.get -> string?
+ResultHandler.Core.Abstractions.IOperationResult.Errors.get -> System.Collections.Generic.IReadOnlyList<string!>!
+ResultHandler.Core.Abstractions.IOperationResult.IsSuccessful.get -> bool
+ResultHandler.Core.Abstractions.IOperationResult.Status.get -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Abstractions.IOperationResult.StatusCode.get -> System.Net.HttpStatusCode
+ResultHandler.Core.Abstractions.IOperationResult.StatusMessage.get -> string!
+ResultHandler.Core.Abstractions.IOperationResult.Title.get -> string!
+ResultHandler.Core.Abstractions.IOperationResult<T>
+ResultHandler.Core.Abstractions.IOperationResult<T>.Data.get -> T
+ResultHandler.Core.Abstractions.IOperationResult<T>.IsSuccessful.get -> bool
+ResultHandler.Core.Abstractions.IOperationResult<T>.ResultData.get -> T
+ResultHandler.Core.Abstractions.IResultFailureFactory<TSelf>
+ResultHandler.Core.Abstractions.IResultFailureFactory<TSelf>.Failure(System.Collections.Generic.IReadOnlyList<string!>! errors) -> TSelf
+ResultHandler.Core.Abstractions.IResultFailureFactory<TSelf>.Failure(string! title, string! detail, ResultHandler.Core.Enums.ResultStatus status) -> TSelf
+ResultHandler.Core.Base.OperationDataResult<T>
+ResultHandler.Core.Base.OperationDataResult<T>.Data.get -> T
+ResultHandler.Core.Base.OperationDataResult<T>.OperationDataResult(T data, bool isSuccessful, ResultHandler.Core.Enums.ResultStatus status, string! title, string? detail = null, System.Collections.Generic.IReadOnlyList<string!>? errors = null) -> void
+ResultHandler.Core.Base.OperationDataResult<T>.OperationDataResult(T resultData, bool isSuccessful) -> void
+ResultHandler.Core.Base.OperationDataResult<T>.OperationDataResult(T resultData, bool isSuccessful, string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+ResultHandler.Core.Base.OperationDataResult<T>.ResultData.get -> T
+ResultHandler.Core.Base.OperationResult
+ResultHandler.Core.Base.OperationResult.Detail.get -> string?
+ResultHandler.Core.Base.OperationResult.Errors.get -> System.Collections.Generic.IReadOnlyList<string!>!
+ResultHandler.Core.Base.OperationResult.OperationResult(bool isSuccessful) -> void
+ResultHandler.Core.Base.OperationResult.OperationResult(bool isSuccessful, ResultHandler.Core.Enums.ResultStatus status, string! title, string? detail = null, System.Collections.Generic.IReadOnlyList<string!>? errors = null) -> void
+ResultHandler.Core.Base.OperationResult.OperationResult(bool isSuccessful, string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+ResultHandler.Core.Base.OperationResult.Status.get -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Base.OperationResult.StatusCode.get -> System.Net.HttpStatusCode
+ResultHandler.Core.Base.OperationResult.StatusMessage.get -> string!
+ResultHandler.Core.Base.OperationResult.Title.get -> string!
+ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Accepted = 6 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.AlreadyReported = 12 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.BadGateway = 53 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.BadRequest = 22 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Conflict = 31 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.ContentTooLarge = 35 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Continue = 0 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Created = 5 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.EarlyHints = 3 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.ExpectationFailed = 39 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.FailedDependency = 44 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Forbidden = 25 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Found = 16 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.GatewayTimeout = 55 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Gone = 32 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.HttpVersionNotSupported = 56 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.ImATeapot = 40 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.ImUsed = 13 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.InsufficientStorage = 58 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.InternalServerError = 51 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.LengthRequired = 33 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Locked = 43 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.LoopDetected = 59 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.MethodNotAllowed = 27 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.MisdirectedRequest = 41 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.MovedPermanently = 15 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.MultiStatus = 11 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.MultipleChoices = 14 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.NetworkAuthenticationRequired = 61 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.NoContent = 8 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.NonAuthoritativeInformation = 7 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.NotAcceptable = 28 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.NotExtended = 60 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.NotFound = 26 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.NotImplemented = 52 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.NotModified = 18 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Ok = 4 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.PartialContent = 10 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.PaymentRequired = 24 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.PermanentRedirect = 21 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.PreconditionFailed = 34 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.PreconditionRequired = 47 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Processing = 2 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.ProxyAuthenticationRequired = 29 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.RangeNotSatisfiable = 38 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.RequestHeaderFieldsTooLarge = 49 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.RequestTimeout = 30 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.ResetContent = 9 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.SeeOther = 17 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.ServiceUnavailable = 54 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.SwitchingProtocols = 1 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.TemporaryRedirect = 20 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.TooEarly = 45 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.TooManyRequests = 48 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.Unauthorized = 23 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.UnavailableForLegalReasons = 50 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.UnprocessableContent = 42 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.UnsupportedMediaType = 37 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.UpgradeRequired = 46 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.UriTooLong = 36 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.UseProxy = 19 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Core.Enums.ResultStatus.VariantAlsoNegotiates = 57 -> ResultHandler.Core.Enums.ResultStatus
+ResultHandler.Facade.Result
+ResultHandler.Functional.ResultExtensions
+ResultHandler.Functional.ResultFailureFactory
+ResultHandler.Implementations.Error.ErrorDataResult<T>
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult() -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(T data) -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(T data, string! title, ResultHandler.Core.Enums.ResultStatus status) -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(T data, string! title, ResultHandler.Core.Enums.ResultStatus status, string! detail) -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(T resultData, string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(T resultData, string! statusMessage, System.Net.HttpStatusCode statusCode, string! detail) -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(string! statusMessage, System.Net.HttpStatusCode statusCode, string! detail) -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(string! title, ResultHandler.Core.Enums.ResultStatus status) -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(string! title, ResultHandler.Core.Enums.ResultStatus status, System.Collections.Generic.IReadOnlyList<string!>! errors) -> void
+ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(string! title, ResultHandler.Core.Enums.ResultStatus status, string! detail) -> void
+ResultHandler.Implementations.Error.ErrorResult
+ResultHandler.Implementations.Error.ErrorResult.ErrorResult() -> void
+ResultHandler.Implementations.Error.ErrorResult.ErrorResult(string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+ResultHandler.Implementations.Error.ErrorResult.ErrorResult(string! statusMessage, System.Net.HttpStatusCode statusCode, string! detail) -> void
+ResultHandler.Implementations.Error.ErrorResult.ErrorResult(string! title, ResultHandler.Core.Enums.ResultStatus status) -> void
+ResultHandler.Implementations.Error.ErrorResult.ErrorResult(string! title, ResultHandler.Core.Enums.ResultStatus status, System.Collections.Generic.IReadOnlyList<string!>! errors) -> void
+ResultHandler.Implementations.Error.ErrorResult.ErrorResult(string! title, ResultHandler.Core.Enums.ResultStatus status, string! detail) -> void
+ResultHandler.Implementations.Success.SuccessDataResult<T>
+ResultHandler.Implementations.Success.SuccessDataResult<T>.SuccessDataResult(T data) -> void
+ResultHandler.Implementations.Success.SuccessDataResult<T>.SuccessDataResult(T data, string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+ResultHandler.Implementations.Success.SuccessDataResult<T>.SuccessDataResult(T data, string! title) -> void
+ResultHandler.Implementations.Success.SuccessDataResult<T>.SuccessDataResult(T data, string! title, ResultHandler.Core.Enums.ResultStatus status) -> void
+ResultHandler.Implementations.Success.SuccessResult
+ResultHandler.Implementations.Success.SuccessResult.SuccessResult() -> void
+ResultHandler.Implementations.Success.SuccessResult.SuccessResult(string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+ResultHandler.Implementations.Success.SuccessResult.SuccessResult(string! title) -> void
+ResultHandler.Implementations.Success.SuccessResult.SuccessResult(string! title, ResultHandler.Core.Enums.ResultStatus status) -> void
+ResultHandler.Mapping.HttpStatusCodeExtensions
+ResultHandler.Mapping.ResultStatusExtensions
+ResultHandler.Serialization.ResultStatusJsonConverter
+ResultHandler.Serialization.ResultStatusJsonConverter.ResultStatusJsonConverter() -> void
+override ResultHandler.Core.Base.OperationDataResult<T>.Equals(object? obj) -> bool
+override ResultHandler.Core.Base.OperationDataResult<T>.GetHashCode() -> int
+override ResultHandler.Core.Base.OperationDataResult<T>.IsSuccessful.get -> bool
+override ResultHandler.Core.Base.OperationResult.Equals(object? obj) -> bool
+override ResultHandler.Core.Base.OperationResult.GetHashCode() -> int
+override ResultHandler.Core.Base.OperationResult.ToString() -> string!
+override ResultHandler.Serialization.ResultStatusJsonConverter.Read(ref System.Text.Json.Utf8JsonReader reader, System.Type! typeToConvert, System.Text.Json.JsonSerializerOptions! options) -> ResultHandler.Core.Enums.ResultStatus
+override ResultHandler.Serialization.ResultStatusJsonConverter.Write(System.Text.Json.Utf8JsonWriter! writer, ResultHandler.Core.Enums.ResultStatus value, System.Text.Json.JsonSerializerOptions! options) -> void
+static ResultHandler.Core.Base.OperationDataResult<T>.Failure(System.Collections.Generic.IReadOnlyList<string!>! errors) -> ResultHandler.Core.Base.OperationDataResult<T>!
+static ResultHandler.Core.Base.OperationDataResult<T>.Failure(string! title, string! detail, ResultHandler.Core.Enums.ResultStatus status) -> ResultHandler.Core.Base.OperationDataResult<T>!
+static ResultHandler.Core.Base.OperationResult.Failure(System.Collections.Generic.IReadOnlyList<string!>! errors) -> ResultHandler.Core.Base.OperationResult!
+static ResultHandler.Core.Base.OperationResult.Failure(string! title, string! detail, ResultHandler.Core.Enums.ResultStatus status) -> ResultHandler.Core.Base.OperationResult!
+static ResultHandler.Facade.Result.Accepted(string! title = "Request accepted for processing.") -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.Accepted<T>(T data, string! title = "Request accepted for processing.") -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.AlreadyReported() -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.AlreadyReported<T>(T data, string! title = "Already reported.") -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.BadGateway(string! detail = "An upstream server returned an invalid response.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.BadGateway<T>(string! detail = "An upstream server returned an invalid response.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.BadRequest(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.BadRequest<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Conflict(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.Conflict<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.ContentTooLarge(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.ContentTooLarge<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Continue(string! title = "Continue.") -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.Created(string! title = "Resource created successfully.") -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.Created<T>(T data, string! title = "Resource created successfully.") -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.EarlyHints(string! title = "Early hints.") -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.ExpectationFailed(string! detail = "The expectation given in the Expect header could not be met.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.ExpectationFailed<T>(string! detail = "The expectation given in the Expect header could not be met.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.FailedDependency(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.FailedDependency<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Failure(string! title, string! detail, ResultHandler.Core.Enums.ResultStatus status) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.Failure<T>(T data, string! title, string! detail, ResultHandler.Core.Enums.ResultStatus status) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Failure<T>(string! title, string! detail, ResultHandler.Core.Enums.ResultStatus status) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Forbidden(string! detail = "You do not have permission to access this resource.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.Forbidden<T>(string! detail = "You do not have permission to access this resource.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Found(string! location) -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.Found<T>(T data, string! location) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.GatewayTimeout(string! detail = "An upstream server did not respond in time.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.GatewayTimeout<T>(string! detail = "An upstream server did not respond in time.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Gone(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.Gone<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.HttpVersionNotSupported(string! detail = "The HTTP version used in the request is not supported.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.HttpVersionNotSupported<T>(string! detail = "The HTTP version used in the request is not supported.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.ImATeapot(string! detail = "I'm a teapot.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.ImATeapot<T>(string! detail = "I'm a teapot.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.ImUsed() -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.ImUsed<T>(T data, string! title = "IM used.") -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.InsufficientStorage(string! detail = "Insufficient storage to complete the request.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.InsufficientStorage<T>(string! detail = "Insufficient storage to complete the request.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.InternalServerError(string! detail = "An unexpected error occurred. Please try again later.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.InternalServerError<T>(string! detail = "An unexpected error occurred. Please try again later.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Invalid(System.Collections.Generic.IReadOnlyList<string!>! errors) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.Invalid(params string![]! errors) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.Invalid<T>(System.Collections.Generic.IReadOnlyList<string!>! errors) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Invalid<T>(params string![]! errors) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.LengthRequired(string! detail = "A Content-Length header is required for this request.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.LengthRequired<T>(string! detail = "A Content-Length header is required for this request.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Locked(string! detail = "The resource is currently locked and cannot be modified.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.Locked<T>(string! detail = "The resource is currently locked and cannot be modified.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.LoopDetected(string! detail = "The server detected an infinite loop while processing the request.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.LoopDetected<T>(string! detail = "The server detected an infinite loop while processing the request.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.MethodNotAllowed(string! detail = "The HTTP method used is not allowed for this endpoint.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.MethodNotAllowed<T>(string! detail = "The HTTP method used is not allowed for this endpoint.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.MisdirectedRequest(string! detail = "The request was directed to a server unable to produce a response.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.MisdirectedRequest<T>(string! detail = "The request was directed to a server unable to produce a response.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.MovedPermanently(string! location) -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.MovedPermanently<T>(T data, string! location) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.MultiStatus() -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.MultiStatus<T>(T data, string! title = "Multi-status.") -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.MultipleChoices(string! detail) -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.MultipleChoices<T>(T data, string! detail) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.NetworkAuthenticationRequired(string! detail = "Network authentication is required to access this resource.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.NetworkAuthenticationRequired<T>(string! detail = "Network authentication is required to access this resource.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.NoContent() -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.NonAuthoritativeInformation() -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.NonAuthoritativeInformation<T>(T data, string! title = "Non-authoritative information.") -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.NotAcceptable(string! detail = "The requested media type is not supported by this server.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.NotAcceptable<T>(string! detail = "The requested media type is not supported by this server.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.NotExtended(string! detail = "Further extensions to the request are required.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.NotExtended<T>(string! detail = "Further extensions to the request are required.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.NotFound(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.NotFound<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.NotImplemented(string! detail = "This feature is not yet implemented.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.NotImplemented<T>(string! detail = "This feature is not yet implemented.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.NotModified() -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.NotModified<T>(T data) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.PartialContent() -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.PartialContent<T>(T data, string! title = "Partial content.") -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.PaymentRequired(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.PaymentRequired<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.PermanentRedirect(string! location) -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.PermanentRedirect<T>(T data, string! location) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.PreconditionFailed(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.PreconditionFailed<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.PreconditionRequired(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.PreconditionRequired<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Processing(string! title = "Processing.") -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.ProxyAuthenticationRequired(string! detail = "Proxy authentication is required to access this resource.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.ProxyAuthenticationRequired<T>(string! detail = "Proxy authentication is required to access this resource.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.RangeNotSatisfiable(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.RangeNotSatisfiable<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.RequestHeaderFieldsTooLarge(string! detail = "One or more request header fields exceed the maximum allowed size.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.RequestHeaderFieldsTooLarge<T>(string! detail = "One or more request header fields exceed the maximum allowed size.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.RequestTimeout(string! detail = "The request timed out. Please try again.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.RequestTimeout<T>(string! detail = "The request timed out. Please try again.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.ResetContent() -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.SeeOther(string! location) -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.SeeOther<T>(T data, string! location) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.ServiceUnavailable(string! detail = "The service is temporarily unavailable. Please try again later.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.ServiceUnavailable<T>(string! detail = "The service is temporarily unavailable. Please try again later.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Success() -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.Success(string! title) -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.Success<T>(T data) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.Success<T>(T data, string! title) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.SwitchingProtocols(string! title = "Switching protocols.") -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.TemporaryRedirect(string! location) -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.TemporaryRedirect<T>(T data, string! location) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.TooEarly(string! detail = "The request was rejected because it may be replayed.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.TooEarly<T>(string! detail = "The request was rejected because it may be replayed.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.TooManyRequests(string! detail = "Too many requests. Please slow down and try again later.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.TooManyRequests<T>(string! detail = "Too many requests. Please slow down and try again later.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.Unauthorized(string! detail = "Authentication is required to access this resource.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.Unauthorized<T>(string! detail = "Authentication is required to access this resource.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.UnavailableForLegalReasons(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.UnavailableForLegalReasons<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.UnprocessableContent(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.UnprocessableContent<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.UnsupportedMediaType(string! detail = "The submitted media type is not supported. Please use a supported type.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.UnsupportedMediaType<T>(string! detail = "The submitted media type is not supported. Please use a supported type.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.UpgradeRequired(string! detail) -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.UpgradeRequired<T>(string! detail) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.UriTooLong(string! detail = "The request URI exceeds the maximum allowed length.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.UriTooLong<T>(string! detail = "The request URI exceeds the maximum allowed length.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Facade.Result.UseProxy(string! proxy) -> ResultHandler.Implementations.Success.SuccessResult!
+static ResultHandler.Facade.Result.UseProxy<T>(T data, string! proxy) -> ResultHandler.Implementations.Success.SuccessDataResult<T>!
+static ResultHandler.Facade.Result.VariantAlsoNegotiates(string! detail = "The server has an internal configuration error.") -> ResultHandler.Implementations.Error.ErrorResult!
+static ResultHandler.Facade.Result.VariantAlsoNegotiates<T>(string! detail = "The server has an internal configuration error.") -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Functional.ResultExtensions.Bind<T, TOut>(this ResultHandler.Core.Abstractions.IOperationResult<T>! result, System.Func<T, ResultHandler.Core.Abstractions.IOperationResult<TOut>!>! binder) -> ResultHandler.Core.Abstractions.IOperationResult<TOut>!
+static ResultHandler.Functional.ResultExtensions.Map<T, TOut>(this ResultHandler.Core.Abstractions.IOperationResult<T>! result, System.Func<T, TOut>! mapper) -> ResultHandler.Core.Abstractions.IOperationResult<TOut>!
+static ResultHandler.Functional.ResultExtensions.Match<T, TOut>(this ResultHandler.Core.Abstractions.IOperationResult<T>! result, System.Func<T, TOut>! onSuccess, System.Func<ResultHandler.Core.Abstractions.IOperationResult<T>!, TOut>! onFailure) -> TOut
+static ResultHandler.Functional.ResultExtensions.Match<TOut>(this ResultHandler.Core.Abstractions.IOperationResult! result, System.Func<ResultHandler.Core.Abstractions.IOperationResult!, TOut>! onSuccess, System.Func<ResultHandler.Core.Abstractions.IOperationResult!, TOut>! onFailure) -> TOut
+static ResultHandler.Functional.ResultExtensions.OnFailure(this ResultHandler.Core.Abstractions.IOperationResult! result, System.Action<ResultHandler.Core.Abstractions.IOperationResult!>! action) -> ResultHandler.Core.Abstractions.IOperationResult!
+static ResultHandler.Functional.ResultExtensions.OnSuccess(this ResultHandler.Core.Abstractions.IOperationResult! result, System.Action<ResultHandler.Core.Abstractions.IOperationResult!>! action) -> ResultHandler.Core.Abstractions.IOperationResult!
+static ResultHandler.Functional.ResultExtensions.OnSuccess<T>(this ResultHandler.Core.Abstractions.IOperationResult<T>! result, System.Action<T>! action) -> ResultHandler.Core.Abstractions.IOperationResult<T>!
+static ResultHandler.Functional.ResultExtensions.ToErrorDataResult<T>(this ResultHandler.Core.Abstractions.IOperationResult! failed) -> ResultHandler.Implementations.Error.ErrorDataResult<T>!
+static ResultHandler.Functional.ResultFailureFactory.BadGateway<TSelf>(string! detail = "An upstream server returned an invalid response.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.BadRequest<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.Conflict<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.ContentTooLarge<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.ExpectationFailed<TSelf>(string! detail = "The expectation given in the Expect header could not be met.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.FailedDependency<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.Forbidden<TSelf>(string! detail = "You do not have permission to access this resource.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.GatewayTimeout<TSelf>(string! detail = "An upstream server did not respond in time.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.Gone<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.HttpVersionNotSupported<TSelf>(string! detail = "The HTTP version used in the request is not supported.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.ImATeapot<TSelf>(string! detail = "I'm a teapot.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.InsufficientStorage<TSelf>(string! detail = "Insufficient storage to complete the request.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.InternalServerError<TSelf>(string! detail = "An unexpected error occurred. Please try again later.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.LengthRequired<TSelf>(string! detail = "A Content-Length header is required for this request.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.Locked<TSelf>(string! detail = "The resource is currently locked and cannot be modified.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.LoopDetected<TSelf>(string! detail = "The server detected an infinite loop while processing the request.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.MethodNotAllowed<TSelf>(string! detail = "The HTTP method used is not allowed for this endpoint.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.MisdirectedRequest<TSelf>(string! detail = "The request was directed to a server unable to produce a response.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.NetworkAuthenticationRequired<TSelf>(string! detail = "Network authentication is required to access this resource.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.NotAcceptable<TSelf>(string! detail = "The requested media type is not supported by this server.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.NotExtended<TSelf>(string! detail = "Further extensions to the request are required.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.NotFound<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.NotImplemented<TSelf>(string! detail = "This feature is not yet implemented.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.PaymentRequired<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.PreconditionFailed<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.PreconditionRequired<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.ProxyAuthenticationRequired<TSelf>(string! detail = "Proxy authentication is required to access this resource.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.RangeNotSatisfiable<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.RequestHeaderFieldsTooLarge<TSelf>(string! detail = "One or more request header fields exceed the maximum allowed size.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.RequestTimeout<TSelf>(string! detail = "The request timed out. Please try again.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.ServiceUnavailable<TSelf>(string! detail = "The service is temporarily unavailable. Please try again later.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.TooEarly<TSelf>(string! detail = "The request was rejected because it may be replayed.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.TooManyRequests<TSelf>(string! detail = "Too many requests. Please slow down and try again later.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.Unauthorized<TSelf>(string! detail = "Authentication is required to access this resource.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.UnavailableForLegalReasons<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.UnprocessableContent<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.UnsupportedMediaType<TSelf>(string! detail = "The submitted media type is not supported. Please use a supported type.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.UpgradeRequired<TSelf>(string! detail) -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.UriTooLong<TSelf>(string! detail = "The request URI exceeds the maximum allowed length.") -> TSelf
+static ResultHandler.Functional.ResultFailureFactory.VariantAlsoNegotiates<TSelf>(string! detail = "The server has an internal configuration error.") -> TSelf
+static ResultHandler.Mapping.HttpStatusCodeExtensions.ToResultStatus(this System.Net.HttpStatusCode httpStatusCode) -> ResultHandler.Core.Enums.ResultStatus
+static ResultHandler.Mapping.HttpStatusCodeExtensions.ToResultStatus(this int httpStatusCode) -> ResultHandler.Core.Enums.ResultStatus
+static ResultHandler.Mapping.ResultStatusExtensions.ToHttpStatusCode(this ResultHandler.Core.Enums.ResultStatus status) -> System.Net.HttpStatusCode
+virtual ResultHandler.Core.Base.OperationResult.IsSuccessful.get -> bool

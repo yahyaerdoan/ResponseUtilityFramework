@@ -24,6 +24,8 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>11.0.12-beta.12</PackageValidationBaselineVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
