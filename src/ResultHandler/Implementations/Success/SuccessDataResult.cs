@@ -1,16 +1,16 @@
-﻿using ResultHandler.Core.Base;
+﻿using System.Net;
+using ResultHandler.Core.Base;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
-using System.Net;
 
 namespace ResultHandler.Implementations.Success;
 
-/// <summary>A successful <see cref="DataResult{T}"/> (<c>IsSuccessful</c> is always <see langword="true"/>).</summary>
-public class SuccessDataResult<T> : DataResult<T>
+/// <summary>A successful <see cref="OperationDataResult{T}"/> (<c>IsSuccessful</c> is always <see langword="true"/>).</summary>
+public class SuccessDataResult<T> : OperationDataResult<T>
 {
     /// <summary>Success with the given data: status <see cref="ResultStatus.Ok"/>, title "Operation completed successfully.".</summary>
     public SuccessDataResult(T data)
-        : base(data, true, ResultStatus.Ok, "Operation completed successfully.")
+        : base(data, true, ResultStatus.Ok, OperationResultDefaults.SuccessTitle)
     {
     }
 

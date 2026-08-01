@@ -1,16 +1,16 @@
-﻿using ResultHandler.Core.Base;
+﻿using System.Net;
+using ResultHandler.Core.Base;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
-using System.Net;
 
 namespace ResultHandler.Implementations.Error;
 
-/// <summary>A failed <see cref="Result"/> (<c>IsSuccessful</c> is always <see langword="false"/>).</summary>
-public class ErrorResult : Result
+/// <summary>A failed <see cref="OperationResult"/> (<c>IsSuccessful</c> is always <see langword="false"/>).</summary>
+public class ErrorResult : OperationResult
 {
-    /// <summary>Default error: status <see cref="ResultStatus.Error"/>, title "An error occurred.".</summary>
+    /// <summary>Default error: status <see cref="ResultStatus.InternalServerError"/>, title "An error occurred.".</summary>
     public ErrorResult()
-        : base(false, ResultStatus.Error, "An error occurred.")
+        : base(false, ResultStatus.InternalServerError, OperationResultDefaults.ErrorTitle)
     {
     }
 

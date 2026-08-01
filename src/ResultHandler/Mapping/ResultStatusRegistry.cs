@@ -1,5 +1,5 @@
-﻿using ResultHandler.Core.Enums;
-using System.Net;
+﻿using System.Net;
+using ResultHandler.Core.Enums;
 
 namespace ResultHandler.Mapping;
 
@@ -56,7 +56,7 @@ internal static class ResultStatusRegistry
         [ResultStatus.ExpectationFailed] = HttpStatusCode.ExpectationFailed,
         [ResultStatus.ImATeapot] = (HttpStatusCode)418,
         [ResultStatus.MisdirectedRequest] = (HttpStatusCode)421,
-        [ResultStatus.Invalid] = (HttpStatusCode)422,
+        [ResultStatus.UnprocessableContent] = (HttpStatusCode)422,
         [ResultStatus.Locked] = (HttpStatusCode)423,
         [ResultStatus.FailedDependency] = (HttpStatusCode)424,
         [ResultStatus.TooEarly] = (HttpStatusCode)425,
@@ -67,10 +67,10 @@ internal static class ResultStatusRegistry
         [ResultStatus.UnavailableForLegalReasons] = (HttpStatusCode)451,
 
         // 5xx
-        [ResultStatus.Error] = HttpStatusCode.InternalServerError,
+        [ResultStatus.InternalServerError] = HttpStatusCode.InternalServerError,
         [ResultStatus.NotImplemented] = HttpStatusCode.NotImplemented,
         [ResultStatus.BadGateway] = HttpStatusCode.BadGateway,
-        [ResultStatus.Unavailable] = HttpStatusCode.ServiceUnavailable,
+        [ResultStatus.ServiceUnavailable] = HttpStatusCode.ServiceUnavailable,
         [ResultStatus.GatewayTimeout] = HttpStatusCode.GatewayTimeout,
         [ResultStatus.HttpVersionNotSupported] = HttpStatusCode.HttpVersionNotSupported,
         [ResultStatus.VariantAlsoNegotiates] = (HttpStatusCode)506,
@@ -81,6 +81,25 @@ internal static class ResultStatusRegistry
     };
 
     // Never hand-written: always derived from ToHttpCode so the two directions can never drift apart.
-    public static readonly IReadOnlyDictionary<int, ResultStatus> FromHttpCode =
-        ToHttpCode.ToDictionary(kv => (int)kv.Value, kv => kv.Key);
+    public static readonly IReadOnlyDictionary<int, ResultStatus> FromHttpCode = BuildFromHttpCode();
+
+    private static Dictionary<int, ResultStatus> BuildFromHttpCode()
+    {
+        var map = new Dictionary<int, ResultStatus>();
+        foreach (var (status, httpStatusCode) in ToHttpCode)
+        {
+            var code = (int)httpStatusCode;
+            if (map.TryGetValue(code, out var existing))
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(ResultStatusRegistry)}.{nameof(ToHttpCode)} maps both " +
+                    $"{nameof(ResultStatus)}.{existing} and {nameof(ResultStatus)}.{status} to HTTP status code {code}. " +
+                    "Each ResultStatus must map to a distinct HTTP status code.");
+            }
+
+            map[code] = status;
+        }
+
+        return map;
+    }
 }

@@ -1,125 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
-using HttpContext = Microsoft.AspNetCore.Http.HttpContext;
 
 namespace ResultHandler.AspNetCore.Extensions;
 
-public static class AspNetCoreResultExtensions
+/// <summary>
+/// Converts <see cref="IOperationResult"/>/<see cref="IOperationResult{T}"/> into ASP.NET Core
+/// response types. Split across three files: the MVC <see cref="IActionResult"/> surface lives in
+/// <c>AspNetCoreResultExtensions.Mvc.cs</c>, the Minimal API <see cref="IResult"/> surface lives in
+/// <c>AspNetCoreResultExtensions.MinimalApi.cs</c>, and this file holds what both share — RFC 9457
+/// <see cref="ProblemDetails"/> construction and the bodyless-status classification they both need to
+/// agree on.
+/// </summary>
+public static partial class AspNetCoreResultExtensions
 {
-    /// <summary>
-    /// Maps to an HTTP response without a body on success.
-    /// Use for endpoints that do not return data (e.g. fire-and-forget commands).
-    /// </summary>
-    /// <param name="result">The result to convert.</param>
-    /// <param name="httpContext">
-    /// Optional; when provided, a failed result's <see cref="ProblemDetails.Instance"/> is set to
-    /// the current request path per RFC 9457.
-    /// </param>
-    public static IActionResult ToActionResult(this IResult result, HttpContext? httpContext = null)
-    {
-        if (result.IsSuccessful)
-        {
-            return result.Status switch
-            {
-                ResultStatus.NoContent => new NoContentResult(),
-                _ => new StatusCodeResult((int)result.Status.ToHttpStatusCode()),
-            };
-        }
-
-        return ToProblemActionResult(result, httpContext);
-    }
-
-    /// <summary>
-    /// Maps to an HTTP response whose success body is the raw <typeparamref name="T"/> data.
-    /// 1xx / 3xx / NoContent / NotModified carry no body.
-    /// </summary>
-    /// <param name="result">The result to convert.</param>
-    /// <param name="httpContext">
-    /// Optional; when provided, a failed result's <see cref="ProblemDetails.Instance"/> is set to
-    /// the current request path per RFC 9457.
-    /// </param>
-    public static IActionResult ToActionResult<T>(this IDataResult<T> result, HttpContext? httpContext = null)
-    {
-        if (result.IsSuccessful)
-        {
-            return ToSuccessActionResult(result.Status, result.Data);
-        }
-
-        return ToProblemActionResult(result, httpContext);
-    }
-
-    /// <summary>
-    /// Maps to an HTTP response whose success body is the full result envelope (data + metadata).
-    /// 1xx / 3xx / NoContent / NotModified carry no body.
-    /// </summary>
-    /// <param name="result">The result to convert.</param>
-    /// <param name="httpContext">
-    /// Optional; when provided, a failed result's <see cref="ProblemDetails.Instance"/> is set to
-    /// the current request path per RFC 9457.
-    /// </param>
-    public static IActionResult ToEnvelopedActionResult(this IResult result, HttpContext? httpContext = null)
-    {
-        if (result.IsSuccessful)
-        {
-            return (IActionResult?)ToBodylessSuccessActionResult(result.Status)
-                ?? new OkObjectResult(result);
-        }
-
-        return ToProblemActionResult(result, httpContext);
-    }
-
-    /// <param name="result">The result to convert.</param>
-    /// <param name="httpContext">
-    /// Optional; when provided, <see cref="ProblemDetails.Instance"/> is set to the current request
-    /// path, per RFC 9457's guidance that it identify "this specific occurrence" of the problem.
-    /// </param>
-    public static ProblemDetails ToProblemDetails(this IResult result, HttpContext? httpContext = null)
-    {
-        var problem = new ProblemDetails
-        {
-            Type = _problemTypes.TryGetValue(result.Status, out var type) ? type : "about:blank",
-            Title = result.Title,
-            Detail = result.Detail,
-            Status = (int)result.Status.ToHttpStatusCode(),
-            Instance = httpContext?.Request.Path.Value,
-        };
-
-        if (result.Errors.Count > 0)
-        {
-            problem.Extensions["errors"] = result.Errors;
-        }
-
-        return problem;
-    }
-
-    private static IActionResult ToSuccessActionResult<T>(ResultStatus status, T data)
-    {
-        return (IActionResult?)ToBodylessSuccessActionResult(status)
-            ?? new OkObjectResult(data);
-    }
-
-    private static StatusCodeResult? ToBodylessSuccessActionResult(ResultStatus status)
-    {
-        var httpCode = (int)status.ToHttpStatusCode();
-        return status switch
-        {
-            ResultStatus.NoContent => new NoContentResult(),
-            ResultStatus.NotModified => new StatusCodeResult(304),
-            _ when httpCode is >= 100 and < 200 or >= 300 and < 400 => new StatusCodeResult(httpCode),
-            _ => null,
-        };
-    }
-
-    private static ObjectResult ToProblemActionResult(IResult result, HttpContext? httpContext)
-        => new(result.ToProblemDetails(httpContext))
-        {
-            StatusCode = (int)result.Status.ToHttpStatusCode(),
-        };
-
     // RFC 9110 / RFC 6585 / RFC 4918 / RFC 7725 / RFC 8470 - canonical type URIs per RFC 9457 §4.2
-    private static readonly Dictionary<ResultStatus, string> _problemTypes =
+    // internal (not private) so ResultHandler.Tests can assert every ResultStatus is covered.
+    internal static readonly Dictionary<ResultStatus, string> _problemTypes =
         new()
         {
             // 1xx, 2xx, 3xx - about:blank per RFC 9457 §4.2.1
@@ -142,6 +41,7 @@ public static class AspNetCoreResultExtensions
             [ResultStatus.Found] = "about:blank",
             [ResultStatus.SeeOther] = "about:blank",
             [ResultStatus.NotModified] = "about:blank",
+            [ResultStatus.UseProxy] = "about:blank",
             [ResultStatus.TemporaryRedirect] = "about:blank",
             [ResultStatus.PermanentRedirect] = "about:blank",
 
@@ -166,7 +66,7 @@ public static class AspNetCoreResultExtensions
             [ResultStatus.ExpectationFailed] = "https://tools.ietf.org/html/rfc9110#section-15.5.18",
             [ResultStatus.ImATeapot] = "https://tools.ietf.org/html/rfc9110#section-15.5.19",
             [ResultStatus.MisdirectedRequest] = "https://tools.ietf.org/html/rfc9110#section-15.5.20",
-            [ResultStatus.Invalid] = "https://tools.ietf.org/html/rfc9110#section-15.5.21",
+            [ResultStatus.UnprocessableContent] = "https://tools.ietf.org/html/rfc9110#section-15.5.21",
             [ResultStatus.Locked] = "https://tools.ietf.org/html/rfc4918#section-11.3",
             [ResultStatus.FailedDependency] = "https://tools.ietf.org/html/rfc4918#section-11.4",
             [ResultStatus.TooEarly] = "https://tools.ietf.org/html/rfc8470#section-5.2",
@@ -177,10 +77,10 @@ public static class AspNetCoreResultExtensions
             [ResultStatus.UnavailableForLegalReasons] = "https://tools.ietf.org/html/rfc7725#section-3",
 
             // 5xx - RFC 9110 §15.6.x / RFC 4918 / RFC 2295 / RFC 5842 / RFC 2774 / RFC 6585
-            [ResultStatus.Error] = "https://tools.ietf.org/html/rfc9110#section-15.6.1",
+            [ResultStatus.InternalServerError] = "https://tools.ietf.org/html/rfc9110#section-15.6.1",
             [ResultStatus.NotImplemented] = "https://tools.ietf.org/html/rfc9110#section-15.6.2",
             [ResultStatus.BadGateway] = "https://tools.ietf.org/html/rfc9110#section-15.6.3",
-            [ResultStatus.Unavailable] = "https://tools.ietf.org/html/rfc9110#section-15.6.4",
+            [ResultStatus.ServiceUnavailable] = "https://tools.ietf.org/html/rfc9110#section-15.6.4",
             [ResultStatus.GatewayTimeout] = "https://tools.ietf.org/html/rfc9110#section-15.6.5",
             [ResultStatus.HttpVersionNotSupported] = "https://tools.ietf.org/html/rfc9110#section-15.6.6",
             [ResultStatus.VariantAlsoNegotiates] = "https://tools.ietf.org/html/rfc2295#section-8.1",
@@ -189,4 +89,54 @@ public static class AspNetCoreResultExtensions
             [ResultStatus.NotExtended] = "https://tools.ietf.org/html/rfc2774#section-7",
             [ResultStatus.NetworkAuthenticationRequired] = "https://tools.ietf.org/html/rfc6585#section-6",
         };
+
+    private enum BodylessKind
+    {
+        None,
+        NoContent,
+        NotModified,
+        Generic,
+    }
+
+    /// <summary>Creates an RFC 9457 <see cref="ProblemDetails"/> payload from an <see cref="IOperationResult"/>.</summary>
+    /// <param name="result">The result to convert.</param>
+    /// <param name="httpContext">
+    /// Optional; when provided, <see cref="ProblemDetails.Instance"/> is set to the current request
+    /// path, per RFC 9457's guidance that it identify "this specific occurrence" of the problem.
+    /// </param>
+    public static ProblemDetails ToProblemDetails(this IOperationResult result, HttpContext? httpContext = null)
+    {
+        var problem = new ProblemDetails
+        {
+            Type = _problemTypes.TryGetValue(result.Status, out var type) ? type : "about:blank",
+            Title = result.Title,
+            Detail = result.Detail,
+            Status = (int)result.Status.ToHttpStatusCode(),
+            Instance = httpContext?.Request.Path.Value,
+        };
+
+        if (result.Errors.Count > 0)
+        {
+            problem.Extensions["errors"] = result.Errors;
+        }
+
+        return problem;
+    }
+
+    /// <summary>
+    /// Single source of truth for which statuses map to a bodyless response and what HTTP code to
+    /// use — shared by both the <see cref="IActionResult"/> and Minimal API <see cref="IResult"/>
+    /// surfaces so the two never drift apart.
+    /// </summary>
+    private static (BodylessKind Kind, int HttpCode) ClassifyBodyless(ResultStatus status)
+    {
+        var httpCode = (int)status.ToHttpStatusCode();
+        return status switch
+        {
+            ResultStatus.NoContent => (BodylessKind.NoContent, httpCode),
+            ResultStatus.NotModified => (BodylessKind.NotModified, 304),
+            _ when httpCode is >= 100 and < 200 or >= 300 and < 400 => (BodylessKind.Generic, httpCode),
+            _ => (BodylessKind.None, httpCode),
+        };
+    }
 }

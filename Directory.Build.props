@@ -9,8 +9,11 @@
     <NoWarn>$(NoWarn);CS1591</NoWarn>
 
     <Authors>Yahya Erdogan</Authors>
-    <Company>Cambridge Consulting Group LLC</Company>
-    <Copyright>YahyaErdogan-2024</Copyright>
+    <CopyrightStartYear>2024</CopyrightStartYear>
+    <CopyrightCurrentYear>$([System.DateTime]::Now.Year)</CopyrightCurrentYear>
+    <CopyrightYears Condition="'$(CopyrightCurrentYear)' == '$(CopyrightStartYear)'">$(CopyrightStartYear)</CopyrightYears>
+    <CopyrightYears Condition="'$(CopyrightCurrentYear)' != '$(CopyrightStartYear)'">$(CopyrightStartYear)-$(CopyrightCurrentYear)</CopyrightYears>
+    <Copyright>Copyright © $(Authors) $(CopyrightYears)</Copyright>
     <RepositoryUrl>https://github.com/yahyaerdoan/Response-Utility-Library</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <NeutralLanguage>en</NeutralLanguage>
@@ -21,14 +24,34 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
+  <!--
+    Package validation compares the built package's API against the last published NuGet
+    baseline to catch accidental breaking changes. It needs a real -p:Version (set by
+    publish.yml from the release tag) to compare meaningfully, so it's gated on the
+    IsPublishBuild flag publish.yml passes explicitly — not on GITHUB_ACTIONS, which is
+    also 'true' for build.yml/codeql.yml's plain `dotnet build` (no -p:Version override),
+    where it would always fail comparing the placeholder Version against the baseline.
+  -->
+  <PropertyGroup Condition="'$(IsPackable)' != 'false' AND '$(IsPublishBuild)' == 'true'">
+    <EnablePackageValidation>true</EnablePackageValidation>
+    <PackageValidationBaselineVersion>11.0.12-beta.12</PackageValidationBaselineVersion>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(IsPackable)' != 'false'">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.556" PrivateAssets="all" />
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="10.31.0.145097" PrivateAssets="all" />
+    <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
 </Project>

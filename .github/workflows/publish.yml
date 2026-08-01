@@ -2,13 +2,15 @@ name: publish
 
 on:
   push:
-    branches: [master]
+    branches: [master, beta]
     paths:
       - 'src/**'
 
 env:
   # Bump when introducing a breaking/minor change; patch is auto-derived below.
-  VERSION_PREFIX: 11.0
+  # Quoted so YAML/expressions keep it as the literal string "11.0" (unquoted, it
+  # gets parsed as the number 11 and loses the trailing .0).
+  VERSION_PREFIX: "11.0"
 
 jobs:
   publish:
@@ -26,7 +28,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
-            6.0.x
             7.0.x
             8.0.x
             9.0.x
@@ -37,19 +38,22 @@ jobs:
         shell: pwsh
         run: |
           $version = "${{ env.VERSION_PREFIX }}.${{ github.run_number }}"
+          if ("${{ github.ref_name }}" -eq "beta") {
+            $version = "$version-beta.${{ github.run_number }}"
+          }
           "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Restore
-        run: dotnet restore ResponseUtilityLibrary.sln
+        run: dotnet restore ResponseUtilityLibrary.sln -p:IsPublishBuild=true
 
       - name: Build
-        run: dotnet build ResponseUtilityLibrary.sln --no-restore --configuration Release -p:Version=${{ steps.version.outputs.version }}
+        run: dotnet build ResponseUtilityLibrary.sln --no-restore --configuration Release -p:Version=${{ steps.version.outputs.version }} -p:IsPublishBuild=true
 
       - name: Test
-        run: dotnet test tests/ResultHandler.Tests/ResultHandler.Tests.csproj --no-build --configuration Release
+        run: dotnet test test/ResultHandler.Tests/ResultHandler.Tests.csproj --no-build --configuration Release
 
       - name: Pack
-        run: dotnet pack ResponseUtilityLibrary.sln --no-build --configuration Release -p:Version=${{ steps.version.outputs.version }} --output ./nupkgs
+        run: dotnet pack ResponseUtilityLibrary.sln --no-build --configuration Release -p:Version=${{ steps.version.outputs.version }} -p:IsPublishBuild=true --output ./nupkgs
 
       - name: NuGet login (OIDC -> temp API key)
         uses: NuGet/login@v1
@@ -58,4 +62,12 @@ jobs:
           user: ${{ secrets.NUGET_USER }}
 
       - name: Push to NuGet.org
-        run: dotnet nuget push "./nupkgs/*.nupkg" --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        shell: pwsh
+        run: |
+          $packages = Get-ChildItem -Path ./nupkgs -Filter *.nupkg
+          if (-not $packages) {
+            throw "No .nupkg files found in ./nupkgs"
+          }
+          foreach ($package in $packages) {
+            dotnet nuget push $package.FullName --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }

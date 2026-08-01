@@ -1,6 +1,6 @@
-﻿using ResultHandler.Core.Enums;
+﻿using System.Net;
+using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Success;
-using System.Net;
 using Xunit;
 
 namespace ResultHandler.Tests.Results;

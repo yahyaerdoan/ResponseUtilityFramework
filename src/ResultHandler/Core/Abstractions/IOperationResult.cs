@@ -1,5 +1,5 @@
-﻿using ResultHandler.Core.Enums;
-using System.Net;
+﻿using System.Net;
+using ResultHandler.Core.Enums;
 
 namespace ResultHandler.Core.Abstractions;
 
@@ -7,7 +7,7 @@ namespace ResultHandler.Core.Abstractions;
 /// The outcome of an operation: whether it succeeded, a status mappable to an HTTP status code,
 /// a short title, optional detail text, and an optional list of error messages.
 /// </summary>
-public interface IResult
+public interface IOperationResult
 {
     /// <summary>Whether the operation succeeded.</summary>
     bool IsSuccessful { get; }

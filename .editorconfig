@@ -45,6 +45,51 @@ csharp_indent_case_contents = true
 csharp_indent_switch_labels = true
 csharp_space_after_keywords_in_control_flow_statements = true
 
+# StyleCop.Analyzers / SonarAnalyzer.CSharp — rules disabled because they conflict with an
+# established, deliberate project convention rather than because they're low-value in general.
+# Everything else stays at its default severity and must build warning-free.
+
+# CS1591 (missing XML doc on public member) is already suppressed project-wide (Directory.Build.props),
+# so the StyleCop rules that police the *content* of doc comments would fight that decision.
+dotnet_diagnostic.SA1600.severity = none # Elements should be documented
+dotnet_diagnostic.SA1601.severity = none # Partial elements should be documented
+dotnet_diagnostic.SA1602.severity = none # Enumeration items should be documented
+dotnet_diagnostic.SA1604.severity = none # Element documentation should have summary
+dotnet_diagnostic.SA1611.severity = none # Element parameters should be documented
+dotnet_diagnostic.SA1615.severity = none # Element return value should be documented
+dotnet_diagnostic.SA1618.severity = none # Generic type parameters should be documented
+dotnet_diagnostic.SA1623.severity = none # Property summary documentation should match accessors
+dotnet_diagnostic.SA1642.severity = none # Constructor summary documentation should begin with standard text
+
+# No file-header convention in this project.
+dotnet_diagnostic.SA1633.severity = none # File should have a header
+
+# `IOperationResultOfT.cs` is the established file-naming workaround for the open generic
+# type IOperationResult<T> (a literal "<T>" can't appear in a filename).
+dotnet_diagnostic.SA1649.severity = none # File name should match first type name
+
+# dotnet_style_qualification_for_* = false above already means "don't prefix with this.".
+dotnet_diagnostic.SA1101.severity = none # Prefix local calls with this.
+
+# Conflicts with the private/internal field naming rule below (leading underscore is intentional).
+dotnet_diagnostic.SA1309.severity = none # Field name should not begin with underscore
+
+# Obsolete members here are permanent, documented backward-compatibility shims (see package release
+# notes), not dead code slated for removal.
+dotnet_diagnostic.S1133.severity = none # Deprecated code should be removed
+
+# IOperationResult<T> could be made covariant (T only appears in getter/out positions), but widening
+# a shipped public interface's variance is a deliberate API decision, not a mechanical style fix.
+dotnet_diagnostic.S3246.severity = none # Add the 'out' keyword to make a type parameter covariant
+
+# Test code deliberately declares locals as the interface type in several places (e.g.
+# IOperationResult result = new SuccessResult(...)) specifically to verify contract/annotation
+# behavior (like [MemberNotNullWhen]) through the interface reference, not the concrete type — the
+# exact opposite of what CA1859 assumes. Test methods also aren't perf-sensitive, so the "avoid
+# virtual/interface call overhead" rationale doesn't apply here the way it does in library code.
+[test/**/*.cs]
+dotnet_diagnostic.CA1859.severity = none
+
 [*.{csproj,props,targets}]
 indent_size = 2
 

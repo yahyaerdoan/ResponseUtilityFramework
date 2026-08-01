@@ -1,0 +1,10 @@
+#nullable enable
+ResultHandler.AspNetCore.Extensions.AspNetCoreResultExtensions
+static ResultHandler.AspNetCore.Extensions.AspNetCoreResultExtensions.ToActionResult(this ResultHandler.Core.Abstractions.IOperationResult! result, Microsoft.AspNetCore.Http.HttpContext? httpContext = null) -> Microsoft.AspNetCore.Mvc.IActionResult!
+static ResultHandler.AspNetCore.Extensions.AspNetCoreResultExtensions.ToActionResult<T>(this ResultHandler.Core.Abstractions.IOperationResult<T>! result, Microsoft.AspNetCore.Http.HttpContext? httpContext = null) -> Microsoft.AspNetCore.Mvc.IActionResult!
+static ResultHandler.AspNetCore.Extensions.AspNetCoreResultExtensions.ToEnvelopedActionResult(this ResultHandler.Core.Abstractions.IOperationResult! result, Microsoft.AspNetCore.Http.HttpContext? httpContext = null) -> Microsoft.AspNetCore.Mvc.IActionResult!
+static ResultHandler.AspNetCore.Extensions.AspNetCoreResultExtensions.ToEnvelopedResult(this ResultHandler.Core.Abstractions.IOperationResult! result, Microsoft.AspNetCore.Http.HttpContext? httpContext = null) -> Microsoft.AspNetCore.Http.IResult!
+static ResultHandler.AspNetCore.Extensions.AspNetCoreResultExtensions.ToProblemDetails(this ResultHandler.Core.Abstractions.IOperationResult! result, Microsoft.AspNetCore.Http.HttpContext? httpContext = null) -> Microsoft.AspNetCore.Mvc.ProblemDetails!
+static ResultHandler.AspNetCore.Extensions.AspNetCoreResultExtensions.ToProblemResult(this ResultHandler.Core.Abstractions.IOperationResult! result, Microsoft.AspNetCore.Http.HttpContext? httpContext = null) -> Microsoft.AspNetCore.Http.IResult!
+static ResultHandler.AspNetCore.Extensions.AspNetCoreResultExtensions.ToResult(this ResultHandler.Core.Abstractions.IOperationResult! result, Microsoft.AspNetCore.Http.HttpContext? httpContext = null) -> Microsoft.AspNetCore.Http.IResult!
+static ResultHandler.AspNetCore.Extensions.AspNetCoreResultExtensions.ToResult<T>(this ResultHandler.Core.Abstractions.IOperationResult<T>! result, Microsoft.AspNetCore.Http.HttpContext? httpContext = null) -> Microsoft.AspNetCore.Http.IResult!

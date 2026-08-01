@@ -1,12 +1,12 @@
-namespace ResultHandler.Core.Enums;
+﻿namespace ResultHandler.Core.Enums;
 
 public enum ResultStatus
 {
     // 1xx - Informational
-    Continue,               // 100
-    SwitchingProtocols,     // 101
-    Processing,             // 102
-    EarlyHints,              // 103
+    Continue,                       // 100
+    SwitchingProtocols,             // 101
+    Processing,                     // 102
+    EarlyHints,                     // 103
 
     // 2xx - Success
     Ok,                             // 200
@@ -21,14 +21,14 @@ public enum ResultStatus
     ImUsed,                         // 226
 
     // 3xx - Redirection
-    MultipleChoices,     // 300
-    MovedPermanently,    // 301
-    Found,                // 302
-    SeeOther,             // 303
-    NotModified,          // 304
-    UseProxy,             // 305
-    TemporaryRedirect,    // 307
-    PermanentRedirect,    // 308
+    MultipleChoices,                // 300
+    MovedPermanently,               // 301
+    Found,                          // 302
+    SeeOther,                       // 303
+    NotModified,                    // 304
+    UseProxy,                       // 305
+    TemporaryRedirect,              // 307
+    PermanentRedirect,              // 308
 
     // 4xx - Client errors
     BadRequest,                     // 400
@@ -51,7 +51,7 @@ public enum ResultStatus
     ExpectationFailed,              // 417
     ImATeapot,                      // 418
     MisdirectedRequest,             // 421
-    Invalid,                        // 422 (Unprocessable Entity)
+    UnprocessableContent,           // 422
     Locked,                         // 423
     FailedDependency,               // 424
     TooEarly,                       // 425
@@ -62,10 +62,10 @@ public enum ResultStatus
     UnavailableForLegalReasons,     // 451
 
     // 5xx - Server errors
-    Error,                            // 500 (Internal Server Error)
+    InternalServerError,              // 500
     NotImplemented,                   // 501
     BadGateway,                       // 502
-    Unavailable,                      // 503
+    ServiceUnavailable,               // 503
     GatewayTimeout,                   // 504
     HttpVersionNotSupported,          // 505
     VariantAlsoNegotiates,            // 506
