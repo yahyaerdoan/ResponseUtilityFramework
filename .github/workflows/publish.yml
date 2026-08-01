@@ -44,7 +44,7 @@ jobs:
           "version=$version" >> $env:GITHUB_OUTPUT
 
       - name: Restore
-        run: dotnet restore ResponseUtilityLibrary.sln
+        run: dotnet restore ResponseUtilityLibrary.sln -p:IsPublishBuild=true
 
       - name: Build
         run: dotnet build ResponseUtilityLibrary.sln --no-restore --configuration Release -p:Version=${{ steps.version.outputs.version }} -p:IsPublishBuild=true
