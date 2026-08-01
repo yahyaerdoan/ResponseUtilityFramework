@@ -1,4 +1,4 @@
-using ResultHandler.Core.Abstractions;
+﻿using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Base;
 using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Success;
@@ -21,13 +21,12 @@ public class OperationResultTests
     }
 
     [Fact]
-    public void OperationResult_AndEquivalentSubclass_AreEqual()
+    public void OperationResult_AndEquivalentSubclass_AreNotEqual()
     {
         var bespoke = new OperationResult(true, ResultStatus.Ok, "Operation completed successfully.");
         var viaSubclass = new SuccessResult();
 
-        Assert.Equal(bespoke, viaSubclass);
-        Assert.Equal(bespoke.GetHashCode(), viaSubclass.GetHashCode());
+        Assert.NotEqual<object>(bespoke, viaSubclass);
     }
 
     [Fact]
@@ -40,13 +39,12 @@ public class OperationResultTests
     }
 
     [Fact]
-    public void OperationDataResult_AndEquivalentSubclass_AreEqual()
+    public void OperationDataResult_AndEquivalentSubclass_AreNotEqual()
     {
         var bespoke = new OperationDataResult<int>(7, true, ResultStatus.Ok, "Fetched.");
         var viaSubclass = new SuccessDataResult<int>(7, "Fetched.");
 
-        Assert.Equal(bespoke, viaSubclass);
-        Assert.Equal(bespoke.GetHashCode(), viaSubclass.GetHashCode());
+        Assert.NotEqual<object>(bespoke, viaSubclass);
     }
 
     [Fact]

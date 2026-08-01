@@ -64,9 +64,16 @@ public class OperationDataResult<T>([AllowNull] T data, bool isSuccessful, Resul
         => new ErrorDataResult<T>(title, status, detail);
 
     public override bool Equals(object? obj)
-        => obj is OperationDataResult<T> other
-            && base.Equals(other)
-            && EqualityComparer<T>.Default.Equals(Data!, other.Data!);
+    {
+        if (obj is null || obj.GetType() != GetType())
+        {
+            return false;
+        }
+
+        var other = (OperationDataResult<T>)obj;
+        return base.Equals(other)
+            && EqualityComparer<T>.Default.Equals(Data, other.Data);
+    }
 
     public override int GetHashCode()
         => HashCode.Combine(base.GetHashCode(), Data);

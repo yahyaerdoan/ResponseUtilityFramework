@@ -71,12 +71,19 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
         => new ErrorResult(title, status, detail);
 
     public override bool Equals(object? obj)
-        => obj is OperationResult other
-            && IsSuccessful == other.IsSuccessful
+    {
+        if (obj is null || obj.GetType() != GetType())
+        {
+            return false;
+        }
+
+        var other = (OperationResult)obj;
+        return IsSuccessful == other.IsSuccessful
             && Status == other.Status
             && Title == other.Title
             && Detail == other.Detail
             && (ReferenceEquals(Errors, other.Errors) || Errors.SequenceEqual(other.Errors));
+    }
 
     public override int GetHashCode()
     {
