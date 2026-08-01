@@ -140,8 +140,8 @@ public class AspNetCoreExtensionTests
 
         var problemDetails = result.ToProblemDetails();
 
-        Assert.True(problemDetails.Extensions.ContainsKey("errors"));
-        Assert.Equal(errors, problemDetails.Extensions["errors"]);
+        Assert.True(problemDetails.Extensions.TryGetValue("errors", out var errorsExtension));
+        Assert.Equal(errors, errorsExtension);
     }
 
     [Fact]

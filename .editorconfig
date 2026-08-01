@@ -82,6 +82,14 @@ dotnet_diagnostic.S1133.severity = none # Deprecated code should be removed
 # a shipped public interface's variance is a deliberate API decision, not a mechanical style fix.
 dotnet_diagnostic.S3246.severity = none # Add the 'out' keyword to make a type parameter covariant
 
+# Test code deliberately declares locals as the interface type in several places (e.g.
+# IOperationResult result = new SuccessResult(...)) specifically to verify contract/annotation
+# behavior (like [MemberNotNullWhen]) through the interface reference, not the concrete type — the
+# exact opposite of what CA1859 assumes. Test methods also aren't perf-sensitive, so the "avoid
+# virtual/interface call overhead" rationale doesn't apply here the way it does in library code.
+[test/**/*.cs]
+dotnet_diagnostic.CA1859.severity = none
+
 [*.{csproj,props,targets}]
 indent_size = 2
 
