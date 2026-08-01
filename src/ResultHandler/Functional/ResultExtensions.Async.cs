@@ -1,4 +1,7 @@
 using ResultHandler.Core.Abstractions;
+using ResultHandler.Core.Enums;
+using ResultHandler.Facade;
+using ResultHandler.Implementations.Error;
 
 namespace ResultHandler.Functional;
 
@@ -117,4 +120,18 @@ public static partial class ResultExtensions
     /// <summary>Awaits <paramref name="resultTask"/>, then chains into another async result-returning operation, short-circuiting on failure.</summary>
     public static async Task<IOperationResult<TOut>> BindAsync<T, TOut>(this Task<IOperationResult<T>> resultTask, Func<T, Task<IOperationResult<TOut>>> binder)
         => await (await resultTask.ConfigureAwait(false)).BindAsync(binder).ConfigureAwait(false);
+
+    /// <summary>Awaits <paramref name="resultTask"/>, then turns it into a validation failure when <paramref name="predicate"/> rejects the data, for guard-clause-style chaining.</summary>
+    public static async Task<IOperationResult<T>> EnsureAsync<T>(this Task<IOperationResult<T>> resultTask, Func<T, bool> predicate, string errorMessage)
+        => (await resultTask.ConfigureAwait(false)).Ensure(predicate, errorMessage);
+
+    /// <summary>Turns <paramref name="result"/> into a validation failure when an async <paramref name="predicate"/> rejects the data, for guard-clause-style chaining.</summary>
+    public static async Task<IOperationResult<T>> EnsureAsync<T>(this IOperationResult<T> result, Func<T, Task<bool>> predicate, string errorMessage)
+        => result.IsSuccessful && !await predicate(result.Data).ConfigureAwait(false)
+            ? new ErrorDataResult<T>(ResultTitles.ValidationFailed, ResultStatus.UnprocessableContent, errorMessage)
+            : result;
+
+    /// <summary>Awaits <paramref name="resultTask"/>, then turns it into a validation failure when an async <paramref name="predicate"/> rejects the data, for guard-clause-style chaining.</summary>
+    public static async Task<IOperationResult<T>> EnsureAsync<T>(this Task<IOperationResult<T>> resultTask, Func<T, Task<bool>> predicate, string errorMessage)
+        => await (await resultTask.ConfigureAwait(false)).EnsureAsync(predicate, errorMessage).ConfigureAwait(false);
 }

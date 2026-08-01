@@ -125,6 +125,42 @@ public class ResultExtensionsAsyncTests
     }
 
     [Fact]
+    public async Task EnsureAsync_TaskSource_SyncPredicateFails_ReturnsValidationFailure()
+    {
+        var resultTask = Task.FromResult<IOperationResult<int>>(new SuccessDataResult<int>(-5, "Ok.", ResultStatus.Ok));
+
+        var ensured = await resultTask.EnsureAsync(value => value > 0, "Value must be positive.");
+
+        Assert.False(ensured.IsSuccessful);
+        Assert.Equal(ResultStatus.UnprocessableContent, ensured.Status);
+        Assert.Equal("Value must be positive.", ensured.Detail);
+    }
+
+    [Fact]
+    public async Task EnsureAsync_SyncSourceAsyncPredicate_PassesThrough()
+    {
+        IOperationResult<int> result = new SuccessDataResult<int>(5, "Ok.", ResultStatus.Ok);
+
+        var ensured = await result.EnsureAsync(value => Task.FromResult(value > 0), "Value must be positive.");
+
+        Assert.Same(result, ensured);
+    }
+
+    [Fact]
+    public async Task EnsureAsync_TaskSourceAsyncPredicateFails_ShortCircuitsChain()
+    {
+        var chained = await GetOrderTotalAsync()
+            .EnsureAsync(total => Task.FromResult(total > 0), "Order total must be positive.")
+            .MapAsync(total => $"total={total}");
+
+        Assert.False(chained.IsSuccessful);
+        Assert.Equal(ResultStatus.UnprocessableContent, chained.Status);
+
+        static Task<IOperationResult<decimal>> GetOrderTotalAsync()
+            => Task.FromResult<IOperationResult<decimal>>(new SuccessDataResult<decimal>(-1m, "Ok.", ResultStatus.Ok));
+    }
+
+    [Fact]
     public async Task FluentChain_MapAsyncThenBindAsync_ComposesAcrossAwaitsWithoutIntermediateAwait()
     {
         var chained = await GetUserIdAsync()

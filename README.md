@@ -254,10 +254,21 @@ _products.GetById(id)
 
 IOperationResult<OrderDto> order = _products.GetById(id)
     .Bind(product => _orders.CreateDraftOrder(product)); // chains into another IOperationResult<T>-returning call
+
+IOperationResult<ProductDto> validated = _products.GetById(id)
+    .Ensure(product => product.Stock > 0, "Product is out of stock."); // guard clause: 422 if the predicate fails
 ```
 
 `Map`/`Bind` short-circuit automatically: if the source result failed, the mapper/binder never runs
-and the failure (title/status/detail/errors) is carried over into the new result type.
+and the failure (title/status/detail/errors) is carried over into the new result type. `Ensure` turns
+a still-*successful* result into a failure when a business-rule predicate rejects the data — the
+shortcut overload above defaults to `"Validation Failed"` / `422 Unprocessable Content` (same shape as
+`Result.Invalid`); pass your own `(title, detail, status)` when a different outcome fits better:
+
+```csharp
+_products.GetById(id)
+    .Ensure(product => product.OwnerId == currentUserId, "Forbidden.", "You do not own this product.", ResultStatus.Forbidden);
+```
 
 ---
 ## 8. Async composition
@@ -291,8 +302,10 @@ in the same chain:
 | `Task<IOperationResult<T>>` source, async delegate | `.BindAsync(p => _orders.CreateDraftOrderAsync(p))` |
 | `IOperationResult<T>` source, async delegate | `existingResult.OnSuccessAsync(p => _email.SendAsync(p))` |
 
-`MatchAsync`, `OnSuccessAsync`, `OnFailureAsync`, `MapAsync`, and `BindAsync` all follow this pattern,
-for both `IOperationResult` and `IOperationResult<T>`. The controller/endpoint at the edge (§5/§6)
+`MatchAsync`, `OnSuccessAsync`, `OnFailureAsync`, `MapAsync`, `BindAsync`, and `EnsureAsync` all follow
+this pattern, for both `IOperationResult` and `IOperationResult<T>` (`EnsureAsync` only exists for
+`IOperationResult<T>` — same reasoning as `Ensure` in §7, there's no data to check on the non-generic
+form). The controller/endpoint at the edge (§5/§6)
 doesn't change — just `await` the final result and call `.ToActionResult()` / `.ToResult()` as usual:
 
 ```csharp
