@@ -16,49 +16,6 @@ namespace ResultHandler.AspNetCore.Extensions;
 /// </summary>
 public static partial class AspNetCoreResultExtensions
 {
-    /// <param name="result">The result to convert.</param>
-    /// <param name="httpContext">
-    /// Optional; when provided, <see cref="ProblemDetails.Instance"/> is set to the current request
-    /// path, per RFC 9457's guidance that it identify "this specific occurrence" of the problem.
-    /// </param>
-    public static ProblemDetails ToProblemDetails(this IOperationResult result, HttpContext? httpContext = null)
-    {
-        var problem = new ProblemDetails
-        {
-            Type = _problemTypes.TryGetValue(result.Status, out var type) ? type : "about:blank",
-            Title = result.Title,
-            Detail = result.Detail,
-            Status = (int)result.Status.ToHttpStatusCode(),
-            Instance = httpContext?.Request.Path.Value,
-        };
-
-        if (result.Errors.Count > 0)
-        {
-            problem.Extensions["errors"] = result.Errors;
-        }
-
-        return problem;
-    }
-
-    /// <summary>
-    /// Single source of truth for which statuses map to a bodyless response and what HTTP code to
-    /// use — shared by both the <see cref="IActionResult"/> and Minimal API <see cref="IResult"/>
-    /// surfaces so the two never drift apart.
-    /// </summary>
-    private static (BodylessKind Kind, int HttpCode) ClassifyBodyless(ResultStatus status)
-    {
-        var httpCode = (int)status.ToHttpStatusCode();
-        return status switch
-        {
-            ResultStatus.NoContent => (BodylessKind.NoContent, httpCode),
-            ResultStatus.NotModified => (BodylessKind.NotModified, 304),
-            _ when httpCode is >= 100 and < 200 or >= 300 and < 400 => (BodylessKind.Generic, httpCode),
-            _ => (BodylessKind.None, httpCode),
-        };
-    }
-
-    private enum BodylessKind { None, NoContent, NotModified, Generic }
-
     // RFC 9110 / RFC 6585 / RFC 4918 / RFC 7725 / RFC 8470 - canonical type URIs per RFC 9457 §4.2
     // internal (not private) so ResultHandler.Tests can assert every ResultStatus is covered.
     internal static readonly Dictionary<ResultStatus, string> _problemTypes =
@@ -132,4 +89,54 @@ public static partial class AspNetCoreResultExtensions
             [ResultStatus.NotExtended] = "https://tools.ietf.org/html/rfc2774#section-7",
             [ResultStatus.NetworkAuthenticationRequired] = "https://tools.ietf.org/html/rfc6585#section-6",
         };
+
+    private enum BodylessKind
+    {
+        None,
+        NoContent,
+        NotModified,
+        Generic,
+    }
+
+    /// <summary>Creates an RFC 9457 <see cref="ProblemDetails"/> payload from an <see cref="IOperationResult"/>.</summary>
+    /// <param name="result">The result to convert.</param>
+    /// <param name="httpContext">
+    /// Optional; when provided, <see cref="ProblemDetails.Instance"/> is set to the current request
+    /// path, per RFC 9457's guidance that it identify "this specific occurrence" of the problem.
+    /// </param>
+    public static ProblemDetails ToProblemDetails(this IOperationResult result, HttpContext? httpContext = null)
+    {
+        var problem = new ProblemDetails
+        {
+            Type = _problemTypes.TryGetValue(result.Status, out var type) ? type : "about:blank",
+            Title = result.Title,
+            Detail = result.Detail,
+            Status = (int)result.Status.ToHttpStatusCode(),
+            Instance = httpContext?.Request.Path.Value,
+        };
+
+        if (result.Errors.Count > 0)
+        {
+            problem.Extensions["errors"] = result.Errors;
+        }
+
+        return problem;
+    }
+
+    /// <summary>
+    /// Single source of truth for which statuses map to a bodyless response and what HTTP code to
+    /// use — shared by both the <see cref="IActionResult"/> and Minimal API <see cref="IResult"/>
+    /// surfaces so the two never drift apart.
+    /// </summary>
+    private static (BodylessKind Kind, int HttpCode) ClassifyBodyless(ResultStatus status)
+    {
+        var httpCode = (int)status.ToHttpStatusCode();
+        return status switch
+        {
+            ResultStatus.NoContent => (BodylessKind.NoContent, httpCode),
+            ResultStatus.NotModified => (BodylessKind.NotModified, 304),
+            _ when httpCode is >= 100 and < 200 or >= 300 and < 400 => (BodylessKind.Generic, httpCode),
+            _ => (BodylessKind.None, httpCode),
+        };
+    }
 }

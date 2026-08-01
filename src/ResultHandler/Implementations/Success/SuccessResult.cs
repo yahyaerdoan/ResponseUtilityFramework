@@ -1,7 +1,7 @@
-﻿using ResultHandler.Core.Base;
+﻿using System.Net;
+using ResultHandler.Core.Base;
 using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
-using System.Net;
 
 namespace ResultHandler.Implementations.Success;
 
@@ -10,7 +10,7 @@ public class SuccessResult : OperationResult
 {
     /// <summary>Default success: status <see cref="ResultStatus.Ok"/>, title "Operation completed successfully.".</summary>
     public SuccessResult()
-        : base(true, ResultStatus.Ok, "Operation completed successfully.")
+        : base(true, ResultStatus.Ok, OperationResultDefaults.SuccessTitle)
     {
     }
 

@@ -16,6 +16,8 @@ dotnet add package ResponseResultHandler
 dotnet add package ResponseResultHandler.AspNetCore   # optional: IActionResult / RFC 9457 adapter
 ```
 
+See [`CHANGELOG.md`](CHANGELOG.md) for what changed between versions.
+
 Everything below is demonstrated through one running example: a `ProductService` that looks up a
 product by id, and a `ProductsController` that exposes it over HTTP.
 
@@ -254,13 +256,109 @@ _products.GetById(id)
 
 IOperationResult<OrderDto> order = _products.GetById(id)
     .Bind(product => _orders.CreateDraftOrder(product)); // chains into another IOperationResult<T>-returning call
+
+IOperationResult<ProductDto> validated = _products.GetById(id)
+    .Ensure(product => product.Stock > 0, "Product is out of stock."); // guard clause: 422 if the predicate fails
 ```
 
 `Map`/`Bind` short-circuit automatically: if the source result failed, the mapper/binder never runs
-and the failure (title/status/detail/errors) is carried over into the new result type.
+and the failure (title/status/detail/errors) is carried over into the new result type. `Ensure` turns
+a still-*successful* result into a failure when a business-rule predicate rejects the data — the
+shortcut overload above defaults to `"Validation Failed"` / `422 Unprocessable Content` (same shape as
+`Result.Invalid`); pass your own `(title, detail, status)` when a different outcome fits better:
+
+```csharp
+_products.GetById(id)
+    .Ensure(product => product.OwnerId == currentUserId, "Forbidden.", "You do not own this product.", ResultStatus.Forbidden);
+```
 
 ---
-## 8. Generic short-circuiting — `IResultFailureFactory<TSelf>` / `ResultFailureFactory`
+## 8. Combining independent checks — `Result.Combine`
+
+`Ensure` (and `Bind`/`Map`) stop at the *first* failure — the rest of the chain never runs. That's the
+right behavior for a pipeline of dependent steps, but wrong for independent checks where you want to
+report every problem at once (e.g. every invalid field on a form). `Result.Combine(...)` (`ResultHandler.Facade`)
+covers that case instead — it runs every result to completion and merges their outcomes:
+
+```csharp
+using ResultHandler.Facade; // Result
+
+ErrorResult ValidateCreate(CreateProductRequest request)
+{
+    var nameCheck = string.IsNullOrEmpty(request.Name)
+        ? Result.Invalid("Name is required.")
+        : Result.Success();
+
+    var priceCheck = request.Price <= 0
+        ? Result.Invalid("Price must be greater than zero.")
+        : Result.Success();
+
+    var combined = Result.Combine(nameCheck, priceCheck);
+    return combined.IsSuccessful ? null! : (ErrorResult)combined;
+}
+```
+
+If both checks fail, `combined.Errors` contains **both** messages — `["Name is required.", "Price must be greater than zero."]`
+— not just the first one. Every failed result's `Errors` (or `Detail`/`Title` when it carries none) are
+concatenated in order; if every result succeeds, `Combine` returns `Result.Success()`.
+
+When the independent checks each carry data you actually need afterward, the 2–4 arity generic
+overloads combine both the outcome *and* the payloads into a named tuple:
+
+```csharp
+IOperationResult<(CustomerDto Customer, ShippingAddressDto Address)> ValidateOrder(int customerId, int addressId)
+    => Result.Combine(_customers.GetById(customerId), _addresses.GetById(addressId));
+```
+
+If both succeed, `Data` is `(CustomerDto Customer, ShippingAddressDto Address)`; if either (or both) fail,
+you get the same aggregated `Result.Invalid(...)` as above, re-projected into `IOperationResult<(...)>`.
+
+---
+## 9. Async composition
+
+Real handlers usually chain calls that are themselves `async` — a repository hit, an email send, a
+downstream API call. `ResultHandler.Functional` mirrors every method from §7 with an `...Async`
+counterpart so those chains read the same way, without an `await` breaking up the fluent chain at
+every step:
+
+```csharp
+using ResultHandler.Functional;
+
+public Task<IOperationResult<ProductDto>> ActivateAsync(int id)
+    => _products.GetByIdAsync(id)                       // Task<IOperationResult<Product>>
+        .BindAsync(product => ValidateCanActivateAsync(product)) // async business rule
+        .MapAsync(product => ToDto(product))                     // sync mapper
+        .OnSuccessAsync(dto => _email.SendActivationEmailAsync(dto.OwnerEmail)); // async side effect
+```
+
+If `GetByIdAsync` returns `NotFound`, or `ValidateCanActivateAsync` fails, the chain short-circuits
+immediately — `MapAsync` and `OnSuccessAsync` never run, and the original failure (title/status/detail)
+is what the caller gets back, exactly like the sync `Map`/`Bind` in §7.
+
+Each method comes in three shapes so you can start the chain from either a `Task<IOperationResult<T>>`
+or a plain `IOperationResult<T>`, and pass either a sync or an `async` delegate — mix and match freely
+in the same chain:
+
+| Shape | Example |
+|---|---|
+| `Task<IOperationResult<T>>` source, sync delegate | `.MapAsync(p => p.Name)` |
+| `Task<IOperationResult<T>>` source, async delegate | `.BindAsync(p => _orders.CreateDraftOrderAsync(p))` |
+| `IOperationResult<T>` source, async delegate | `existingResult.OnSuccessAsync(p => _email.SendAsync(p))` |
+
+`MatchAsync`, `OnSuccessAsync`, `OnFailureAsync`, `MapAsync`, `BindAsync`, and `EnsureAsync` all follow
+this pattern, for both `IOperationResult` and `IOperationResult<T>` (`EnsureAsync` only exists for
+`IOperationResult<T>` — same reasoning as `Ensure` in §7, there's no data to check on the non-generic
+form). The controller/endpoint at the edge (§5/§6)
+doesn't change — just `await` the final result and call `.ToActionResult()` / `.ToResult()` as usual:
+
+```csharp
+[HttpPost("{id}/activate")]
+public async Task<IActionResult> Activate(int id)
+    => (await _products.ActivateAsync(id)).ToActionResult();
+```
+
+---
+## 10. Generic short-circuiting — `IResultFailureFactory<TSelf>` / `ResultFailureFactory`
 
 Everything above assumes the calling code knows the concrete result type (`IOperationResult<ProductDto>`,
 `ErrorResult`, ...). Generic infrastructure often doesn't — a MediatR `IPipelineBehavior<TRequest, TResponse>`,
@@ -374,7 +472,7 @@ public async Task<IActionResult> Create(CreateProductCommand command)
 ```
 
 ---
-## 9. Serialization
+## 11. Serialization
 
 `System.Text.Json` output uses fixed property names regardless of your `JsonSerializerOptions`
 naming policy, and `ResultStatus` always serializes as its numeric HTTP code:
@@ -397,7 +495,7 @@ JsonSerializer.Serialize(Result.NotFound<ProductDto>("Product 42 does not exist.
 `ResultData`) never appear in JSON — only the current API does.
 
 ---
-## 10. Equality & debugging
+## 12. Equality & debugging
 
 `OperationResult`/`OperationDataResult<T>` override `Equals`/`GetHashCode` (structural, by value) and `ToString()`:
 
@@ -408,7 +506,7 @@ Result.NotFound("x").ToString(); // "NotFound (404): Not found."
 ```
 
 ---
-## 11. Migrating from the pre-v11 API
+## 13. Migrating from the pre-v11 API
 
 `StatusMessage`, `StatusCode: HttpStatusCode`, and `ResultData` still work — marked `[Obsolete]` so
 existing code keeps compiling while you migrate to `Title`, `Status: ResultStatus`, and `Data`:

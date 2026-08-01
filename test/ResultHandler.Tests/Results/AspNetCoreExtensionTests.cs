@@ -1,6 +1,4 @@
-#if NET7_0_OR_GREATER
 using Microsoft.AspNetCore.Http.HttpResults;
-#endif
 using Microsoft.AspNetCore.Mvc;
 using ResultHandler.AspNetCore.Extensions;
 using ResultHandler.Core.Abstractions;
@@ -35,7 +33,6 @@ public class AspNetCoreExtensionTests
         Assert.Equal(202, actionResult.StatusCode);
     }
 
-#if NET7_0_OR_GREATER
     [Fact]
     public void ToResult_Success_NoContent_ReturnsNoContentResult()
     {
@@ -79,7 +76,6 @@ public class AspNetCoreExtensionTests
         Assert.Equal("Not found.", problemDetails.Title);
         Assert.Equal("The user does not exist.", problemDetails.Detail);
     }
-#endif
 
     [Fact]
     public void ToActionResult_Success_NoContent_ReturnsNoContentResult()
@@ -176,8 +172,8 @@ public class AspNetCoreExtensionTests
             .Where(status => !AspNetCoreResultExtensions._problemTypes.ContainsKey(status))
             .ToArray();
 
-        Assert.True(missing.Length == 0,
-            $"Missing problem-type mapping for: {string.Join(", ", missing)}. " +
-            $"A missing entry silently falls back to \"about:blank\" instead of failing loudly.");
+        var message = $"Missing problem-type mapping for: {string.Join(", ", missing)}. " +
+            $"A missing entry silently falls back to \"about:blank\" instead of failing loudly.";
+        Assert.True(missing.Length == 0, message);
     }
 }

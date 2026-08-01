@@ -123,4 +123,57 @@ public class ResultExtensionsTests
         Assert.False(chained.IsSuccessful);
         Assert.Equal(ResultStatus.NotFound, chained.Status);
     }
+
+    [Fact]
+    public void Ensure_PredicateFails_ReturnsValidationFailure()
+    {
+        var result = new SuccessDataResult<int>(-5, "Ok.", ResultStatus.Ok);
+
+        var ensured = result.Ensure(value => value > 0, "Value must be positive.");
+
+        Assert.False(ensured.IsSuccessful);
+        Assert.Equal(ResultStatus.UnprocessableContent, ensured.Status);
+        Assert.Equal("Value must be positive.", ensured.Detail);
+    }
+
+    [Fact]
+    public void Ensure_PredicatePasses_ReturnsOriginalResultUnchanged()
+    {
+        var result = new SuccessDataResult<int>(5, "Ok.", ResultStatus.Ok);
+
+        var ensured = result.Ensure(value => value > 0, "Value must be positive.");
+
+        Assert.Same(result, ensured);
+    }
+
+    [Fact]
+    public void Ensure_AlreadyFailed_ShortCircuitsWithoutInvokingPredicate()
+    {
+        var result = new ErrorDataResult<int>("Not found.", ResultStatus.NotFound);
+        var invoked = false;
+
+        bool Predicate(int value)
+        {
+            invoked = true;
+            return true;
+        }
+
+        var ensured = result.Ensure(Predicate, "Value must be positive.");
+
+        Assert.False(invoked);
+        Assert.Same(result, ensured);
+    }
+
+    [Fact]
+    public void Ensure_WithCustomStatus_UsesGivenTitleDetailAndStatus()
+    {
+        var result = new SuccessDataResult<int>(5, "Ok.", ResultStatus.Ok);
+
+        var ensured = result.Ensure(value => value == 42, "Forbidden.", "Only 42 is allowed.", ResultStatus.Forbidden);
+
+        Assert.False(ensured.IsSuccessful);
+        Assert.Equal(ResultStatus.Forbidden, ensured.Status);
+        Assert.Equal("Forbidden.", ensured.Title);
+        Assert.Equal("Only 42 is allowed.", ensured.Detail);
+    }
 }

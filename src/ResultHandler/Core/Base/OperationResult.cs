@@ -1,10 +1,10 @@
+using System.Net;
+using System.Text.Json.Serialization;
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Error;
 using ResultHandler.Mapping;
 using ResultHandler.Serialization;
-using System.Net;
-using System.Text.Json.Serialization;
 
 namespace ResultHandler.Core.Base;
 
@@ -21,6 +21,23 @@ namespace ResultHandler.Core.Base;
 public class OperationResult(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null)
     : IOperationResult, IResultFailureFactory<OperationResult>
 {
+    /// <summary>Legacy constructor forwarding into the canonical constructor via <see cref="Mapping.HttpStatusCodeExtensions.ToResultStatus(HttpStatusCode)"/>.</summary>
+    [Obsolete("Use OperationResult(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
+    public OperationResult(bool isSuccessful, string statusMessage, HttpStatusCode statusCode)
+        : this(isSuccessful, statusCode.ToResultStatus(), statusMessage)
+    {
+    }
+
+    /// <summary>Legacy constructor with default title/status for the given success flag.</summary>
+    [Obsolete("Use OperationResult(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
+    public OperationResult(bool isSuccessful)
+        : this(
+            isSuccessful,
+            isSuccessful ? ResultStatus.Ok : ResultStatus.InternalServerError,
+            isSuccessful ? OperationResultDefaults.SuccessTitle : OperationResultDefaults.ErrorTitle)
+    {
+    }
+
     [JsonPropertyName("isSuccessful")]
     public virtual bool IsSuccessful { get; } = isSuccessful;
 
@@ -37,23 +54,6 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
 
     public IReadOnlyList<string> Errors { get; } = errors ?? [];
 
-    /// <summary>Legacy constructor forwarding into the canonical constructor via <see cref="Mapping.HttpStatusCodeExtensions.ToResultStatus(HttpStatusCode)"/>.</summary>
-    [Obsolete("Use OperationResult(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
-    public OperationResult(bool isSuccessful, string statusMessage, HttpStatusCode statusCode)
-        : this(isSuccessful, statusCode.ToResultStatus(), statusMessage)
-    {
-    }
-
-    /// <summary>Legacy constructor with default title/status for the given success flag.</summary>
-    [Obsolete("Use OperationResult(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
-    public OperationResult(bool isSuccessful)
-        : this(
-            isSuccessful,
-            isSuccessful ? ResultStatus.Ok : ResultStatus.InternalServerError,
-            isSuccessful ? "Operation completed successfully." : "An error occurred.")
-    {
-    }
-
     [Obsolete("Use Title instead.")]
     [JsonIgnore]
     public string StatusMessage => Title;
@@ -61,6 +61,14 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
     [Obsolete("Use Status instead.")]
     [JsonIgnore]
     public HttpStatusCode StatusCode => Status.ToHttpStatusCode();
+
+    /// <inheritdoc />
+    public static OperationResult Failure(IReadOnlyList<string> errors)
+        => new ErrorResult(OperationResultDefaults.ValidationFailedTitle, ResultStatus.UnprocessableContent, errors);
+
+    /// <inheritdoc />
+    public static OperationResult Failure(string title, string detail, ResultStatus status)
+        => new ErrorResult(title, status, detail);
 
     public override bool Equals(object? obj)
         => obj is OperationResult other
@@ -72,7 +80,7 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
 
     public override int GetHashCode()
     {
-        var hash = new HashCode();
+        var hash = default(HashCode);
         hash.Add(IsSuccessful);
         hash.Add(Status);
         hash.Add(Title);
@@ -87,12 +95,4 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
 
     public override string ToString()
         => $"{Status} ({(int)Status.ToHttpStatusCode()}): {Title}";
-
-    /// <inheritdoc />
-    public static OperationResult Failure(IReadOnlyList<string> errors)
-        => new ErrorResult("Validation Failed", ResultStatus.UnprocessableContent, errors);
-
-    /// <inheritdoc />
-    public static OperationResult Failure(string title, string detail, ResultStatus status)
-        => new ErrorResult(title, status, detail);
 }

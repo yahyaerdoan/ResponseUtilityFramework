@@ -1,5 +1,6 @@
 ﻿using ResultHandler.Core.Enums;
 using ResultHandler.Facade;
+using ResultHandler.Implementations.Error;
 using Xunit;
 
 namespace ResultHandler.Tests.Facade;
@@ -98,5 +99,74 @@ public class ResultFacadeTests
 
         Assert.Equal(-1, result.Data);
         Assert.Equal(ResultStatus.Conflict, result.Status);
+    }
+
+    [Fact]
+    public void Combine_AllSucceed_ReturnsSuccess()
+    {
+        var result = Result.Combine(Result.Success(), Result.Success("Ok."), Result.Created());
+
+        Assert.True(result.IsSuccessful);
+    }
+
+    [Fact]
+    public void Combine_NoResults_ReturnsSuccess()
+    {
+        var result = Result.Combine();
+
+        Assert.True(result.IsSuccessful);
+    }
+
+    [Fact]
+    public void Combine_SomeFail_CollectsErrorsFromEveryFailureNotJustTheFirst()
+    {
+        var result = Result.Combine(
+            Result.Success(),
+            Result.Invalid("Name is required."),
+            Result.NotFound("Category 7 does not exist."),
+            Result.Invalid("Price must be greater than zero."));
+
+        Assert.False(result.IsSuccessful);
+        Assert.Equal(ResultStatus.UnprocessableContent, result.Status);
+        Assert.Equal(
+            ["Name is required.", "Category 7 does not exist.", "Price must be greater than zero."],
+            result.Errors);
+    }
+
+    [Fact]
+    public void Combine_FailureWithoutDetailOrErrors_FallsBackToTitle()
+    {
+        var result = Result.Combine(new ErrorResult("Something went wrong.", ResultStatus.Conflict));
+
+        Assert.Equal(["Something went wrong."], result.Errors);
+    }
+
+    [Fact]
+    public void CombineOfT_AllSucceed_ReturnsTupleOfData()
+    {
+        var result = Result.Combine(Result.Success<string>("Alice"), Result.Success(42));
+
+        Assert.True(result.IsSuccessful);
+        Assert.Equal(("Alice", 42), result.Data);
+    }
+
+    [Fact]
+    public void CombineOfT_SomeFail_ReturnsAggregatedValidationFailure()
+    {
+        var result = Result.Combine(Result.Invalid<string>("Name is required."), Result.Success(42));
+
+        Assert.False(result.IsSuccessful);
+        Assert.Equal(ResultStatus.UnprocessableContent, result.Status);
+        Assert.Equal(["Name is required."], result.Errors);
+    }
+
+    [Fact]
+    public void CombineOfT_ThreeAndFourArity_ReturnTupleOfData()
+    {
+        var three = Result.Combine(Result.Success(1), Result.Success<string>("two"), Result.Success(3.0));
+        var four = Result.Combine(Result.Success(1), Result.Success<string>("two"), Result.Success(3.0), Result.Success(true));
+
+        Assert.Equal((1, "two", 3.0), three.Data);
+        Assert.Equal((1, "two", 3.0, true), four.Data);
     }
 }

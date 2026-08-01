@@ -1,10 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Text.Json.Serialization;
 using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Error;
 using ResultHandler.Mapping;
-using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using System.Text.Json.Serialization;
 
 namespace ResultHandler.Core.Base;
 
@@ -22,16 +22,6 @@ namespace ResultHandler.Core.Base;
 public class OperationDataResult<T>([AllowNull] T data, bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null)
     : OperationResult(isSuccessful, status, title, detail, errors), IOperationResult<T>, IResultFailureFactory<OperationDataResult<T>>
 {
-    /// <inheritdoc cref="IOperationResult{T}.Data"/>
-    [MaybeNull]
-    [JsonPropertyName("resultData")]
-    public T Data { get; } = data!;
-
-    /// <inheritdoc cref="IOperationResult.IsSuccessful"/>
-    [JsonPropertyName("isSuccessful")]
-    [MemberNotNullWhen(true, nameof(Data))]
-    public override bool IsSuccessful => base.IsSuccessful;
-
     /// <summary>Legacy constructor forwarding into the canonical constructor via <see cref="Mapping.HttpStatusCodeExtensions.ToResultStatus(HttpStatusCode)"/>.</summary>
     [Obsolete("Use OperationDataResult(T, bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
     public OperationDataResult([AllowNull] T resultData, bool isSuccessful, string statusMessage, HttpStatusCode statusCode)
@@ -46,14 +36,32 @@ public class OperationDataResult<T>([AllowNull] T data, bool isSuccessful, Resul
             resultData,
             isSuccessful,
             isSuccessful ? ResultStatus.Ok : ResultStatus.InternalServerError,
-            isSuccessful ? "Operation completed successfully." : "An error occurred.")
+            isSuccessful ? OperationResultDefaults.SuccessTitle : OperationResultDefaults.ErrorTitle)
     {
     }
+
+    /// <inheritdoc cref="IOperationResult{T}.Data"/>
+    [MaybeNull]
+    [JsonPropertyName("resultData")]
+    public T Data { get; } = data!;
+
+    /// <inheritdoc cref="IOperationResult.IsSuccessful"/>
+    [JsonPropertyName("isSuccessful")]
+    [MemberNotNullWhen(true, nameof(Data))]
+    public override bool IsSuccessful => base.IsSuccessful;
 
     [Obsolete("Use Data instead.")]
     [MaybeNull]
     [JsonIgnore]
     public T ResultData => Data;
+
+    /// <inheritdoc />
+    public static new OperationDataResult<T> Failure(IReadOnlyList<string> errors)
+        => new ErrorDataResult<T>(OperationResultDefaults.ValidationFailedTitle, ResultStatus.UnprocessableContent, errors);
+
+    /// <inheritdoc />
+    public static new OperationDataResult<T> Failure(string title, string detail, ResultStatus status)
+        => new ErrorDataResult<T>(title, status, detail);
 
     public override bool Equals(object? obj)
         => obj is OperationDataResult<T> other
@@ -62,12 +70,4 @@ public class OperationDataResult<T>([AllowNull] T data, bool isSuccessful, Resul
 
     public override int GetHashCode()
         => HashCode.Combine(base.GetHashCode(), Data);
-
-    /// <inheritdoc />
-    public static new OperationDataResult<T> Failure(IReadOnlyList<string> errors)
-        => new ErrorDataResult<T>("Validation Failed", ResultStatus.UnprocessableContent, errors);
-
-    /// <inheritdoc />
-    public static new OperationDataResult<T> Failure(string title, string detail, ResultStatus status)
-        => new ErrorDataResult<T>(title, status, detail);
 }
