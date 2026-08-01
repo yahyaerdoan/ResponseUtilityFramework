@@ -1,0 +1,57 @@
+# Changelog
+
+All notable changes to `ResponseResultHandler` and `ResponseResultHandler.AspNetCore` are documented
+here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); this project does not
+yet commit to strict [SemVer](https://semver.org/) pre-1.0-style guarantees, but breaking changes are
+always called out explicitly below.
+
+## [Unreleased]
+
+### Added
+- `Result.Combine(params IOperationResult[])` / `Result.Combine(IEnumerable<IOperationResult>)`
+  (`ResultHandler.Facade`) — merges independent checks into one outcome, collecting *every* failing
+  result's messages instead of stopping at the first (see README §8).
+- `Result.Combine<T1, T2>` / `<T1, T2, T3>` / `<T1, T2, T3, T4>` overloads — same merge behavior as
+  above, but for `IOperationResult<T>`s: on success, returns every payload as a named tuple.
+- `ResultExtensions.Ensure<T>` / `EnsureAsync<T>` (`ResultHandler.Functional`) — guard-clause-style
+  helper that turns an already-successful result into a failure when a business-rule predicate
+  rejects the data (see README §7).
+- Async composition: `MatchAsync`, `OnSuccessAsync`, `OnFailureAsync`, `MapAsync`, `BindAsync`
+  (`ResultHandler.Functional`) — `Task`-aware counterparts of the sync composition helpers, each in
+  the three shapes needed to chain across `await` without an intermediate one (see README §9).
+
+### Changed
+- Enforced `StyleCop.Analyzers` and `SonarAnalyzer.CSharp` across all three projects; the codebase
+  builds warning-free under both. Suppressed rules are limited to ones that conflict with an existing,
+  deliberate convention (documented per-rule in `.editorconfig`) — nothing is silenced to hide a real
+  issue.
+- Centralized previously-duplicated literals (`"Operation completed successfully."`,
+  `"An error occurred."`, `"Validation Failed"`, and the 3xx redirect message templates) behind single
+  named constants (`OperationResultDefaults`, `ResultTitles`) so the concrete/generic overload pairs
+  and legacy constructors can never drift apart.
+
+## [11.0.0]
+
+### Added
+- `ResultStatus` enum (`ResultHandler.Core.Enums`) — decouples the library from
+  `System.Net.HttpStatusCode`; convert either direction via `HttpStatusCodeExtensions`/`ResultStatusExtensions`.
+- `Result` static factory facade (`ResultHandler.Facade`) — one named factory pair per `ResultStatus`.
+- RFC 9457 Problem Details support in `ResponseResultHandler.AspNetCore`, including per-status
+  `ProblemDetails.Type` URIs and Minimal API `IResult` adapters alongside the existing MVC
+  `IActionResult` ones.
+- Custom `System.Text.Json` serialization with fixed property names, independent of the consumer's
+  `JsonSerializerOptions` naming policy.
+- `IResultFailureFactory<TSelf>` / `ResultFailureFactory` (`ResultHandler.Functional`) — lets generic
+  infrastructure (MediatR pipeline behaviors, gRPC interceptors) short-circuit without knowing the
+  concrete result type.
+
+### Fixed
+- `ToActionResult<T>()` / `ToEnvelopedActionResult()` used to hardcode HTTP `200` for any successful
+  result carrying a body, discarding the result's actual `Status` (so `Result.Created(...)` came back
+  as `200`, not `201`). Both now honor `Status` correctly — see README §13 if you relied on the old
+  behavior.
+
+### Deprecated
+- `StatusMessage`, `StatusCode: HttpStatusCode`, and `ResultData` — marked `[Obsolete]`, forward into
+  the new `Title`/`Status: ResultStatus`/`Data` members, and are kept indefinitely for backward
+  compatibility (see README §13).
