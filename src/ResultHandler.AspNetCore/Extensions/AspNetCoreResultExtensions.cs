@@ -98,6 +98,7 @@ public static partial class AspNetCoreResultExtensions
         Generic,
     }
 
+    /// <summary>Creates an RFC 9457 <see cref="ProblemDetails"/> payload from an <see cref="IOperationResult"/>.</summary>
     /// <param name="result">The result to convert.</param>
     /// <param name="httpContext">
     /// Optional; when provided, <see cref="ProblemDetails.Instance"/> is set to the current request
