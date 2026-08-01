@@ -47,13 +47,13 @@ jobs:
         run: dotnet restore ResponseUtilityLibrary.sln
 
       - name: Build
-        run: dotnet build ResponseUtilityLibrary.sln --no-restore --configuration Release -p:Version=${{ steps.version.outputs.version }}
+        run: dotnet build ResponseUtilityLibrary.sln --no-restore --configuration Release -p:Version=${{ steps.version.outputs.version }} -p:IsPublishBuild=true
 
       - name: Test
         run: dotnet test test/ResultHandler.Tests/ResultHandler.Tests.csproj --no-build --configuration Release
 
       - name: Pack
-        run: dotnet pack ResponseUtilityLibrary.sln --no-build --configuration Release -p:Version=${{ steps.version.outputs.version }} --output ./nupkgs
+        run: dotnet pack ResponseUtilityLibrary.sln --no-build --configuration Release -p:Version=${{ steps.version.outputs.version }} -p:IsPublishBuild=true --output ./nupkgs
 
       - name: NuGet login (OIDC -> temp API key)
         uses: NuGet/login@v1

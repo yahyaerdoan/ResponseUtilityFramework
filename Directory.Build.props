@@ -34,11 +34,12 @@
   <!--
     Package validation compares the built package's API against the last published NuGet
     baseline to catch accidental breaking changes. It needs a real -p:Version (set by
-    publish.yml from the release tag) to compare meaningfully, so it only runs in CI —
-    local builds always use the csproj's placeholder Version and would otherwise fail
-    PackageValidation's "assembly version must be >= baseline" check on every build.
+    publish.yml from the release tag) to compare meaningfully, so it's gated on the
+    IsPublishBuild flag publish.yml passes explicitly — not on GITHUB_ACTIONS, which is
+    also 'true' for build.yml/codeql.yml's plain `dotnet build` (no -p:Version override),
+    where it would always fail comparing the placeholder Version against the baseline.
   -->
-  <PropertyGroup Condition="'$(IsPackable)' != 'false' AND '$(GITHUB_ACTIONS)' == 'true'">
+  <PropertyGroup Condition="'$(IsPackable)' != 'false' AND '$(IsPublishBuild)' == 'true'">
     <EnablePackageValidation>true</EnablePackageValidation>
     <PackageValidationBaselineVersion>11.0.12-beta.12</PackageValidationBaselineVersion>
   </PropertyGroup>
