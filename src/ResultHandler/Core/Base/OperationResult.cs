@@ -18,6 +18,7 @@ namespace ResultHandler.Core.Base;
 /// <param name="title">A short summary of the result.</param>
 /// <param name="detail">Optional additional context.</param>
 /// <param name="errors">Optional list of individual error messages.</param>
+[method: JsonConstructor]
 public class OperationResult(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null)
     : IOperationResult, IResultFailureFactory<OperationResult>
 {
@@ -52,6 +53,7 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Detail { get; } = detail;
 
+    [JsonPropertyName("errors")]
     public IReadOnlyList<string> Errors { get; } = errors ?? [];
 
     [Obsolete("Use Title instead.")]
