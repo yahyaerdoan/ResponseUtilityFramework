@@ -1,5 +1,5 @@
-﻿using System.Net;
-using ResultHandler.Core.Enums;
+﻿using ResultHandler.Core.Enums;
+using System.Net;
 
 namespace ResultHandler.Mapping;
 

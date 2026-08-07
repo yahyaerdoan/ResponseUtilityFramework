@@ -7,6 +7,8 @@ always called out explicitly below.
 
 ## [Unreleased]
 
+## [12.0.0]
+
 ### Added
 - `Result.Combine(params IOperationResult[])` / `Result.Combine(IEnumerable<IOperationResult>)`
   (`ResultHandler.Facade`) — merges independent checks into one outcome, collecting *every* failing
@@ -29,6 +31,15 @@ always called out explicitly below.
   `"An error occurred."`, `"Validation Failed"`, and the 3xx redirect message templates) behind single
   named constants (`OperationResultDefaults`, `ResultTitles`) so the concrete/generic overload pairs
   and legacy constructors can never drift apart.
+
+### Removed (breaking)
+- `StatusMessage`, `StatusCode: HttpStatusCode`, and `ResultData` — the members deprecated in
+  `[11.0.0]` are gone, no forwarding shim. Use `Title`, `Status: ResultStatus`, and `Data`.
+- Every `HttpStatusCode`-based constructor on `OperationResult`, `OperationDataResult<T>`,
+  `SuccessResult`, `SuccessDataResult<T>`, `ErrorResult`, and `ErrorDataResult<T>` — use the
+  `ResultStatus`-based constructor instead (convert an `HttpStatusCode` via
+  `HttpStatusCodeExtensions.ToResultStatus()` if needed). See README §13 "Migrating to v12" for the
+  full replacement table.
 
 ## [11.0.0]
 

@@ -12,9 +12,4 @@ public interface IOperationResult<T> : IOperationResult
     /// <inheritdoc cref="IOperationResult.IsSuccessful"/>
     [MemberNotNullWhen(true, nameof(Data))]
     new bool IsSuccessful { get; }
-
-    /// <summary>Legacy alias for <see cref="Data"/>, kept for backward compatibility.</summary>
-    [Obsolete("Use Data instead.")]
-    [MaybeNull]
-    T ResultData { get; }
 }

@@ -1,7 +1,5 @@
-﻿using System.Net;
-using ResultHandler.Core.Base;
+﻿using ResultHandler.Core.Base;
 using ResultHandler.Core.Enums;
-using ResultHandler.Mapping;
 
 namespace ResultHandler.Implementations.Error;
 
@@ -26,18 +24,6 @@ public class ErrorResult : OperationResult
 
     public ErrorResult(string title, ResultStatus status, IReadOnlyList<string> errors)
         : base(false, status, title, null, errors)
-    {
-    }
-
-    [Obsolete("Use ErrorResult(string title, ResultStatus status) instead.")]
-    public ErrorResult(string statusMessage, HttpStatusCode statusCode)
-        : base(false, statusCode.ToResultStatus(), statusMessage)
-    {
-    }
-
-    [Obsolete("Use ErrorResult(string title, ResultStatus status, string detail) instead.")]
-    public ErrorResult(string statusMessage, HttpStatusCode statusCode, string detail)
-        : base(false, statusCode.ToResultStatus(), statusMessage, detail)
     {
     }
 }

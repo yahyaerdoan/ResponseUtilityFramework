@@ -1,10 +1,9 @@
-using System.Net;
-using System.Text.Json.Serialization;
-using ResultHandler.Core.Abstractions;
+﻿using ResultHandler.Core.Abstractions;
 using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Error;
 using ResultHandler.Mapping;
 using ResultHandler.Serialization;
+using System.Text.Json.Serialization;
 
 namespace ResultHandler.Core.Base;
 
@@ -22,23 +21,6 @@ namespace ResultHandler.Core.Base;
 public class OperationResult(bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null)
     : IOperationResult, IResultFailureFactory<OperationResult>
 {
-    /// <summary>Legacy constructor forwarding into the canonical constructor via <see cref="Mapping.HttpStatusCodeExtensions.ToResultStatus(HttpStatusCode)"/>.</summary>
-    [Obsolete("Use OperationResult(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
-    public OperationResult(bool isSuccessful, string statusMessage, HttpStatusCode statusCode)
-        : this(isSuccessful, statusCode.ToResultStatus(), statusMessage)
-    {
-    }
-
-    /// <summary>Legacy constructor with default title/status for the given success flag.</summary>
-    [Obsolete("Use OperationResult(bool, ResultStatus, string, string?, IReadOnlyList<string>?) instead.")]
-    public OperationResult(bool isSuccessful)
-        : this(
-            isSuccessful,
-            isSuccessful ? ResultStatus.Ok : ResultStatus.InternalServerError,
-            isSuccessful ? OperationResultDefaults.SuccessTitle : OperationResultDefaults.ErrorTitle)
-    {
-    }
-
     [JsonPropertyName("isSuccessful")]
     public virtual bool IsSuccessful { get; } = isSuccessful;
 
@@ -55,14 +37,6 @@ public class OperationResult(bool isSuccessful, ResultStatus status, string titl
 
     [JsonPropertyName("errors")]
     public IReadOnlyList<string> Errors { get; } = errors ?? [];
-
-    [Obsolete("Use Title instead.")]
-    [JsonIgnore]
-    public string StatusMessage => Title;
-
-    [Obsolete("Use Status instead.")]
-    [JsonIgnore]
-    public HttpStatusCode StatusCode => Status.ToHttpStatusCode();
 
     /// <inheritdoc />
     public static OperationResult Failure(IReadOnlyList<string> errors)

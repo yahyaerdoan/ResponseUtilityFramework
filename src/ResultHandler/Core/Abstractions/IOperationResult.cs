@@ -1,5 +1,5 @@
-﻿using System.Net;
-using ResultHandler.Core.Enums;
+﻿using ResultHandler.Core.Enums;
+using System.Net;
 
 namespace ResultHandler.Core.Abstractions;
 
@@ -23,12 +23,4 @@ public interface IOperationResult
 
     /// <summary>Optional list of individual error messages (e.g. validation failures).</summary>
     IReadOnlyList<string> Errors { get; }
-
-    /// <summary>Legacy alias for <see cref="Title"/>, kept for backward compatibility.</summary>
-    [Obsolete("Use Title instead.")]
-    string StatusMessage { get; }
-
-    /// <summary>Legacy alias for <see cref="Status"/> as an <see cref="HttpStatusCode"/>, kept for backward compatibility.</summary>
-    [Obsolete("Use Status instead.")]
-    HttpStatusCode StatusCode { get; }
 }
