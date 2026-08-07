@@ -36,8 +36,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(IsPublishBuild)' == 'true'">
-    <CompatibilitySuppressionFilePath Include="CompatibilitySuppressions.xml" />
-  </ItemGroup>
-
 </Project>

@@ -6,12 +6,6 @@ on:
     paths:
       - 'src/**'
 
-env:
-  # Bump when introducing a breaking/minor change; patch is auto-derived below.
-  # Quoted so YAML/expressions keep it as the literal string "11.0" (unquoted, it
-  # gets parsed as the number 11 and loses the trailing .0).
-  VERSION_PREFIX: "11.0"
-
 jobs:
   publish:
     runs-on: windows-latest
@@ -37,9 +31,14 @@ jobs:
         id: version
         shell: pwsh
         run: |
-          $version = "${{ env.VERSION_PREFIX }}.${{ github.run_number }}"
+          # <Version> in ResultHandler.csproj is the single source of truth for the major.minor.patch;
+          # both packages are bumped in lockstep and built with the same -p:Version= below, so reading
+          # it from this one project is sufficient. Only the pre-release/build-number suffix is
+          # computed here — never duplicate the version number itself in this workflow.
+          $baseVersion = (dotnet msbuild src/ResultHandler/ResultHandler.csproj -getProperty:Version).Trim()
+          $version = $baseVersion
           if ("${{ github.ref_name }}" -eq "beta") {
-            $version = "$version-beta.${{ github.run_number }}"
+            $version = "$baseVersion-beta.${{ github.run_number }}"
           }
           "version=$version" >> $env:GITHUB_OUTPUT
 

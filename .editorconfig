@@ -86,10 +86,6 @@ dotnet_diagnostic.SA1101.severity = none # Prefix local calls with this.
 # Conflicts with the private/internal field naming rule below (leading underscore is intentional).
 dotnet_diagnostic.SA1309.severity = none # Field name should not begin with underscore
 
-# Obsolete members here are permanent, documented backward-compatibility shims (see package release
-# notes), not dead code slated for removal.
-dotnet_diagnostic.S1133.severity = none # Deprecated code should be removed
-
 # IOperationResult<T> could be made covariant (T only appears in getter/out positions), but widening
 # a shipped public interface's variance is a deliberate API decision, not a mechanical style fix.
 dotnet_diagnostic.S3246.severity = none # Add the 'out' keyword to make a type parameter covariant

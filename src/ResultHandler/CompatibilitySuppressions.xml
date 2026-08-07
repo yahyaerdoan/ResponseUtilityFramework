@@ -1,115 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- https://learn.microsoft.com/dotnet/fundamentals/package-validation/diagnostic-ids -->
-<!--
-  Suppresses CP0002 ("member exists in the baseline package but not in the current build") for the
-  18 members intentionally removed in v12.0.0 (see CHANGELOG.md [12.0.0] Removed). Package
-  validation stays enabled for everything else, so any *unintentional* breaking change is still
-  caught.
--->
 <Suppressions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>System.Net.HttpStatusCode ResultHandler.Core.Abstractions.IOperationResult.StatusCode.get</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>System.Net.HttpStatusCode ResultHandler.Core.Abstractions.IOperationResult.StatusCode.get</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>System.Net.HttpStatusCode ResultHandler.Core.Abstractions.IOperationResult.StatusCode.get</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>System.Net.HttpStatusCode ResultHandler.Core.Abstractions.IOperationResult.StatusCode.get</Target>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult.get_StatusCode</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>string ResultHandler.Core.Abstractions.IOperationResult.StatusMessage.get</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>string ResultHandler.Core.Abstractions.IOperationResult.StatusMessage.get</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>string ResultHandler.Core.Abstractions.IOperationResult.StatusMessage.get</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>string ResultHandler.Core.Abstractions.IOperationResult.StatusMessage.get</Target>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult.get_StatusMessage</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>T ResultHandler.Core.Abstractions.IOperationResult&lt;T&gt;.ResultData.get</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>T ResultHandler.Core.Abstractions.IOperationResult&lt;T&gt;.ResultData.get</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>T ResultHandler.Core.Abstractions.IOperationResult&lt;T&gt;.ResultData.get</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>T ResultHandler.Core.Abstractions.IOperationResult&lt;T&gt;.ResultData.get</Target>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult`1.get_ResultData</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net10.0/ResultHandler.dll</Left>
+    <Right>lib/net10.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
@@ -121,79 +38,16 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.get_ResultData</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>T ResultHandler.Core.Base.OperationDataResult&lt;T&gt;.ResultData.get</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>T ResultHandler.Core.Base.OperationDataResult&lt;T&gt;.ResultData.get</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>T ResultHandler.Core.Base.OperationDataResult&lt;T&gt;.ResultData.get</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>T ResultHandler.Core.Base.OperationDataResult&lt;T&gt;.ResultData.get</Target>
+    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
@@ -205,107 +59,23 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
+    <Target>M:ResultHandler.Core.Base.OperationResult.get_StatusCode</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>System.Net.HttpStatusCode ResultHandler.Core.Base.OperationResult.StatusCode.get</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>System.Net.HttpStatusCode ResultHandler.Core.Base.OperationResult.StatusCode.get</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>System.Net.HttpStatusCode ResultHandler.Core.Base.OperationResult.StatusCode.get</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>System.Net.HttpStatusCode ResultHandler.Core.Base.OperationResult.StatusCode.get</Target>
+    <Target>M:ResultHandler.Core.Base.OperationResult.get_StatusMessage</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>string ResultHandler.Core.Base.OperationResult.StatusMessage.get</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>string ResultHandler.Core.Base.OperationResult.StatusMessage.get</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>string ResultHandler.Core.Base.OperationResult.StatusMessage.get</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>string ResultHandler.Core.Base.OperationResult.StatusMessage.get</Target>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode,System.String)</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
@@ -317,51 +87,9 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
@@ -373,83 +101,6 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net10.0/ResultHandler.dll</Left>
-    <Right>lib/net10.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net10.0/ResultHandler.dll</Left>
-    <Right>lib/net10.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
     <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
     <Left>lib/net10.0/ResultHandler.dll</Left>
     <Right>lib/net10.0/ResultHandler.dll</Right>
@@ -457,23 +108,9 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Success.SuccessDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net7.0/ResultHandler.dll</Left>
-    <Right>lib/net7.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Success.SuccessDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net8.0/ResultHandler.dll</Left>
-    <Right>lib/net8.0/ResultHandler.dll</Right>
-    <IsBaselineSuppression>true</IsBaselineSuppression>
-  </Suppression>
-  <Suppression>
-    <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Success.SuccessDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net9.0/ResultHandler.dll</Left>
-    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net10.0/ResultHandler.dll</Left>
+    <Right>lib/net10.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
@@ -486,8 +123,253 @@
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
     <Target>M:ResultHandler.Implementations.Success.SuccessResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net10.0/ResultHandler.dll</Left>
+    <Right>lib/net10.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult.get_StatusCode</Target>
     <Left>lib/net7.0/ResultHandler.dll</Left>
     <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult.get_StatusMessage</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult`1.get_ResultData</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.get_ResultData</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.get_StatusCode</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.get_StatusMessage</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Success.SuccessDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Success.SuccessResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net7.0/ResultHandler.dll</Left>
+    <Right>lib/net7.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult.get_StatusCode</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult.get_StatusMessage</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult`1.get_ResultData</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.get_ResultData</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.get_StatusCode</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.get_StatusMessage</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Success.SuccessDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net8.0/ResultHandler.dll</Left>
+    <Right>lib/net8.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
   <Suppression>
@@ -499,7 +381,119 @@
   </Suppression>
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
-    <Target>M:ResultHandler.Implementations.Success.SuccessResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult.get_StatusCode</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult.get_StatusMessage</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Abstractions.IOperationResult`1.get_ResultData</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.#ctor(`0,System.Boolean)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationDataResult`1.get_ResultData</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.#ctor(System.Boolean)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.get_StatusCode</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Core.Base.OperationResult.get_StatusMessage</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorDataResult`1.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode,System.String)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Error.ErrorResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
+    <IsBaselineSuppression>true</IsBaselineSuppression>
+  </Suppression>
+  <Suppression>
+    <DiagnosticId>CP0002</DiagnosticId>
+    <Target>M:ResultHandler.Implementations.Success.SuccessDataResult`1.#ctor(`0,System.String,System.Net.HttpStatusCode)</Target>
     <Left>lib/net9.0/ResultHandler.dll</Left>
     <Right>lib/net9.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
@@ -507,8 +501,8 @@
   <Suppression>
     <DiagnosticId>CP0002</DiagnosticId>
     <Target>M:ResultHandler.Implementations.Success.SuccessResult.#ctor(System.String,System.Net.HttpStatusCode)</Target>
-    <Left>lib/net10.0/ResultHandler.dll</Left>
-    <Right>lib/net10.0/ResultHandler.dll</Right>
+    <Left>lib/net9.0/ResultHandler.dll</Left>
+    <Right>lib/net9.0/ResultHandler.dll</Right>
     <IsBaselineSuppression>true</IsBaselineSuppression>
   </Suppression>
 </Suppressions>
