@@ -491,8 +491,7 @@ JsonSerializer.Serialize(Result.NotFound<ProductDto>("Product 42 does not exist.
 }
 ```
 
-`Detail` is omitted entirely when `null`. Obsolete members (`StatusMessage`, `StatusCode`,
-`ResultData`) never appear in JSON — only the current API does.
+`Detail` is omitted entirely when `null`.
 
 ---
 ## 12. Equality & debugging
@@ -506,19 +505,29 @@ Result.NotFound("x").ToString(); // "NotFound (404): Not found."
 ```
 
 ---
-## 13. Migrating from the pre-v11 API
+## 13. Migrating to v12
 
-`StatusMessage`, `StatusCode: HttpStatusCode`, and `ResultData` still work — marked `[Obsolete]` so
-existing code keeps compiling while you migrate to `Title`, `Status: ResultStatus`, and `Data`:
+v12 **removes** every member that v11 marked `[Obsolete]` — they no longer compile, there's no
+forwarding shim. Replace them directly:
+
+| Removed in v12 | Use instead |
+| --- | --- |
+| `StatusMessage` | `Title` |
+| `StatusCode: HttpStatusCode` | `Status: ResultStatus` |
+| `ResultData` | `Data` |
+| `new ErrorResult(string statusMessage, HttpStatusCode statusCode)` and the equivalent `HttpStatusCode`-based constructors on `OperationResult`, `OperationDataResult<T>`, `SuccessResult`, `SuccessDataResult<T>`, `ErrorDataResult<T>` | The `ResultStatus`-based constructor, e.g. `new ErrorResult(title, status)`. If you only have an `HttpStatusCode` on hand, convert it first: `new ErrorResult(title, httpStatusCode.ToResultStatus())` (`HttpStatusCodeExtensions.ToResultStatus`). |
 
 ```csharp
-#pragma warning disable CS0618
-var legacy = new ErrorResult("Not found.", HttpStatusCode.NotFound); // forwards into the new API
-Console.WriteLine(legacy.StatusMessage); // "Not found." — same as legacy.Title
-#pragma warning restore CS0618
+// Before (v11, obsolete):
+var legacy = new ErrorResult("Not found.", HttpStatusCode.NotFound);
+Console.WriteLine(legacy.StatusMessage);
+
+// After (v12):
+var current = new ErrorResult("Not found.", HttpStatusCode.NotFound.ToResultStatus());
+Console.WriteLine(current.Title);
 ```
 
-**`ResultHandler.AspNetCore` behavior fix:** `ToActionResult<T>()` and `ToEnvelopedActionResult()`
+**`ResultHandler.AspNetCore` behavior fix (carried over from v11):** `ToActionResult<T>()` and `ToEnvelopedActionResult()`
 used to hardcode a `200` status code for any successful result that carried a body, silently
 discarding the result's actual `Status` (so `Result.Created(...)` came back as `200`, not `201`).
 Both now honor `Status` correctly. If you were relying on the old (incorrect) `200`-always behavior,

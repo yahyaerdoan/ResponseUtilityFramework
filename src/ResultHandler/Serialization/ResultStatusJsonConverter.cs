@@ -1,7 +1,7 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using ResultHandler.Core.Enums;
+﻿using ResultHandler.Core.Enums;
 using ResultHandler.Mapping;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace ResultHandler.Serialization;
 

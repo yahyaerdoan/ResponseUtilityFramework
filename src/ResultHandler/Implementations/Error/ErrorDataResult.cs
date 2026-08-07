@@ -1,7 +1,5 @@
-﻿using System.Net;
-using ResultHandler.Core.Base;
+﻿using ResultHandler.Core.Base;
 using ResultHandler.Core.Enums;
-using ResultHandler.Mapping;
 
 namespace ResultHandler.Implementations.Error;
 
@@ -41,30 +39,6 @@ public class ErrorDataResult<T> : OperationDataResult<T>
 
     public ErrorDataResult(T data, string title, ResultStatus status, string detail)
         : base(data, false, status, title, detail)
-    {
-    }
-
-    [Obsolete("Use ErrorDataResult(string title, ResultStatus status) instead.")]
-    public ErrorDataResult(string statusMessage, HttpStatusCode statusCode)
-        : base(default, false, statusCode.ToResultStatus(), statusMessage)
-    {
-    }
-
-    [Obsolete("Use ErrorDataResult(string title, ResultStatus status, string detail) instead.")]
-    public ErrorDataResult(string statusMessage, HttpStatusCode statusCode, string detail)
-        : base(default, false, statusCode.ToResultStatus(), statusMessage, detail)
-    {
-    }
-
-    [Obsolete("Use ErrorDataResult(T data, string title, ResultStatus status) instead.")]
-    public ErrorDataResult(T resultData, string statusMessage, HttpStatusCode statusCode)
-        : base(resultData, false, statusCode.ToResultStatus(), statusMessage)
-    {
-    }
-
-    [Obsolete("Use ErrorDataResult(T data, string title, ResultStatus status, string detail) instead.")]
-    public ErrorDataResult(T resultData, string statusMessage, HttpStatusCode statusCode, string detail)
-        : base(resultData, false, statusCode.ToResultStatus(), statusMessage, detail)
     {
     }
 }
