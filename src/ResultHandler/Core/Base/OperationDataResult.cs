@@ -19,6 +19,7 @@ namespace ResultHandler.Core.Base;
 /// <param name="title">A short summary of the result.</param>
 /// <param name="detail">Optional additional context.</param>
 /// <param name="errors">Optional list of individual error messages.</param>
+[method: JsonConstructor]
 public class OperationDataResult<T>([AllowNull] T data, bool isSuccessful, ResultStatus status, string title, string? detail = null, IReadOnlyList<string>? errors = null)
     : OperationResult(isSuccessful, status, title, detail, errors), IOperationResult<T>, IResultFailureFactory<OperationDataResult<T>>
 {
