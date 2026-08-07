@@ -10,6 +10,18 @@ insert_final_newline = true
 indent_size = 4
 end_of_line = crlf
 
+# Required so the editor's "Organize Imports"/format-on-save agrees with StyleCop's SA1208
+# (System.* usings before other namespaces). Without this, IDEs sort usings purely
+# alphabetically, which puts e.g. ResultHandler.* before System.* and fails the build.
+dotnet_sort_system_directives_first = true
+
+# No blank line between the System.* and project-namespace using groups (matches existing
+# single-block style throughout the codebase).
+dotnet_separate_import_directive_groups = false
+
+# Usings stay outside the (file-scoped) namespace declaration, matching every file today.
+csharp_using_directive_placement = outside_namespace:warning
+
 # Language conventions
 csharp_style_namespace_declarations = file_scoped:warning
 csharp_style_var_for_built_in_types = true:suggestion
@@ -73,10 +85,6 @@ dotnet_diagnostic.SA1101.severity = none # Prefix local calls with this.
 
 # Conflicts with the private/internal field naming rule below (leading underscore is intentional).
 dotnet_diagnostic.SA1309.severity = none # Field name should not begin with underscore
-
-# Obsolete members here are permanent, documented backward-compatibility shims (see package release
-# notes), not dead code slated for removal.
-dotnet_diagnostic.S1133.severity = none # Deprecated code should be removed
 
 # IOperationResult<T> could be made covariant (T only appears in getter/out positions), but widening
 # a shipped public interface's variance is a deliberate API decision, not a mechanical style fix.

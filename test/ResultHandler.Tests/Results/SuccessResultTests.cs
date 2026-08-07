@@ -1,5 +1,4 @@
-﻿using System.Net;
-using ResultHandler.Core.Enums;
+﻿using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Success;
 using Xunit;
 
@@ -36,19 +35,6 @@ public class SuccessResultTests
         Assert.Equal(ResultStatus.Created, result.Status);
         Assert.Equal("Created.", result.Title);
     }
-
-#pragma warning disable CS0618
-    [Fact]
-    public void ObsoleteConstructor_ForwardsIntoNewApi()
-    {
-        var result = new SuccessResult("Legacy success.", HttpStatusCode.Created);
-
-        Assert.True(result.IsSuccessful);
-        Assert.Equal(ResultStatus.Created, result.Status);
-        Assert.Equal("Legacy success.", result.StatusMessage);
-        Assert.Equal(HttpStatusCode.Created, result.StatusCode);
-    }
-#pragma warning restore CS0618
 
     [Fact]
     public void SuccessDataResult_DataOnlyConstructor_UsesDefaultTitleAndStatus()

@@ -1,7 +1,5 @@
-﻿using System.Net;
-using ResultHandler.Core.Base;
+﻿using ResultHandler.Core.Base;
 using ResultHandler.Core.Enums;
-using ResultHandler.Mapping;
 
 namespace ResultHandler.Implementations.Success;
 
@@ -21,12 +19,6 @@ public class SuccessDataResult<T> : OperationDataResult<T>
 
     public SuccessDataResult(T data, string title, ResultStatus status)
         : base(data, true, status, title)
-    {
-    }
-
-    [Obsolete("Use SuccessDataResult(T data, string title, ResultStatus status) instead.")]
-    public SuccessDataResult(T data, string statusMessage, HttpStatusCode statusCode)
-        : base(data, true, statusCode.ToResultStatus(), statusMessage)
     {
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using ResultHandler.Core.Enums;
+﻿using ResultHandler.Core.Enums;
 using ResultHandler.Implementations.Error;
 using Xunit;
 
@@ -39,20 +38,6 @@ public class ErrorResultTests
         Assert.Equal(errors, result.Errors);
         Assert.Null(result.Detail);
     }
-
-#pragma warning disable CS0618
-    [Fact]
-    public void ObsoleteConstructor_ForwardsIntoNewApi()
-    {
-        var result = new ErrorResult("Legacy failure.", HttpStatusCode.Conflict);
-
-        Assert.False(result.IsSuccessful);
-        Assert.Equal(ResultStatus.Conflict, result.Status);
-        Assert.Equal("Legacy failure.", result.Title);
-        Assert.Equal("Legacy failure.", result.StatusMessage);
-        Assert.Equal(HttpStatusCode.Conflict, result.StatusCode);
-    }
-#pragma warning restore CS0618
 
     [Fact]
     public void ErrorDataResult_DataOnlyConstructor_UsesDefaultTitleAndStatus()

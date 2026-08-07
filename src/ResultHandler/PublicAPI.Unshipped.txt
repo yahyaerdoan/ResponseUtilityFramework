@@ -30,3 +30,21 @@ static ResultHandler.Functional.ResultExtensions.OnSuccessAsync(this System.Thre
 static ResultHandler.Functional.ResultExtensions.OnSuccessAsync<T>(this ResultHandler.Core.Abstractions.IOperationResult<T>! result, System.Func<T, System.Threading.Tasks.Task!>! action) -> System.Threading.Tasks.Task<ResultHandler.Core.Abstractions.IOperationResult<T>!>!
 static ResultHandler.Functional.ResultExtensions.OnSuccessAsync<T>(this System.Threading.Tasks.Task<ResultHandler.Core.Abstractions.IOperationResult<T>!>! resultTask, System.Action<T>! action) -> System.Threading.Tasks.Task<ResultHandler.Core.Abstractions.IOperationResult<T>!>!
 static ResultHandler.Functional.ResultExtensions.OnSuccessAsync<T>(this System.Threading.Tasks.Task<ResultHandler.Core.Abstractions.IOperationResult<T>!>! resultTask, System.Func<T, System.Threading.Tasks.Task!>! action) -> System.Threading.Tasks.Task<ResultHandler.Core.Abstractions.IOperationResult<T>!>!
+*REMOVED*ResultHandler.Core.Abstractions.IOperationResult.StatusCode.get -> System.Net.HttpStatusCode
+*REMOVED*ResultHandler.Core.Abstractions.IOperationResult.StatusMessage.get -> string!
+*REMOVED*ResultHandler.Core.Abstractions.IOperationResult<T>.ResultData.get -> T
+*REMOVED*ResultHandler.Core.Base.OperationDataResult<T>.OperationDataResult(T resultData, bool isSuccessful) -> void
+*REMOVED*ResultHandler.Core.Base.OperationDataResult<T>.OperationDataResult(T resultData, bool isSuccessful, string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+*REMOVED*ResultHandler.Core.Base.OperationDataResult<T>.ResultData.get -> T
+*REMOVED*ResultHandler.Core.Base.OperationResult.OperationResult(bool isSuccessful) -> void
+*REMOVED*ResultHandler.Core.Base.OperationResult.OperationResult(bool isSuccessful, string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+*REMOVED*ResultHandler.Core.Base.OperationResult.StatusCode.get -> System.Net.HttpStatusCode
+*REMOVED*ResultHandler.Core.Base.OperationResult.StatusMessage.get -> string!
+*REMOVED*ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(T resultData, string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+*REMOVED*ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(T resultData, string! statusMessage, System.Net.HttpStatusCode statusCode, string! detail) -> void
+*REMOVED*ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+*REMOVED*ResultHandler.Implementations.Error.ErrorDataResult<T>.ErrorDataResult(string! statusMessage, System.Net.HttpStatusCode statusCode, string! detail) -> void
+*REMOVED*ResultHandler.Implementations.Error.ErrorResult.ErrorResult(string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+*REMOVED*ResultHandler.Implementations.Error.ErrorResult.ErrorResult(string! statusMessage, System.Net.HttpStatusCode statusCode, string! detail) -> void
+*REMOVED*ResultHandler.Implementations.Success.SuccessDataResult<T>.SuccessDataResult(T data, string! statusMessage, System.Net.HttpStatusCode statusCode) -> void
+*REMOVED*ResultHandler.Implementations.Success.SuccessResult.SuccessResult(string! statusMessage, System.Net.HttpStatusCode statusCode) -> void

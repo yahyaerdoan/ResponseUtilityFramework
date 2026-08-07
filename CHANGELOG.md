@@ -5,7 +5,7 @@ here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); t
 yet commit to strict [SemVer](https://semver.org/) pre-1.0-style guarantees, but breaking changes are
 always called out explicitly below.
 
-## [Unreleased]
+## [12.0.0]
 
 ### Added
 - `Result.Combine(params IOperationResult[])` / `Result.Combine(IEnumerable<IOperationResult>)`
@@ -29,6 +29,15 @@ always called out explicitly below.
   `"An error occurred."`, `"Validation Failed"`, and the 3xx redirect message templates) behind single
   named constants (`OperationResultDefaults`, `ResultTitles`) so the concrete/generic overload pairs
   and legacy constructors can never drift apart.
+
+### Removed (breaking)
+- `StatusMessage`, `StatusCode: HttpStatusCode`, and `ResultData` — the members deprecated in
+  `[11.0.0]` are gone, no forwarding shim. Use `Title`, `Status: ResultStatus`, and `Data`.
+- Every `HttpStatusCode`-based constructor on `OperationResult`, `OperationDataResult<T>`,
+  `SuccessResult`, `SuccessDataResult<T>`, `ErrorResult`, and `ErrorDataResult<T>` — use the
+  `ResultStatus`-based constructor instead (convert an `HttpStatusCode` via
+  `HttpStatusCodeExtensions.ToResultStatus()` if needed). See README §13 "Migrating to v12" for the
+  full replacement table.
 
 ## [11.0.0]
 
